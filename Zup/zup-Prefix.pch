@@ -1,0 +1,35 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "Utilities.h"
+    #import "CustomButton.h"
+    #import "ServerOperations.h"
+    #import "UserDefaults.h"
+
+#endif
+
+#warning Faltando dados
+
+//static NSString * const kAPIkey = @"AIzaSyB63AChJ0R6195vGiW_KCq-NA-jrhrnumc";
+//static NSString * const kClientId = @"278632881278-0253kmktfm2bc3516mms47acq8rdtfs0.apps.googleusercontent.com";
+//static NSString * const kClientSecret = @"-WjBc5n1qxOpfew3v5CXc4kj";
+
+
+static NSString * const kAPIkey = @"AIzaSyDecq7z3XghWttNX_BU4XzGr7vVaYq8UrI";
+static NSString * const kClientId = @"937126404865.apps.googleusercontent.com";
+static NSString * const kClientSecret = @"By9p5DtVhQ-4AwDbHfcm5lbg";
+
+static int const maxMarkersCountiPhone4 = 50;
+static int const maxMarkersCountiPhone5iPad = 150;
