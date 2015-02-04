@@ -17,7 +17,7 @@
 
 @interface PostController : NSObject <GPPSignInDelegate>
 
-+ (void)postMessageWithFacebook:(NSString*)message;
++ (void)postMessageWithFacebook:(NSString*)message link:(NSString*)link linkTitle:(NSString*)linkTitle linkDesc:(NSString*)linkDesc image:(NSString*)image;
 - (void)postMessageWithGoogle:(NSString*)message;
 
 @end

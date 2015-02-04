@@ -28,8 +28,27 @@
         catDict = [UserDefaults getCategory:[[dict valueForKeyPath:@"category_id"]integerValue]];
     }
     
-    if ([catDict valueForKey:@"title"]) {
-        [self.lblTitle setText:[Utilities checkIfNull:[catDict valueForKey:@"title"]]];
+    if([catDict valueForKey:@"parent_id"] != nil) // Categoria possui pai
+    {
+        NSNumber* parentcatid = [catDict valueForKey:@"parent_id"];
+        NSDictionary* parentcatdict = [UserDefaults getCategory:[parentcatid intValue]];
+        
+        if ([parentcatdict valueForKey:@"title"]) {
+            [self.lblTitle setText:[Utilities checkIfNull:[parentcatdict valueForKey:@"title"]]];
+        }
+        if ([catDict valueForKey:@"title"]) {
+            [self.lblCategory setText:[Utilities checkIfNull:[catDict valueForKey:@"title"]]];
+        }
+        
+        self.lblCategory.hidden = NO;
+    }
+    else
+    {
+        if ([catDict valueForKey:@"title"]) {
+            [self.lblTitle setText:[Utilities checkIfNull:[catDict valueForKey:@"title"]]];
+        }
+        
+        self.lblCategory.hidden = YES;
     }
     
     
@@ -40,6 +59,7 @@
     [self.lblProtocolo setText:[NSString stringWithFormat:@"PROTOCOLO %@",[Utilities checkIfNull:[dict valueForKey:@"protocol"]]]];
     
     [self.lblTitle setFont:[Utilities fontOpensSansLightWithSize:16]];
+    [self.lblCategory setFont:[Utilities fontOpensSansLightWithSize:12]];
     [self.lblSubtitle setFont:[Utilities fontOpensSansBoldWithSize:10]];
     [self.lblProtocolo setFont:[Utilities fontOpensSansLightWithSize:8]];
     
@@ -61,7 +81,7 @@
     UIColor *color = [Utilities colorWithHexString:strColor];
     [self.imgLine setBackgroundColor:color];
     
-    [self.lblStatus setFrame:CGRectMake(207, 47, 101, 21)];
+    [self.lblStatus setFrame:CGRectMake(207, 67, 101, 21)];
     [self.lblStatus setText:[Utilities checkIfNull:strStatus]];
     
     [self.lblStatus setBackgroundColor:color];

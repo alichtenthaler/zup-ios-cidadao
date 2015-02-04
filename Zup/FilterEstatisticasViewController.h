@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "EstatisticasViewController.h"
 
-@interface FilterEstatisticasViewController : UIViewController{
+@interface FilterEstatisticasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
     BOOL isCategoriesOpen;
     int currentIdCat;
+    
+    NSArray* categories;
+    NSMutableArray* selectedCategories;
 }
 
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *arrBtStatus;
@@ -33,6 +36,8 @@
 @property (retain, nonatomic) IBOutlet UIButton *btResolvidos;
 @property (retain, nonatomic) IBOutlet UIButton *btAndamento;
 @property (retain, nonatomic) IBOutlet UIButton *btAberto;
+
+@property (nonatomic, retain) IBOutlet UITableView* tableView;
 
 - (IBAction)btCategories:(id)sender;
 - (IBAction)slider:(id)sender;

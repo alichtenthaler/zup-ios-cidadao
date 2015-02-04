@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PerfilViewController.h"
 #import "RelateViewController.h"
+#import "MainViewController.h"
 
 @interface CreateViewController : UIViewController <UITextFieldDelegate> {
     CustomButton *btCreate;
@@ -18,6 +19,7 @@
 
 @property (nonatomic) BOOL isFromPerfil;
 @property (nonatomic) BOOL isFromSolicit;
+@property (strong, nonatomic)  MainViewController *mainVC;
 @property (strong, nonatomic)  PerfilViewController *perfilVC;
 @property (weak, nonatomic)  RelateViewController *relateVC;
 

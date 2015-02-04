@@ -9,6 +9,7 @@
 #import "CreateViewController.h"
 #import "SocialViewController.h"
 #import "TermosViewController.h"
+#import "TabBarController.h"
 
 UITextField *activeField;
 
@@ -170,7 +171,7 @@ UITextField *activeField;
     BOOL isNoCpf = NO;
     BOOL isNoCep = NO;
     
-    if (self.tfPhone.text.length != 13) {
+    if (self.tfPhone.text.length != 13 && self.tfPhone.text.length != 14) {
         self.tfPhone.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPhone.background = [Utilities changeColorForImage:self.tfPhone.background toColor:[UIColor redColor]];
         isEmpty = YES;
@@ -301,6 +302,8 @@ UITextField *activeField;
         [UserDefaults setToken:[dict valueForKey:@"token"]];
         [UserDefaults setIsUserLogged:YES];
         
+        [self.mainVC getReportCategories];
+        
         [self callNextView];
         
     }
@@ -312,15 +315,40 @@ UITextField *activeField;
 
 - (void)callNextView {
     
+    BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+    BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
+    BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
+    
     [btCancel removeFromSuperview];
     [btCreate removeFromSuperview];
     
-    SocialViewController *social = [[SocialViewController alloc]initWithNibName:@"SocialViewController" bundle:nil];
-    social.isFromPerfil = self.isFromPerfil;
-    social.isFromSolicit = self.isFromSolicit;
-    social.perfilVC = self.perfilVC;
-    social.relateVC = self.relateVC;
-    [self.navigationController pushViewController:social animated:YES];
+    if(facebookEnabled || twitterEnabled || plusEnabled)
+    {
+        SocialViewController *social = [[SocialViewController alloc]initWithNibName:@"SocialViewController" bundle:nil];
+        social.isFromPerfil = self.isFromPerfil;
+        social.isFromSolicit = self.isFromSolicit;
+        social.perfilVC = self.perfilVC;
+        social.relateVC = self.relateVC;
+        [self.navigationController pushViewController:social animated:YES];
+    }
+    else if ([Utilities isIpad])
+    {
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"jump" object:nil];
+        }];
+        
+    }
+    else
+    {
+        NSString *strName = @"Main_iPhone";
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:strName bundle: nil];
+        
+        [self.navigationController setNavigationBarHidden:YES];
+        TabBarController *tabBar = [storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
+        [self.navigationController pushViewController:tabBar animated:YES];
+    }
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
@@ -439,13 +467,13 @@ UITextField *activeField;
     } else {
         
         if (textField == self.tfComplement || textField == self.tfCep) {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.navigationController.view.superview.bounds = CGRectMake(-25, 100, 470, 620);
-            }];
+            //[UIView animateWithDuration:0.2 animations:^{
+            //    self.navigationController.view.superview.bounds = CGRectMake(-25, 100, 470, 620);
+            //}];
         } else {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.navigationController.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
-            }];
+            //[UIView animateWithDuration:0.2 animations:^{
+            //    self.navigationController.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
+            //}];
         }
        
     }
@@ -548,7 +576,7 @@ UITextField *activeField;
             [textField setText:@""];
         }
         
-        if (range.location == 13) {
+        if (range.location == 14 /* 13 */) {
             return NO;
         }
         

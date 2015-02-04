@@ -25,7 +25,7 @@
 
 @property (retain, nonatomic) IBOutlet UILabel *lblTitle;
 
-@property (retain, nonatomic) MainViewController *mainVC;
+@property (retain, nonatomic) IBOutlet MainViewController *mainVC;
 @property (weak, nonatomic)  PerfilViewController *perfilVC;
 @property (weak, nonatomic)  RelateViewController *relateVC;
 

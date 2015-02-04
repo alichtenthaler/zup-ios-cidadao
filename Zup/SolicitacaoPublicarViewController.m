@@ -19,6 +19,7 @@
 
 NSDictionary *dictTemp;
 NSString *messageTemp;
+NSString* linkTemp;
 
 @implementation SolicitacaoPublicarViewController
 
@@ -85,6 +86,29 @@ NSString *messageTemp;
         [self.viewContainer setCenter:self.view.center];
     }
     
+    self.viewConfidential.layer.cornerRadius = 3;
+    self.labelConfidential.font = [Utilities fontOpensSansLightWithSize:12];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSNumber* catid = [self.dictMain valueForKey:@"catId"];
+    NSDictionary* cat = [UserDefaults getCategory:[catid intValue]];
+    
+    if([[cat valueForKey:@"confidential"] boolValue])
+    {
+        self.viewConfidential.hidden = NO;
+        CGRect frame = self.viewContainer.frame;
+        frame.origin.y = 60;
+        self.viewContainer.frame = frame;
+        
+        self.scroll.contentSize = CGSizeMake(self.scroll.frame.size.width, 386);
+    }
+    else
+    {
+        self.viewConfidential.hidden = YES;
+        self.scroll.contentSize = CGSizeMake(self.scroll.frame.size.width, 326);
+    }
 }
 
 - (void)handleSocialView {
@@ -92,13 +116,30 @@ NSString *messageTemp;
     
     [self.viewToShare setHidden:YES];
     
-    if (socialType == kSocialNetworFacebook) {
+    BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+    BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
+    BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
+    
+    if (facebookEnabled && socialType == kSocialNetworFacebook) {
+        self.lblFacebook.hidden = NO;
+        self.swFacebook.hidden = NO;
         [self.lblFacebook setText:@"Compartilhar no Facebook"];
-    } else if (socialType == kSocialNetworGooglePlus) {
+    } else if (plusEnabled && socialType == kSocialNetworGooglePlus) {
+        self.lblFacebook.hidden = NO;
+        self.swFacebook.hidden = NO;
         [self.lblFacebook setText:@"Compartilhar no Google Plus"];
-    } else if (socialType == kSocialNetworTwitter) {
+    } else if (twitterEnabled && socialType == kSocialNetworTwitter) {
+        self.lblFacebook.hidden = NO;
+        self.swFacebook.hidden = NO;
         [self.lblFacebook setText:@"Compartilhar no Twitter"];
-    } else {
+    } else if(!facebookEnabled && !twitterEnabled && !plusEnabled) {
+        self.lblFacebook.hidden = YES;
+        self.swFacebook.hidden = YES;
+        [self.viewToShare setHidden:YES];
+    }
+    else {
+        self.lblFacebook.hidden = YES;
+        self.swFacebook.hidden = YES;
         [self.viewToShare setHidden:NO];
     }
 }
@@ -196,36 +237,70 @@ NSString *messageTemp;
     if (![Utilities checkIfError:dict]) {
         
         NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.intValue];
-        int resolutionInt = [[dictCat valueForKey:@"resolution_time"]intValue];
         
-        int hours = resolutionInt/60/60/24;
-        NSString *timeStr = [NSString stringWithFormat:@"%i", hours];
+        NSString* sentence;
         
-        NSString *sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: %@ Horas", [dict valueForKeyPath:@"report.protocol"], timeStr];
+        // Exibir tempo de resolução?
+        if([UserDefaults isFeatureEnabled:@"show_resolution_time_to_clients"])
+        {
+            int resolutionInt = [[dictCat valueForKey:@"resolution_time"]intValue];
         
-        if (hours < 1) {
-            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
+            int hours = resolutionInt/60/60/24;
+            NSString *timeStr = [NSString stringWithFormat:@"%i", hours];
+        
+            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: %@ Horas", [dict valueForKeyPath:@"report.protocol"], timeStr];
+        
+            if (hours < 1) {
+                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
+            }
         }
-        
+        else
+        {
+            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@", [dict valueForKeyPath:@"report.protocol"]];
+        }
         
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Solicitação enviada" message:sentence delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
         
         SocialNetworkType social = [UserDefaults getSocialNetworkType];
         
+        BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+        BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
+        BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
+        
         if (self.swFacebook.on && social != kSocialNetworkAnyone) {
+            NSString* message = [Utilities defaultShareMessage];
+            NSString* link = [Utilities linkForReportId:[[dict valueForKeyPath:@"report.id"] intValue]];
+            NSString* cat = [dictCat valueForKeyPath:@"title"];
+            NSString* desc = [dict valueForKeyPath:@"report.description"];
+            NSString* image = @"";
             
-            if (social == kSocialNetworFacebook) {
-                [PostController postMessageWithFacebook:@"Mensagem teste."];
+            if(desc == nil)
+                desc = @"";
+            
+            NSArray *arrImages = [dict valueForKeyPath:@"report.images"];
+            if(arrImages != nil && [arrImages count] > 0)
+            {
+                NSDictionary* firstImage = [arrImages objectAtIndex:0];
+                image = [firstImage valueForKey:@"high"];
+            }
+            
+            if (social == kSocialNetworFacebook && facebookEnabled) {
+                [PostController postMessageWithFacebook:message link:link linkTitle:cat linkDesc:desc image:image];
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [self callReportDetail];
-            } else if (social == kSocialNetworGooglePlus) {
-                [self postMessageWithGoogle:@"Mensagem teste"];
+            } else if (social == kSocialNetworGooglePlus && plusEnabled) {
+                [self postMessageWithGoogle:[Utilities socialShareTextForReportId:[[dict valueForKeyPath:@"report.id"] intValue]]];
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [self callReportDetail];
-            } else if (social == kSocialNetworTwitter) {
-                messageTemp = @"Mensagem teste";
+            } else if (social == kSocialNetworTwitter && twitterEnabled) {
+                messageTemp = message;
+                linkTemp = link;
                 [self postMessageWithTwitter];
+                //[self dismissViewControllerAnimated:YES completion:nil];
+            } else {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                [self callReportDetail];
             }
 
             
@@ -244,7 +319,7 @@ NSString *messageTemp;
         }
         
     } else {
-        [Utilities alertWithError:@"Erro ao plublicar."];
+        [Utilities alertWithError:@"Erro ao publicar."];
     }
 }
 
@@ -467,12 +542,15 @@ NSString *messageTemp;
         controller.completionHandler =myBlock;
         
         [controller setInitialText:messageTemp];
-        [controller addURL:[NSURL URLWithString:@"http://www.globo.com"]];
+        [controller addURL:[NSURL URLWithString:linkTemp]];
         
         [self presentViewController:controller animated:YES completion:nil];
     }
     else{
         NSLog(@"UnAvailable");
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [self callReportDetail];
     }
 }
 

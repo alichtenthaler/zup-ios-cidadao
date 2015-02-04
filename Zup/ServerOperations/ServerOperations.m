@@ -11,25 +11,37 @@
 #import "TIRequest.h"
 #import "NSData+Base64.h"
 
+// http://staging.zup.sapience.io/
+// http://zup.cognita.ntxdev.com.br/
+#define BASE_URL @"http://zup-staging.cognita.ntxdev.com.br/"
+//#define BASE_URL @"http://zup-api-sbc.cognita.ntxdev.com.br/"
+//#define BASE_URL @"http://zup-api-boa-vista.cognita.ntxdev.com.br/"
+#define APIURL(x) BASE_URL x
+
+#define BASE_WEB_URL @"http://zup.cognita.ntxdev.com.br"
+
+NSString* q = @"a" @"b";
+
 NSString * const URL = @"";
 NSString * const URLgetAddress = @"http://maps.googleapis.com/maps/api/geocode/json?latlng=";
-NSString * const URLauthenticate = @"http://staging.zup.sapience.io/authenticate.json";
-NSString * const URLupdateUser = @"http://staging.zup.sapience.io/users/";
-NSString * const URLcreate = @"http://staging.zup.sapience.io/users.json";
-NSString * const URLrecoveryPass = @"http://staging.zup.sapience.io/recover_password.json";
-NSString * const URLuserDetails = @"http://staging.zup.sapience.io/users/";
-NSString * const URLgetPoints = @"http://staging.zup.sapience.io/reports/users/";
-NSString * const URLpost = @"http://staging.zup.sapience.io/reports/";
-NSString * const URLreportCategoriesList = @"http://staging.zup.sapience.io/reports/categories.json";
+NSString * const URLauthenticate = APIURL(@"authenticate.json");
+NSString * const URLupdateUser = APIURL(@"users/");
+NSString * const URLcreate = APIURL(@"users.json");
+NSString * const URLrecoveryPass = APIURL(@"recover_password.json");
+NSString * const URLuserDetails = APIURL(@"users/");
+NSString * const URLgetPoints = APIURL(@"reports/users/");
+NSString * const URLpost = APIURL(@"reports/");
+NSString * const URLreportCategoriesList = APIURL(@"reports/categories.json?display_type=full&token=");
 NSString * const URLgetAddressStreey = @"http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
-NSString * const URLgetItems = @"http://staging.zup.sapience.io/inventory/items.json";
-NSString * const URLgetReportItems = @"http://staging.zup.sapience.io/reports/items.json";
-NSString * const URLgetReportItemsForInventory = @"http://staging.zup.sapience.io/reports/items.json?inventory_item_id=";
-NSString * const URLgetInventoryCategories = @"http://staging.zup.sapience.io/inventory/categories.json?display_type=full";
-NSString * const URLgetReportsForCategory = @"http://staging.zup.sapience.io/reports/";
-NSString * const URLgetUserPosts = @"http://staging.zup.sapience.io/reports/users/";
-NSString * const URLgetInventoryWithId = @"http://staging.zup.sapience.io/reports/inventory/";
-NSString * const URLgetStats = @"http://staging.zup.sapience.io/reports/stats.json";
+NSString * const URLgetItems = APIURL(@"inventory/items.json");
+NSString * const URLgetReportItems = APIURL(@"reports/items.json");
+NSString * const URLgetReportItemsForInventory = APIURL(@"reports/items.json?inventory_item_id=");
+NSString * const URLgetInventoryCategories = APIURL(@"inventory/categories.json?display_type=full");
+NSString * const URLgetReportsForCategory = APIURL(@"reports/");
+NSString * const URLgetUserPosts = APIURL(@"reports/users/");
+NSString * const URLgetInventoryWithId = APIURL(@"reports/inventory/");
+NSString * const URLgetStats = APIURL(@"reports/stats.json");
+NSString * const URLgetFeatureFlags = APIURL(@"feature_flags.json");
 
 @implementation ServerOperations
 
@@ -128,6 +140,10 @@ addressAdditional:(NSString*)addressAdditional
     document = [document stringByReplacingOccurrencesOfString:@"." withString:@""];
     document = [document stringByReplacingOccurrencesOfString:@"-" withString:@""];
     
+    NSString* token = [UserDefaults getDeviceToken];
+    if (token == nil)
+        token = @"";
+    
     NSDictionary* jsonData = @{ @"email" : email,
                                 @"password" : pass,
                                 @"password_confirmation" : pass,
@@ -138,7 +154,7 @@ addressAdditional:(NSString*)addressAdditional
                                 @"address_additional" : addressAdditional,
                                 @"postal_code" : postalCode,
                                 @"district" : district,
-                                @"device_token" : [UserDefaults getDeviceToken],
+                                @"device_token" : token,
                                 @"device_type" : @"ios"
                                 };
     
@@ -253,7 +269,37 @@ addressAdditional:(NSString*)addressAdditional
     return [self StartRequest:postRequest];
 }
 
--(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom categoryId:(NSString*)catId{
+-(BOOL) getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds
+{
+    int maxCount = 0;
+    if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
+    else maxCount = maxMarkersCountiPhone4;
+    
+    NSString* strUrl;
+    
+    if ([categoryIds count] == 0) {
+        strUrl = [NSString stringWithFormat:APIURL(@"inventory/items.json?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f"), maxCount,radius, latitude, longitude, zoom];
+    } else {
+        NSMutableString* catIds = [[NSMutableString alloc] init];
+        int i = 0;
+        for(NSNumber* catid in categoryIds)
+        {
+            NSString* param = [NSString stringWithFormat:@"inventory_category_id[]=%i&", [catid intValue]];
+            
+            [catIds appendString:param];
+            i++;
+        }
+        strUrl = [NSString stringWithFormat:APIURL(@"inventory/items.json?%@limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f"), catIds, maxCount,radius, latitude, longitude, zoom];
+    }
+    
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    [postRequest setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:postRequest];
+}
+
+-(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom categoryId:(int)catId{
     
     int maxCount = 0;
     if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
@@ -261,7 +307,7 @@ addressAdditional:(NSString*)addressAdditional
     
 //    NSString *strUrl = @"http://staging.zup.sapience.io/inventory/items.json?limit=30&position%5Bdistance%5D=518.0249592829191&position%5Blatitude%5D=-23.5481173&position%5Blongitude%5D=-46.63609300000002&zoom=17";
     
-    NSString *strUrl = [NSString stringWithFormat:@"http://staging.zup.sapience.io/inventory/items.json?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f", maxCount,radius, latitude, longitude, zoom];
+    NSString *strUrl = [NSString stringWithFormat:APIURL(@"inventory/items.json?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f&inventory_category_id=%i"), maxCount,radius, latitude, longitude, zoom, catId];
     
 //    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&limit=%i&zoom=%f&inventory_category_id=%@", URLgetItems, latitude, longitude, radius, maxCount, zoom, catId];
     
@@ -311,7 +357,10 @@ addressAdditional:(NSString*)addressAdditional
 }
 
 -(BOOL)getReportCategories{
-    NSURL* url = [NSURL URLWithString:URLreportCategoriesList];
+    NSString* token = [UserDefaults getToken];
+    if(token == nil)
+        token = @"";
+    NSURL* url = [NSURL URLWithString:[URLreportCategoriesList stringByAppendingString:token]];
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
     
@@ -424,7 +473,7 @@ categoryId:(NSString*)catId
 
 -(BOOL)getReportDetailsWithId:(NSString*)idCategory {
     
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://staging.zup.sapience.io/reports/items/%@.json", idCategory]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:APIURL(@"reports/items/%@.json"), idCategory]];
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
     
@@ -437,7 +486,7 @@ categoryId:(NSString*)catId
     
     NSString *token = [UserDefaults getToken];
     
-    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"http://staging.zup.sapience.io/inventory/categories/%@/items/%@.json?token=%@", idCategory, idItem, token]];
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:APIURL(@"inventory/categories/%@/items/%@.json?token=%@"), idCategory, idItem, token]];
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
     
@@ -483,6 +532,53 @@ categoryId:(NSString*)catId
     return [self StartRequest:postRequest];
 }
 
+-(BOOL)getStatsWithFilter:(int)days categoryIds:(NSArray*)categoryIds{
+    
+    NSDate *today = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *strToday = [formatter stringFromDate:today];
+    
+    NSString *earlierStr = [Utilities getDateStringFromDaysPassed:days];
+    
+    NSURL* url = nil;
+    
+    if ([categoryIds count] == 0) {
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?begin_date=%@&end_date=%@", URLgetStats, earlierStr, strToday]];
+    } else {
+        NSMutableString* catIds = [[NSMutableString alloc] init];
+        int i = 0;
+        for(NSNumber* catid in categoryIds)
+        {
+            NSString* param = [NSString stringWithFormat:@"category_id[]=%i&", [catid intValue]];
+            
+            [catIds appendString:param];
+            i++;
+        }
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@begin_date=%@&end_date=%@", URLgetStats, catIds ,earlierStr, strToday]];
+    }
+    
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    [postRequest setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:postRequest];
+}
 
+-(BOOL)getFeatureFlags
+{
+    
+    NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", URLgetFeatureFlags]];
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    [postRequest setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:postRequest];
+}
+
++ (NSString*) baseWebUrl
+{
+    return BASE_WEB_URL;
+}
 
 @end

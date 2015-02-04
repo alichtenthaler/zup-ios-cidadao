@@ -26,13 +26,75 @@ int currentIdCategory;
     return self;
 }
 
+- (void) setTab:(NSString*)name
+{
+    BOOL isCategorias = NO;
+    BOOL isPeriodoStatus = NO;
+    BOOL isInventario = NO;
+    
+    //UIView* newView = nil;
+    
+    if ([name isEqualToString:@"categorias"])
+    {
+        isCategorias = YES;
+        //newView = self.viewCategorias;
+    }
+    else if ([name isEqualToString:@"periodoStatus"])
+    {
+        isPeriodoStatus = YES;
+        //newView = self.viewCategorias;
+    }
+    else if ([name isEqualToString:@"inventario"])
+    {
+        isInventario = YES;
+        //newView = self.viewCategorias;
+    }
+    
+    [self.btnCategorias setSelected:isCategorias];
+    [self.btnPeriodoStatus setSelected:isPeriodoStatus];
+    [self.btnInventario setSelected:isInventario];
+    
+    [self.viewCategorias setHidden:!isCategorias];
+    [self.viewPeriodoStatus setHidden:!isPeriodoStatus];
+    [self.viewInventario setHidden:!isInventario];
+    
+    //if(newView != nil)
+    //   [newView setHidden:NO];
+}
+
+- (IBAction)categorias:(id)sender
+{
+    [self setTab:@"categorias"];
+}
+
+- (IBAction)periodoStatus:(id)sender
+{
+    [self setTab:@"periodoStatus"];
+}
+
+- (IBAction)inventario:(id)sender
+{
+    [self setTab:@"inventario"];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.title = @"Filtros";
     
+    [self setTab:@"categorias"];
+    
     self.exploreView.statusToFilterId = 0;
     self.exploreView.dayFilter = 30 * 6;
+    
+    [self.viewContent addSubview:self.viewCategorias];
+    [self.viewContent addSubview:self.viewPeriodoStatus];
+    [self.viewContent addSubview:self.viewInventario];
+    
+    CGRect frame = CGRectMake(0, 0, self.viewContent.frame.size.width, self.viewContent.frame.size.height);
+    self.viewCategorias.frame = frame;
+    self.viewPeriodoStatus.frame = frame;
+    self.viewInventario.frame = frame;
 
 //    [self.btViewStatus setHidden:YES];
 //    [self.imgSeta setHidden:YES];
@@ -41,6 +103,10 @@ int currentIdCategory;
     [self.lblSolicitacoesTitle setFont:[Utilities fontOpensSansBoldWithSize:12]];
     [self.lblPontosTitle setFont:[Utilities fontOpensSansBoldWithSize:12]];
     [self.btViewStatus.titleLabel setFont:[Utilities fontOpensSansLightWithSize:14]];
+    
+    [self.btnCategorias.titleLabel setFont:[Utilities fontOpensSansLightWithSize:14]];
+    [self.btnPeriodoStatus.titleLabel setFont:[Utilities fontOpensSansLightWithSize:14]];
+    [self.btnInventario.titleLabel setFont:[Utilities fontOpensSansLightWithSize:14]];
 
     for (UIButton *bt in self.arrBtStatus) {
         [bt.titleLabel setFont:[Utilities fontOpensSansLightWithSize:14]];
@@ -81,18 +147,44 @@ int currentIdCategory;
     [self createReportButtons];
     [self createInventoryButtons];
 
+    [self.categoriasViewController setDelegate:self selector:@selector(filterChanged:)];
+    [self.inventarioViewController setDelegate:self selector:@selector(filterChanged:)];
+}
+
+- (void)filterChanged:(id)sender
+{
+    if(sender == self.categoriasViewController && [[self.categoriasViewController categoriesIds] count] > 0)
+    {
+        [self.inventarioViewController deselectAll];
+    }
+    else if(sender == self.inventarioViewController && [[self.inventarioViewController categoriesIds] count] > 0)
+    {
+        [self.categoriasViewController deselectAll];
+    }
+    
+    if([[self.categoriasViewController categoriesIds] count] == 0 && [[self.inventarioViewController categoriesIds] count] == 0)
+    {
+        self.btFilter.enabled = NO;
+    }
+    else
+    {
+        self.btFilter.enabled = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    CustomButton *btFilter = nil;
-    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btFilter setFontSize:14];
-    [btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
-    [btFilter addTarget:self action:@selector(btConcluido) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btFilter];
+    //CustomButton *btFilter = nil;
+    self.btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [self.btFilter setFontSize:14];
+    [self.btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
+    [self.btFilter addTarget:self action:@selector(btConcluido) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.btFilter];
     
+    
+    [self.categoriasViewController viewWillAppear:YES];
+    [self.inventarioViewController viewWillAppear:YES];
 }
 
 
@@ -379,22 +471,39 @@ int currentIdCategory;
     [self.exploreView.arrFilterInventoryIDs removeAllObjects];
     self.exploreView.isDayFilter = NO;
     self.exploreView.isFromFilter = NO;
+    self.exploreView.dayFilter = [self.periodoStatusViewController dayFilter];
+    self.exploreView.statusToFilterId = [self.periodoStatusViewController selectedStatusId];
+    
+    NSArray* reportCategories = [self.categoriasViewController categoriesIds];
+    for(NSNumber* catid in reportCategories)
+    {
+        [self addToFilterArray:[catid intValue]];
+        self.exploreView.isDayFilter = YES;
+        self.exploreView.isFromFilter = YES;
+    }
 
-    for (UIButton *bt in self.arrReportCategorias) {
+    /*for (UIButton *bt in self.arrReportCategorias) {
         if (bt.selected) {
             [self addToFilterArray:bt.tag];
             self.exploreView.isDayFilter = YES;
             self.exploreView.isFromFilter = YES;
         }
-    }
+    }*/
    
-    for (UIButton *bt in self.arrBtPontos) {
+    for (NSNumber* catid in [self.inventarioViewController categoriesIds])
+    {
+        [self addToFilterInventoryArray:[catid intValue]];
+        self.exploreView.isDayFilter = YES;
+        self.exploreView.isFromFilter = YES;
+    }
+    
+    /*for (UIButton *bt in self.arrBtPontos) {
         if (bt.selected) {
             [self addToFilterInventoryArray:bt.tag];
             self.exploreView.isDayFilter = YES;
             self.exploreView.isFromFilter = YES;
         }
-    }
+    }*/
     
     if (self.exploreView.arrFilterIDs.count == 0) {
         self.exploreView.isNoReports = YES;
@@ -407,6 +516,8 @@ int currentIdCategory;
     } else {
         self.exploreView.isNoInventories = NO;
     }
+    
+    [self.exploreView viewWillAppear:YES];
     
     [self dismissViewControllerAnimated:YES completion:^{
         [self.exploreView.mapView clear];

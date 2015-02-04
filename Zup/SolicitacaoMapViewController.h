@@ -31,6 +31,9 @@
     NSTimer *timerPlaceholder;
     
     BOOL isSearch;
+    
+    int locationJobId;
+    int freeJobId;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *tvReferencia;

@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "PerfilDetailViewController.h"
+#import "XL/XLMediaZoom.h"
 
 @interface ListExploreViewController : UIViewController {
     CustomButton *btCancel;
     PerfilDetailViewController *detailView;
     BOOL isSolicit;
+    BOOL showingImage;
+    XLMediaZoom* currentZoom;
 }
 
+@property (nonatomic, retain) NSMutableDictionary* imageZooms;
 @property (weak, nonatomic) IBOutlet UILabel *lblNoSolicits;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 @property (weak, nonatomic) IBOutlet UIButton *btSolicit;

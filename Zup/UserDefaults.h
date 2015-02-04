@@ -47,9 +47,14 @@ typedef enum {
 +(void)setFbPublishToken:(NSString*)token;
 +(NSString*)getFbPublishToken;
 
++(void)setFeatureFlags:(NSArray*)arr;
++(BOOL)isFeatureEnabled:(NSString*)feature;
+
 +(void)setReportCategories:(NSArray*)arr;
 +(NSArray*)getReportCategories;
 +(NSDictionary*)getCategory:(int)idCat;
++(NSArray*)getReportSubCategories:(int)idCat;
++(NSArray*)getReportRootCategories;
 
 +(void)setInventoryCategories:(NSArray*)arr;
 +(NSArray*)getInventoryCategories;

@@ -13,6 +13,8 @@
 @property(nonatomic) SEL action;
 @property(nonatomic) SEL actionErro;
 @property(nonatomic, retain) id target;
+@property(nonatomic) int jobId;
+@property(nonatomic) SEL actionJob;
 
 -(void)CancelRequest;
 -(BOOL)StartRequest:(NSURLRequest*)request;

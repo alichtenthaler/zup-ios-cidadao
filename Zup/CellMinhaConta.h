@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblStatus;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
+@property (strong, nonatomic) IBOutlet UILabel *lblCategory;
 @property (strong, nonatomic) IBOutlet UILabel *lblSubtitle;
 @property (weak, nonatomic) IBOutlet UIImageView *imgLine;
 @property (weak, nonatomic) IBOutlet CustomButton *btAberto;

@@ -7,10 +7,30 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FiltrarCategoriasViewController.h"
+#import "FiltrarPeriodoStatusViewController.h"
+#import "FiltrarInventarioViewController.h"
+#import "CustomButton.h"
+
 @class ExploreViewController;
 @interface FiltrarViewController : UIViewController <UIGestureRecognizerDelegate> {
     BOOL isMenuOpen;
 }
+
+@property CustomButton* btFilter;
+
+@property (retain, nonatomic) IBOutlet UIView *contentView;
+@property (retain, nonatomic) IBOutlet UIButton *btnCategorias;
+@property (retain, nonatomic) IBOutlet UIButton *btnPeriodoStatus;
+@property (retain, nonatomic) IBOutlet UIButton *btnInventario;
+
+@property (retain, nonatomic) IBOutlet UIView *viewCategorias;
+@property (retain, nonatomic) IBOutlet UIView *viewPeriodoStatus;
+@property (retain, nonatomic) IBOutlet UIView *viewInventario;
+
+@property (strong, retain) IBOutlet FiltrarCategoriasViewController* categoriasViewController;
+@property (strong, retain) IBOutlet FiltrarPeriodoStatusViewController* periodoStatusViewController;
+@property (strong, retain) IBOutlet FiltrarInventarioViewController* inventarioViewController;
 
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSArray *arrBtStatus;
 @property (retain, nonatomic) IBOutletCollection(UIButton) NSMutableArray *arrReportCategorias;

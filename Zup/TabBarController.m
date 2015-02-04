@@ -19,7 +19,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self->removedUnusedTabs = NO;
     }
     return self;
 }
@@ -96,7 +96,6 @@
 
     } else {
     }
-    
 }
 
 - (void) hideTabBar {
@@ -178,6 +177,52 @@
         ExploreViewController *exploreVC = [nav.viewControllers objectAtIndex:0];
         exploreVC.isFromOtherTab = YES;
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if(!self->removedUnusedTabs)
+    {
+        UITabBar *tabBar = self.tabBar;
+    
+        NSMutableIndexSet* itemsToRemove = [NSMutableIndexSet indexSet];
+    
+        if(![UserDefaults isFeatureEnabled:@"explore"])
+            [itemsToRemove addIndex:0];
+    
+        if(![UserDefaults isFeatureEnabled:@"create_report_clients"])
+            [itemsToRemove addIndex:1];
+    
+        if(![UserDefaults isFeatureEnabled:@"stats"])
+            [itemsToRemove addIndex:3];
+    
+        NSMutableArray *tbViewControllers = [NSMutableArray arrayWithArray:[self viewControllers]];
+        [tbViewControllers removeObjectsAtIndexes:itemsToRemove];
+        [self setViewControllers:tbViewControllers];
+       
+        self->removedUnusedTabs = YES;
+    }
+
+}
+
+- (BOOL)isFeatureEnabled:(NSString*)feature flags:(NSArray*) flags
+{
+    for (NSDictionary* flag in flags)
+    {
+        NSString* name = [flag valueForKey:@"name"];
+        NSString* status = [flag valueForKey:@"status_name"];
+        
+        if([name isEqualToString:feature])
+        {
+            return ![status isEqualToString:@"disabled"];
+        }
+    }
+    
+    return YES;
+}
+
+- (void)didReceiveError:(NSError*)error {
+    [Utilities alertWithServerError];
 }
 
 

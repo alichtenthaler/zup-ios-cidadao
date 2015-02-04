@@ -43,6 +43,33 @@
     return [prefs valueForKey:@"token"];
 }
 
++(void)setFeatureFlags:(NSArray*)arr {
+    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setValue:arr forKey:@"featureFlags"];
+    [prefs synchronize];
+}
+
++(NSArray*)getFeatureFlags {
+    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    return [prefs valueForKey:@"featureFlags"];
+}
+
++ (BOOL)isFeatureEnabled:(NSString*)feature
+{
+    for (NSDictionary* flag in [UserDefaults getFeatureFlags])
+    {
+        NSString* name = [flag valueForKey:@"name"];
+        NSString* status = [flag valueForKey:@"status_name"];
+        
+        if([name isEqualToString:feature])
+        {
+            return ![status isEqualToString:@"disabled"];
+        }
+    }
+    
+    return YES;
+}
+
 +(void)setDeviceToken:(NSString*)token {
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
     [prefs setValue:token forKey:@"deviceToken"];
@@ -192,10 +219,80 @@
 
 
 +(void)setReportCategories:(NSArray*)arr {
+    NSMutableArray* newarr = [[NSMutableArray alloc] init];
+    
+    for(NSDictionary* dict in arr)
+    {
+        if(![[dict valueForKey:@"private"] boolValue])
+           [newarr addObject:dict];
+    }
+    
+    /*for(NSDictionary* dict in arr)
+    {
+        NSMutableDictionary* newdict = [NSMutableDictionary dictionaryWithDictionary:dict];
+        
+        int catid = [[dict valueForKey:@"id"] intValue];
+        [newdict setValue:[NSNumber numberWithInt:catid] forKey:@"parent_id"];
+        [newdict setValue:[NSNumber numberWithInt:catid + 100] forKey:@"id"];
+        
+        [newarr addObject:newdict];
+
+        NSMutableDictionary* newdict2 = [NSMutableDictionary dictionaryWithDictionary:dict];
+        
+        [newdict2 setValue:[NSNumber numberWithInt:catid] forKey:@"parent_id"];
+        [newdict2 setValue:[NSNumber numberWithInt:catid + 501] forKey:@"id"];
+        
+        [newarr addObject:newdict2];
+
+        
+        NSMutableDictionary* newdict3 = [NSMutableDictionary dictionaryWithDictionary:dict];
+        
+        [newdict3 setValue:[NSNumber numberWithInt:catid] forKey:@"parent_id"];
+        [newdict3 setValue:[NSNumber numberWithInt:catid + 902] forKey:@"id"];
+        
+        [newarr addObject:newdict3];
+
+    }*/
     
     NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setValue:arr forKey:@"categoriesArray"];
+    [prefs setValue:newarr forKey:@"categoriesArray"];
     [prefs synchronize];
+}
+
++(NSArray*) getReportSubCategories:(int)idCat
+{
+    NSMutableArray* result = [[NSMutableArray alloc] init];
+    
+    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    NSArray *arr = [prefs valueForKey:@"categoriesArray"];
+    
+    for (NSDictionary *dict in arr)
+    {
+        if ([dict objectForKey:@"parent_id"] != nil && [[dict objectForKey:@"parent_id"] intValue] == idCat)
+        {
+            [result addObject:dict];
+        }
+    }
+    
+    return result;
+}
+
++(NSArray*) getReportRootCategories
+{
+    NSMutableArray* result = [[NSMutableArray alloc] init];
+    
+    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    NSArray *arr = [prefs valueForKey:@"categoriesArray"];
+    
+    for (NSDictionary *dict in arr)
+    {
+        if ([dict objectForKey:@"parent_id"] == nil)
+        {
+            [result addObject:dict];
+        }
+    }
+    
+    return result;
 }
 
 +(NSArray*)getReportCategories{

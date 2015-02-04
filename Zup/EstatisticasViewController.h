@@ -19,6 +19,10 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 
+@property int daysFilter;
+@property NSArray* selectedCategories;
+
 - (void)refreshWithFilter:(int)days categoryId:(int)categoryId;
+- (void)refreshWithFilter:(int)days categoryIds:(NSArray*)categoryIds;
 
 @end

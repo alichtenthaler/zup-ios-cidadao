@@ -66,6 +66,8 @@ int RESOLVIDO = 3;
 
     [self.lblTitle setFont:[Utilities fontOpensSansBoldWithSize:11]];
     
+    [self.lblCategoria setFont:[Utilities fontOpensSansWithSize:11]];
+    
     [self.lblName setFont:[Utilities fontOpensSansLightWithSize:16]];
     [self.lblName setMinimumScaleFactor:0.5];
     
@@ -82,9 +84,17 @@ int RESOLVIDO = 3;
     if (self.lblAddress.text.length == 0 && ![Utilities isIpad]) {
         
         CGRect frame = self.lblName.frame;
-        frame.size.height += 15;
-        [self.lblName setFrame:frame];
+        //frame.size.height += 15;
+        //[self.lblName setFrame:frame];
     
+    }
+    
+    if([Utilities isIpad])
+    {
+        CGRect frm = self.lblName.frame;
+        frm.origin.y -= 15;
+        
+        //self.lblName.frame = frm;
     }
     
     [self getDetails];
@@ -98,9 +108,51 @@ int RESOLVIDO = 3;
         catDict = [UserDefaults getInventoryCategory:[[self.dictMain valueForKeyPath:@"inventory_category_id"]integerValue]];
     }
     
-    if ([catDict valueForKey:@"title"]) {
-        [self.lblName setText:[catDict valueForKey:@"title"]];
+    if([catDict valueForKey:@"parent_id"] != nil) // Categoria possui pai
+    {
+        NSNumber* parentcatid = [catDict valueForKey:@"parent_id"];
+        NSDictionary* parentcatdict = [UserDefaults getCategory:[parentcatid intValue]];
+        
+        if([Utilities isIpad]) // No iPad, as posições são trocadas
+        {
+            if ([parentcatdict valueForKey:@"title"]) {
+                [self.lblCategoria setText:[Utilities checkIfNull:[parentcatdict valueForKey:@"title"]]];
+            }
+            if ([catDict valueForKey:@"title"]) {
+                [self.lblName setText:[Utilities checkIfNull:[catDict valueForKey:@"title"]]];
+            }
+        }
+        else
+        {
+            if ([parentcatdict valueForKey:@"title"]) {
+                [self.lblName setText:[Utilities checkIfNull:[parentcatdict valueForKey:@"title"]]];
+            }
+            if ([catDict valueForKey:@"title"]) {
+                [self.lblCategoria setText:[Utilities checkIfNull:[catDict valueForKey:@"title"]]];
+            }
+        }
+        
+        self.lblCategoria.hidden = NO;
     }
+    else
+    {
+        if ([catDict valueForKey:@"title"]) {
+            [self.lblName setText:[catDict valueForKey:@"title"]];
+        }
+        
+        if(![Utilities isIpad])
+        {
+            CGRect tframe = self.lblName.frame;
+            tframe.origin.y += 4;
+            tframe.size.height += 15;
+            self.lblName.frame = tframe;
+        }
+        
+        self.lblCategoria.hidden = YES;
+    }
+    
+    UIImage* icon = [UIImage imageWithData:[catDict valueForKey:@"iconDataDisabled"]];
+    self.imgIcon.image = icon;
     
     if ([self.dictMain valueForKey:@"updated_at"]) {
         NSString *timeSentence = [Utilities calculateNumberOfDaysPassed:[self.dictMain valueForKey:@"updated_at"]];
@@ -120,6 +172,12 @@ int RESOLVIDO = 3;
     
     [self buildScroll];
     
+    // Só exibe o protocolo se for o criador do relato
+    if([[self.dictMain valueForKeyPath:@"user.id"] intValue] != [[UserDefaults getUserId] intValue])
+    {
+        [self.lblTitle setHidden:YES];
+    }
+    
 }
 
 - (void)buildStatusWithColor:(NSString*)colorStr title:(NSString*)title {
@@ -137,7 +195,7 @@ int RESOLVIDO = 3;
     float width = [Utilities expectedWidthWithLabel:self.lblStatus];
     CGRect frame = self.lblStatus.frame;
     frame.size.width = width + 20;
-    frame.origin.x += currentW - width - 20;
+    //frame.origin.x += currentW - width - 20;
     
     [self.lblStatus setFrame:frame];
 

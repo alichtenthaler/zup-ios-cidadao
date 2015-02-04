@@ -25,6 +25,9 @@
 @property (weak, nonatomic) IBOutlet CustomButton *btBack;
 @property (weak, nonatomic) IBOutlet CustomButton *btPublish;
 @property (weak, nonatomic) IBOutlet UIView *viewContainer;
+@property (weak, nonatomic) IBOutlet UIView* viewConfidential;
+@property (weak, nonatomic) IBOutlet UILabel* labelConfidential;
+@property (weak, nonatomic) IBOutlet UIScrollView* scroll;
 
 @property (strong, nonatomic) NSString *catStr;
 @property (strong, nonatomic)NSMutableDictionary *dictMain;

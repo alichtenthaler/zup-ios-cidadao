@@ -30,7 +30,7 @@ CLLocationCoordinate2D currentCoord;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self->initializing = YES;
     }
     return self;
 }
@@ -39,6 +39,8 @@ CLLocationCoordinate2D currentCoord;
 {
     [super viewDidLoad];
     
+    self->initializing = YES;
+    
     [self initMap];
 
     viewLogo = [[UIView alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 24, 14, 48, 22)];
@@ -46,6 +48,7 @@ CLLocationCoordinate2D currentCoord;
     [viewLogo addSubview:image];
     [self.navigationController.navigationBar addSubview:viewLogo];
     
+    [self.searchBar setBackgroundImage:[UIImage new]];
     [self.searchBar setDelegate:self];
     [self.mapView setDelegate:self];
     [self.mapView setMyLocationEnabled:YES];
@@ -74,8 +77,32 @@ CLLocationCoordinate2D currentCoord;
     self.arrMain = [[NSMutableArray alloc]init];
     self.arrMainInventory = [[NSMutableArray alloc]init];
     self.arrMarkers = [[NSMutableArray alloc]init];
+    
     [self getCurrentLocation];
 
+    if(initializing)
+    {
+        int zoom;
+        if ([Utilities isIpad])
+            zoom = ZOOMLEVELDEFAULT;
+        else
+            zoom = ZOOMLEVELDEFAULT;
+        
+        CLLocationCoordinate2D coordinate = [Utilities getTenantInitialLocation];
+        
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude
+                                                                longitude:coordinate.longitude
+                                                                     zoom:zoom];
+        
+        
+        self.mapView.camera = camera;
+        [self.mapView clear];
+        
+        
+        [self requestWithNewPosition];
+        
+        initializing = NO;
+    }
 }
 
 - (void)didPan:(UIPanGestureRecognizer*)pan {
@@ -88,6 +115,7 @@ CLLocationCoordinate2D currentCoord;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = NO;
     [btFilter removeFromSuperview];
     [viewLogo setHidden:YES];
 }
@@ -117,8 +145,6 @@ CLLocationCoordinate2D currentCoord;
         [self createInventoryPoints];
         [self createPoints];
     }
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -131,7 +157,7 @@ CLLocationCoordinate2D currentCoord;
     
     
     if (!filtrarVC) {
-        filtrarVC = [[FiltrarViewController alloc]initWithNibName:@"FiltrarViewController" bundle:nil];
+        filtrarVC = [[FiltrarViewController alloc]initWithNibName:@"FiltrarViewControllerNovo" bundle:nil];
     }
     filtrarVC.exploreView = self;
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:filtrarVC];
@@ -147,12 +173,19 @@ CLLocationCoordinate2D currentCoord;
         nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
         [nav.view.superview setBackgroundColor:[UIColor clearColor]];
     }
+    
+    [filtrarVC viewWillAppear:YES];
+    
+    //[self viewWillAppear:YES];
 }
 
 #pragma mark - Core Location
 
 - (void)getCurrentLocation {
     self.locationManager = [[CLLocationManager alloc] init];
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
     
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -163,7 +196,7 @@ CLLocationCoordinate2D currentCoord;
     currentCoordinate = [location coordinate];
     
 //    #warning TESTE
-//    currentCoord = CLLocationCoordinate2DMake(-23.557040, -46.638610);
+//    currentCoordinate = CLLocationCoordinate2DMake(-23.557040, -46.638610);
     
     int zoom;
     if ([Utilities isIpad])
@@ -186,6 +219,26 @@ CLLocationCoordinate2D currentCoord;
 
 - (void)locationManager:(CLLocationManager *)manager
 	 didUpdateLocations:(NSArray *)locations {
+    
+    CLLocation *location = [self.locationManager location];
+    currentCoordinate = [location coordinate];
+    
+    int zoom;
+    if ([Utilities isIpad])
+        zoom = ZOOMLEVELDEFAULT;
+    else
+        zoom = ZOOMLEVELDEFAULT;
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:zoom];
+    
+    
+    self.mapView.camera = camera;
+    [self.mapView clear];
+    
+    
+    [self requestWithNewPosition];
     
 //    if (currentCoordinate.latitude == 0) {
 //        [self getCurrentLocation];
@@ -219,6 +272,11 @@ CLLocationCoordinate2D currentCoord;
     [self.searchBar resignFirstResponder];
 }
 
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
+{
+    
+}
+
 #pragma mark - Get Reports
 
 - (void)getPoints {
@@ -236,6 +294,9 @@ CLLocationCoordinate2D currentCoord;
             radius = radius * 1400;
         }
         
+        GMSVisibleRegion visibleRegion = [[self.mapView projection] visibleRegion];
+        double distance = [self getDistance:visibleRegion.nearRight p2:visibleRegion.nearLeft];
+        
         [serverOperationsReport CancelRequest];
         serverOperationsReport = nil;
         
@@ -243,7 +304,7 @@ CLLocationCoordinate2D currentCoord;
         [serverOperationsReport setTarget:self];
         [serverOperationsReport setAction:@selector(didReceiveData:)];
         [serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
-        [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:radius zoom:self.mapView.camera.zoom];
+        [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
     }
 }
 
@@ -319,11 +380,15 @@ CLLocationCoordinate2D currentCoord;
                 isDayFiltered = YES;
             }
             
-            int statusId = [[dict valueForKey:@"status_id"]intValue];
+            int statusId = [[dict  valueForKey:@"status_id"]intValue];
             
             if ([self.arrFilterIDs containsObject:numberId] && (statusId == self.statusToFilterId || self.statusToFilterId == 0) && isDayFiltered) {
                 
                 [self setLocationWithCoordinate:dict];
+            }
+            else
+            {
+                NSLog(@"Some condition");
             }
         } else {
             if (!self.isNoReports) {
@@ -347,8 +412,26 @@ CLLocationCoordinate2D currentCoord;
 
 #pragma mark - Get Inventory
 
-- (void)getIventoryPoints {
+- (double)mtorad:(double)x
+{
+    return x * M_PI / (double)180;
+}
+
+- (double)getDistance:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2
+{
+    double R = 6378137; // Earth’s mean radius in meter
+    double dLat = [self mtorad:p2.latitude - p1.latitude];
+    double dLong = [self mtorad:p2.longitude - p1.longitude];
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+    cos([self mtorad:p1.latitude]) * cos([self mtorad:p1.longitude]) *
+    sin(dLong / 2) * sin(dLong / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double d = R * c;
     
+    return d; // returns the distance in meter
+}
+
+- (void)getIventoryPoints {
     if ([Utilities isInternetActive]) {
         
         CGPoint point = self.mapView.center;
@@ -365,26 +448,29 @@ CLLocationCoordinate2D currentCoord;
             radius = radius * 1400;
         }
         
+        GMSVisibleRegion visibleRegion = [[self.mapView projection] visibleRegion];
+        double distance = [self getDistance:visibleRegion.nearRight p2:visibleRegion.nearLeft];
+        
         [serverOperationsInventory CancelRequest];
         serverOperationsInventory = nil;
         
         serverOperationsInventory = [[ServerOperations alloc]init];
         [serverOperationsInventory setTarget:self];
-        [serverOperationsInventory setAction:@selector(didReceiveInventoryData:)];
+        [serverOperationsInventory setAction:@selector(didReceiveInventoryData:operation:)];
         [serverOperationsInventory setActionErro:@selector(didReceiveIventoryError:data:)];
         
         if (self.arrFilterInventoryIDs.count == 0) {
-            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:radius zoom:self.mapView.camera.zoom];
+            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
 
         } else {
-            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:radius zoom:self.mapView.camera.zoom categoryId:[self.arrFilterInventoryIDs objectAtIndex:0]];
+            [serverOperationsInventory getItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:self.arrFilterInventoryIDs];
 
         }
         
     }
 }
 
-- (void)didReceiveInventoryData:(NSData*)data {
+- (void)didReceiveInventoryData:(NSData*)data operation:(TIRequestOperation*)operation {
     
     _isInventoryLoading = NO;
     
@@ -458,7 +544,12 @@ CLLocationCoordinate2D currentCoord;
     [marker setInfoWindowAnchor:CGPointMake(0.4, 0.1)];
     [marker setAppearAnimation:kGMSMarkerAnimationNone];
     
-    UIImage *img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
+    UIImage *img;
+    if([[catDict valueForKey:@"plot_format"] isEqualToString:@"marker"])
+        img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
+    else
+        img = [UIImage imageWithData:[catDict valueForKey:@"pinData"]];
+    
     img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
     marker.icon = img;
     
@@ -719,9 +810,10 @@ CLLocationCoordinate2D currentCoord;
 - (void) mapView: (GMSMapView *) mapView didChangeCameraPosition: (GMSCameraPosition *) position {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(mapMovementEnd) object:nil];
     
-    //    if (!isMoving) {
-    //        [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
-    //    }
+    //[self mapMovementEnd];
+        if (!isMoving) {
+            [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
+        }
     
 }
 
@@ -781,8 +873,8 @@ CLLocationCoordinate2D currentCoord;
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     
-    [self.arrFilterIDs removeAllObjects];
-    [self.arrFilterInventoryIDs removeAllObjects];
+    //[self.arrFilterIDs removeAllObjects];
+    //[self.arrFilterInventoryIDs removeAllObjects];
     
     [searchBar setShowsCancelButton:NO animated:YES];
     [searchTable.view setHidden:YES];

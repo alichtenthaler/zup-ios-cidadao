@@ -223,7 +223,22 @@
         
     } else {
         for (NSDictionary *newDict in [dict valueForKey:@"reports"]) {
-            [self.arrMain addObject:newDict];
+            NSNumber* rid = [newDict valueForKey:@"id"];
+            
+            BOOL contains = NO;
+            for(NSDictionary* rdict in self.arrMain)
+            {
+                NSNumber* rrid = [rdict valueForKey:@"id"];
+                
+                if([rid intValue] == [rrid intValue])
+                {
+                    contains = YES;
+                    break;
+                }
+            }
+            
+            if(!contains)
+                [self.arrMain addObject:newDict];
         }
     }
     
@@ -324,7 +339,7 @@
     if (indexPath.row == 0 && ![Utilities isIpad]) {
         return 109;
     }
-    return 80;
+    return 100;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -402,6 +417,10 @@
     
 }
 
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
+{
+    
+}
 
 - (void)didReceiveMemoryWarning
 {

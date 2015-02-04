@@ -141,8 +141,8 @@ int ZOOMLEVELSEARCH = 16;
     if (self.isExplore) {
         [self.explorerView.mapView clear];
         [self.explorerView.arrMarkers removeAllObjects];
-        [self.explorerView.arrFilterIDs removeAllObjects];
-        [self.explorerView.arrFilterInventoryIDs removeAllObjects];
+        //[self.explorerView.arrFilterIDs removeAllObjects];
+        //[self.explorerView.arrFilterInventoryIDs removeAllObjects];
         
         
         [self.explorerView setLocationWithClLocation:location zoom:ZOOMLEVELSEARCH];

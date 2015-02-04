@@ -8,6 +8,7 @@
 
 #import "Utilities.h"
 #import "Reachability.h"
+#import <CoreLocation/CoreLocation.h>
 
 @implementation Utilities
 
@@ -441,5 +442,66 @@ typedef enum {
     return newImage;
 }
 
++ (NSString*) socialShareTextForReportId:(int)reportId
+{
+    NSString* phrase = @"Estou colaborando com a minha cidade, reportando problemas e solicitações.";
+    NSString* baseUrl = [ServerOperations baseWebUrl];
+    
+    return [NSString stringWithFormat:@"%@ %@/report/%i", phrase, baseUrl, reportId];
+}
+
++ (NSString*) linkForReportId:(int)reportId
+{
+    NSString* baseUrl = [ServerOperations baseWebUrl];
+    
+    return [NSString stringWithFormat:@"%@/report/%i", baseUrl, reportId];
+}
+
++ (NSString*) defaultShareMessage
+{
+    return @"Estou colaborando com a minha cidade, reportando problemas e solicitações.";
+}
+
++ (NSString*) getCurrentTenant
+{
+    return @"sbc";
+}
+
++ (CLLocationCoordinate2D) getTenantInitialLocation
+{
+    if ([[Utilities getCurrentTenant] isEqualToString:@"sbc"])
+    {
+        return CLLocationCoordinate2DMake(-23.689919, -46.564872);
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"boa-vista"])
+    {
+        return CLLocationCoordinate2DMake(2.807199,-60.6965615);
+    }
+    
+    return CLLocationCoordinate2DMake(0, 0);
+}
+
++ (UIImage*) getTenantLaunchImage
+{
+    NSString *imgName;
+    
+    NSString* fmt;
+    
+    if ([Utilities isIpad]) {
+        fmt = @"launch_%@_ipad";
+        
+        
+    } else {
+        if ([Utilities isIphone4inch]) {
+            fmt = @"launch_%@_iphone5hd";
+        }
+        else {
+            fmt = @"launch_%@_iphone4";
+        }
+    }
+    
+    imgName = [NSString stringWithFormat:fmt, [Utilities getCurrentTenant]];
+    return [UIImage imageNamed:imgName];
+}
 
 @end

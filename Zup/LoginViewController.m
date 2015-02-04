@@ -51,14 +51,17 @@
     [btCancel setFrame:CGRectMake(5, 5, 74, 35)];
     [self.navigationController.navigationBar addSubview:btCancel];
     
-    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
+    int x = self.navigationController.navigationBar.bounds.size.width - 79;
+    x = self.navigationController.view.superview.bounds.size.width - 600;
+    
+    /*CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
     [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
     [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
     [btCreate setFontSize:14];
     [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
     [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
-    [btCreate setFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 79, 5, 74, 35)];
-    [self.navigationController.navigationBar addSubview:btCreate];
+    [btCreate setFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 600, 5, 74, 35)];
+    [self.navigationController.navigationBar addSubview:btCreate];*/
     
     [self.navigationItem setHidesBackButton:YES];
     
@@ -128,6 +131,8 @@
         [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
         [UserDefaults setToken:[dict valueForKey:@"token"]];
         [UserDefaults setIsUserLogged:YES];
+        
+        [self.mainVC getReportCategories];
 
         if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
             
@@ -187,6 +192,15 @@
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
+    
+    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
+    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [btCreate setFontSize:14];
+    [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
+    [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
+    [btCreate setFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 79, 5, 74, 35)];
+    [self.navigationController.navigationBar addSubview:btCreate];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {

@@ -11,6 +11,7 @@
 @interface PerfilDetailViewController : UIViewController {
     CustomButton *btCancel;
 }
+@property (weak, nonatomic) IBOutlet UIImageView* imgIcon;
 @property (weak, nonatomic) IBOutlet UILabel *lblStatus;
 @property (weak, nonatomic) IBOutlet UILabel *lblDesc;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
@@ -21,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lblAddress;
 @property (strong, nonatomic) IBOutlet UILabel *lblName;
+@property (strong, nonatomic) IBOutlet UILabel *lblCategoria;
 @property (strong, nonatomic) IBOutlet UILabel *lblSubtitle;
 @property (strong, nonatomic) IBOutletCollection(CustomButton) NSArray *arrButton;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;

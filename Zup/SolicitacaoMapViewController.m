@@ -8,6 +8,7 @@
 
 #import "SolicitacaoMapViewController.h"
 #import "PlaceMark.h"
+#import "TIRequestOperation.h"
 
 GMSMarker *currentMarker;
 CLLocationCoordinate2D currentCoord;
@@ -35,6 +36,8 @@ ServerOperations *serverOperations;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self->freeJobId = 0;
     
     NSString *titleStr = @"Nova solicitação";
    
@@ -265,8 +268,12 @@ ServerOperations *serverOperations;
     
     serverOperations = [[ServerOperations alloc]init];
     [serverOperations setTarget:self];
-    [serverOperations setAction:@selector(didReceiveAddress:)];
+    [serverOperations setJobId:self->freeJobId];
+    [serverOperations setAction:@selector(didReceiveAddress:withOperation:)];
     [serverOperations getAddressWitLatitude:currentCoord.latitude andLongitude:currentCoord.longitude];
+    
+    self->locationJobId = self->freeJobId;
+    self->freeJobId++;
 }
 
 - (void)mapView:(GMSMapView *)mapView
@@ -274,6 +281,13 @@ didChangeCameraPosition:(GMSCameraPosition *)position {
     CGPoint point = self.mapView.center;
     point.y -= 60;
     currentCoord = [self.mapView.projection coordinateForPoint:point];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(mapMovementEnd) object:nil];
+    
+    //[self mapMovementEnd];
+    //if (!isMoving) {
+        [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
+    //}
 }
 
 - (void)mapView:(GMSMapView *)mapView
@@ -283,7 +297,16 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     }
 }
 
-- (void)didReceiveAddress:(NSData*)data {
+- (void) mapMovementEnd {
+    //isMoving = NO;
+    //    [self.mapView clear];
+    
+    [self getIventoryPoints];
+}
+
+- (void)didReceiveAddress:(NSData*)data withOperation:(TIRequestOperation*)operation {
+    if(operation.jobId != self->locationJobId)
+        return;
     
     isGettingLocation = NO;
     
@@ -567,6 +590,25 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 
 #pragma mark - Get Inventory
 
+- (double)mtorad:(double)x
+{
+    return x * M_PI / (double)180;
+}
+
+- (double)getDistance:(CLLocationCoordinate2D)p1 p2:(CLLocationCoordinate2D)p2
+{
+    double R = 6378137; // Earth’s mean radius in meter
+    double dLat = [self mtorad:p2.latitude - p1.latitude];
+    double dLong = [self mtorad:p2.longitude - p1.longitude];
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+    cos([self mtorad:p1.latitude]) * cos([self mtorad:p1.longitude]) *
+    sin(dLong / 2) * sin(dLong / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double d = R * c;
+    
+    return d; // returns the distance in meter
+}
+
 - (void)getIventoryPoints {
     
     if ([Utilities isInternetActive]) {
@@ -586,12 +628,22 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
             radius = radius * 1400;
         }
         
+        GMSVisibleRegion visibleRegion = [[self.mapView projection] visibleRegion];
+        double distance = [self getDistance:visibleRegion.nearRight p2:visibleRegion.nearLeft];
+        
         if (![[self.dictMain valueForKey:@"arbitrary"]boolValue]) {
             ServerOperations *serverOp = [[ServerOperations alloc]init];
             [serverOp setTarget:self];
             [serverOp setAction:@selector(didReceiveInventoryData:)];
             [serverOp setActionErro:@selector(didReceiveIventoryError:data:)];
-            [serverOp getItemsForPosition:currentCoord.latitude longitude:currentCoord.longitude radius:radius zoom:self.mapView.camera.zoom categoryId:[self.dictMain valueForKey:@"id"]];
+            
+            NSArray* categoryIds = [self.dictMain valueForKey:@"inventory_categories"];
+
+            if([categoryIds count] == 0)
+                [serverOp getItemsForPosition:currentCoord.latitude longitude:currentCoord.longitude radius:distance zoom:self.mapView.camera.zoom];
+            else
+                [serverOp getItemsForPosition:currentCoord.latitude longitude:currentCoord.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:categoryIds];
+            //[serverOp getItemsForPosition:currentCoord.latitude longitude:currentCoord.longitude radius:radius zoom:self.mapView.camera.zoom categoryId:[self.dictMain valueForKey:@"id"]];
         }
     
     }

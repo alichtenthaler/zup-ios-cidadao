@@ -121,6 +121,37 @@ UITextField *activeField;
     
     socialType = [UserDefaults getSocialNetworkType];
     [self reloadButtons];
+    
+    BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+    BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
+    BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
+    
+    CGRect frameFacebook = self.btFacebook.frame;
+    CGRect frameTwitter = self.btTwitter.frame;
+    CGRect framePlus = self.btPlus.frame;
+
+    if(!facebookEnabled)
+    {
+        [self.btFacebook setHidden:YES];
+        frameTwitter.origin.x -= (frameFacebook.size.width / 2) + 10;
+        framePlus.origin.x -= (frameFacebook.size.width / 2) + 5;
+    }
+    if(!twitterEnabled)
+    {
+        [self.btTwitter setHidden:YES];
+        frameFacebook.origin.x += (frameTwitter.size.width / 2) + 5;
+        framePlus.origin.x -= (frameTwitter.size.width / 2) + 5;
+    }
+    if(!plusEnabled)
+    {
+        [self.btPlus setHidden:YES];
+        frameFacebook.origin.x += (framePlus.size.width / 2) + 5;
+        frameTwitter.origin.x += (framePlus.size.width / 2) + 10;
+    }
+    
+    self.btFacebook.frame = frameFacebook;
+    self.btTwitter.frame = frameTwitter;
+    self.btPlus.frame = framePlus;
 }
 
 - (void)setValues {
@@ -360,7 +391,7 @@ UITextField *activeField;
             [textField setText:@""];
         }
         
-        if (range.location == 13) {
+        if (range.location == 14 /* 13 */) {
             return NO;
         }
         
@@ -450,7 +481,7 @@ UITextField *activeField;
     BOOL isNoCpf = NO;
     BOOL isNoCep = NO;
     
-    if (self.tfPhone.text.length != 13) {
+    if (self.tfPhone.text.length != 13 && self.tfPhone.text.length != 14) {
         self.tfPhone.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPhone.background = [Utilities changeColorForImage:self.tfPhone.background toColor:[UIColor redColor]];
         isEmpty = YES;

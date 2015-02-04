@@ -27,7 +27,9 @@
 //static NSString * const kClientSecret = @"-WjBc5n1qxOpfew3v5CXc4kj";
 
 
-static NSString * const kAPIkey = @"AIzaSyDecq7z3XghWttNX_BU4XzGr7vVaYq8UrI";
+//static NSString * const kAPIkey = @"AIzaSyDecq7z3XghWttNX_BU4XzGr7vVaYq8UrI";
+static NSString * const kAPIkey = @"AIzaSyBOHit7f4XSihOEtZpA8o_ysPo5ticplaA";
+
 static NSString * const kClientId = @"937126404865.apps.googleusercontent.com";
 static NSString * const kClientSecret = @"By9p5DtVhQ-4AwDbHfcm5lbg";
 

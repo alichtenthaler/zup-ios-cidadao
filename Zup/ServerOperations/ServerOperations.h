@@ -52,6 +52,7 @@ description:(NSString*)description
 -(BOOL)getReportCategories;
 -(BOOL)getItems;
 -(BOOL)getInventoryCategories;
+-(BOOL)getFeatureFlags;
 
 -(BOOL)getAddressWithString:(NSString*)keyString;
 -(BOOL)getReportsForIdCategory:(int)idCategory;
@@ -62,7 +63,9 @@ description:(NSString*)description
 
 -(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom;
 
--(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom categoryId:(NSString*)catId;
+-(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom categoryId:(int)catId;
+
+-(BOOL) getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds;
 
 -(BOOL)getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom;
 
@@ -70,9 +73,13 @@ description:(NSString*)description
 
 -(BOOL)getStats;
 -(BOOL)getStatsWithFilter:(int)days categoryId:(int)categoryId;
+-(BOOL)getStatsWithFilter:(int)days categoryIds:(NSArray*)categoryIds;
 
 -(BOOL)getAddressWithString:(NSString*)keyString andGeo:(float)lat lng:(float)lng southLat:(float)latSouth southLng:(float)lngSouth;
 
 -(BOOL)getReportItemsForInventory:(NSString*)inventId;
+
++ (NSString*) baseWebUrl;
+
 
 @end

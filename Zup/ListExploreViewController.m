@@ -9,6 +9,10 @@
 #import "ListExploreViewController.h"
 #import "CellMinhaConta.h"
 #import "CustomMap.h"
+#import "CellGaleriaInventario.h"
+#import "ImageCache.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "XL/XLMediaZoom.h"
 
 @interface ListExploreViewController ()
 
@@ -20,7 +24,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.imageZooms = [[NSMutableDictionary alloc] init];
+        self->showingImage = NO;
     }
     return self;
 }
@@ -31,6 +36,7 @@
     [self.lblNoSolicits setHidden:YES];
 
     [self.table registerNib:[UINib nibWithNibName:@"CellMinhaConta" bundle:nil] forCellReuseIdentifier:@"CellConta"];
+    [self.table registerNib:[UINib nibWithNibName:@"CellGaleriaInventario" bundle:nil] forCellReuseIdentifier:@"CellGaleria"];
     
     [super viewDidLoad];
     
@@ -112,8 +118,17 @@
 }
 
 - (void)btBack {
-    [btCancel removeFromSuperview];
-    [self.navigationController popViewControllerAnimated:YES];
+    if(self->showingImage)
+    {
+        [self->currentZoom hide];
+        self->showingImage = NO;
+        self->currentZoom = nil;
+    }
+    else
+    {
+        [btCancel removeFromSuperview];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (IBAction)btSolicit:(id)sender {
@@ -204,10 +219,20 @@
     
     NSMutableArray *arrTempForTable = [[NSMutableArray alloc]init];
     for (NSDictionary *dict in arrData) {
-        NSString *titleStr = [UserDefaults getTitleForFieldId:[[dict valueForKey:@"inventory_field_id"]intValue] idCat:[[self.dictMain valueForKey:@"inventory_category_id"]intValue]];
+        if([[dict valueForKey:@"field"] isKindOfClass:[NSNull class]])
+            continue;
+        
+        NSString *titleStr = [UserDefaults getTitleForFieldId:[[dict valueForKeyPath:@"field.id"]intValue] idCat:[[self.dictMain valueForKey:@"inventory_category_id"]intValue]];
         NSString *content = [dict valueForKey:@"content"];
+        if(titleStr == nil)
+        {
+            NSLog(@"Invalid field: %i", [[dict valueForKeyPath:@"field.id"]intValue]);
+            titleStr = @"NONAME!";
+        }
+        
         NSDictionary *dictTemp = @{@"title": titleStr,
-                                   @"content" : content};
+                                   @"content" : content,
+                                   @"kind": [dict valueForKeyPath:@"field.kind"]};
         
         [arrTempForTable addObject:dictTemp];
         
@@ -301,9 +326,23 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (isSolicit) {
-        return 80;
+        return 100;
     }
-    return 60;
+    else
+    {
+        NSDictionary *dict = [self.arrMain objectAtIndex:indexPath.row];
+        NSString* kind = [dict valueForKey:@"kind"];
+        
+        
+        if([kind isEqualToString:@"images"])
+        {
+            return 155;
+        }
+        else
+        {
+            return 60;
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -328,36 +367,166 @@
         
     } else {
         
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
-        }
-        
         NSDictionary *dict = [self.arrMain objectAtIndex:indexPath.row];
-        [cell.textLabel setText:[[dict valueForKey:@"title"]uppercaseString]];
-        NSString *value = [dict valueForKey:@"content"];
+        id value = [dict valueForKey:@"content"];
+        NSString* kind = [dict valueForKey:@"kind"];
+        
+        if([kind isEqualToString:@"images"])
+        {
+            CellGaleriaInventario* cell = [tableView dequeueReusableCellWithIdentifier:@"CellGaleria"];
+            if (cell == nil) {
+                cell = [[CellGaleriaInventario alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CellGaleria"];
+            }
+            
+            [cell.label setText:[[dict valueForKey:@"title"]uppercaseString]];
+            [cell.label setFont:[Utilities fontOpensSansBoldWithSize:12]];
+            if([cell.label respondsToSelector:@selector(setTintColor:)])
+                [cell.label setTintColor:[Utilities colorGray]];
 
-        if ([value isKindOfClass:[NSNull class]]) {
-            value = @"";
+            int x = 0;
+            int imageSize = 100;
+            
+            NSArray* images = value;
+            for(NSDictionary* imageDict in images)
+            {
+                NSString* url = [imageDict valueForKeyPath:@"versions.thumb"];
+                NSNumber* _id = [imageDict valueForKey:@"id"];
+                
+                UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                
+                spinner.frame = CGRectMake(x, 0, imageSize, imageSize);
+                [cell.scrollView addSubview:spinner];
+                [spinner startAnimating];
+                
+                UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(x, 0, imageSize, imageSize)];
+                imageView.tag = [_id integerValue];
+                [cell.scrollView addSubview:imageView];
+                imageView.userInteractionEnabled = YES;
+                [imageView setImageWithURL:[NSURL URLWithString:url]];
+                imageView.contentMode = UIViewContentModeScaleAspectFill;
+                imageView.clipsToBounds = YES;
+                 
+                //XLMediaZoom* zoom = [[XLMediaZoom alloc] initWithAnimationTime:@(0.5) image:imageView blurEffect:YES];
+                
+                //[self.view addSubview:zoom];
+                //[self.imageZooms setObject:zoom forKey:_id];
+                [self.imageZooms setObject:[imageDict valueForKeyPath:@"versions.high"] forKey:_id];
+                
+                UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(galleryImageTap:)];
+                [imageView addGestureRecognizer:tap];
+                
+                x += imageSize + 5;
+            }
+            cell.scrollView.contentInset = UIEdgeInsetsMake(0, 15, 0, 10);
+            cell.scrollView.contentSize = CGSizeMake(x, imageSize);
+            
+            return cell;
         }
-        
-        if ([value isKindOfClass:[NSArray class]]) {
-            value = [(NSArray *)value componentsJoinedByString:@", "];
-        }
-        
-        [cell.detailTextLabel setText:value];
-        
-        [cell.textLabel setFont:[Utilities fontOpensSansBoldWithSize:12]];
-        [cell.textLabel setTintColor:[Utilities colorGray]];
-        [cell.detailTextLabel setFont:[Utilities fontOpensSansWithSize:13]];
-        [cell.detailTextLabel setTintColor:[Utilities colorGrayLight]];
-        
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        return cell;
+        else
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
+            }
+            
+            [cell.textLabel setText:[[dict valueForKey:@"title"]uppercaseString]];
+            
+            NSString* textValue;
 
+            if ([value isKindOfClass:[NSNull class]]) {
+                textValue = @"";
+            } else if ([value isKindOfClass:[NSArray class]]) {
+                textValue = [(NSArray *)value componentsJoinedByString:@", "];
+            } else {
+                textValue = [NSString stringWithFormat:@"%@", value];
+            }
+            
+            NSString* xtra = @"";
+            if([kind isEqualToString:@"meters"])
+                xtra = @" metros";
+            else if([kind isEqualToString:@"centimeters"])
+                xtra = @" cm";
+            else if([kind isEqualToString:@"kilometers"])
+                xtra = @" km";
+            else if([kind isEqualToString:@"years"])
+                xtra = @" anos";
+            else if([kind isEqualToString:@"months"])
+                xtra = @" meses";
+            else if([kind isEqualToString:@"days"])
+                xtra = @" dias";
+            else if([kind isEqualToString:@"hours"])
+                xtra = @" horas";
+            else if([kind isEqualToString:@"seconds"])
+                xtra = @" segundos";
+            else if([kind isEqualToString:@"angle"])
+                xtra = @" graus";
+
+            textValue = [textValue stringByAppendingString:xtra];
+            
+            [cell.detailTextLabel setText:textValue];
+            
+            [cell.textLabel setFont:[Utilities fontOpensSansBoldWithSize:12]];
+            if([cell.textLabel respondsToSelector:@selector(setTintColor:)])
+                [cell.textLabel setTintColor:[Utilities colorGray]];
+            [cell.detailTextLabel setFont:[Utilities fontOpensSansWithSize:13]];
+            [cell.detailTextLabel setTintColor:[Utilities colorGrayLight]];
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            
+            if([kind isEqualToString:@"url"])
+            {
+                cell.detailTextLabel.textColor = [Utilities colorBlueLight];
+                if([cell.detailTextLabel respondsToSelector:@selector(setAttributedText:)])
+                {
+                    NSDictionary* dict = @{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)};
+                    cell.detailTextLabel.attributedText = [[NSAttributedString alloc] initWithString:textValue attributes:dict];
+                }
+                
+                UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openURL:)];
+                [cell addGestureRecognizer:gesture];
+            }
+            else
+            {
+                cell.detailTextLabel.textColor = [UIColor blackColor];
+            }
+            
+            return cell;
+        }
     }
     
     return nil;
+}
+
+- (void)openURL:(UITapGestureRecognizer*)sender
+{
+    UITableViewCell* cell = (UITableViewCell*) sender.view;
+    UILabel* label = cell.detailTextLabel;
+    NSString* url = label.text;
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+}
+
+- (void)galleryImageTap:(UITapGestureRecognizer*)sender
+{
+    __weak UIImageView* view = (UIImageView*) sender.view;
+    NSNumber* _id = [NSNumber numberWithInteger:view.tag];
+    NSString* url = [self.imageZooms objectForKey:_id];
+    
+    view.layer.opacity = .5f;
+    [view setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        
+        view.layer.opacity = 1.0f;
+        XLMediaZoom* zoom = [[XLMediaZoom alloc] initWithAnimationTime:@(0.35) image:view blurEffect:YES];
+        
+        self->showingImage = YES;
+        self->currentZoom = zoom;
+        
+        [self.view addSubview:zoom];
+        [zoom show:^{
+            self->showingImage = NO;
+            self->currentZoom = nil;
+        }];
+    }];
 }
 //
 //- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

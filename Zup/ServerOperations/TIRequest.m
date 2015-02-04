@@ -76,11 +76,14 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"STATUS_CODE: %i", self.statusCode);
-    if (self.statusCode == 400) {
+    if (self.statusCode == 400 || self.statusCode == 404) {
         NSError* error = [NSError errorWithDomain:@"HTTP Error" code:self.statusCode userInfo:nil];
         if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:)]) {
             [self.delegate request:self DidFinishWithError:error];
         }
+        
+        NSLog(@"%@ yielded an error", [connection.originalRequest.URL absoluteString]);
+        
     }else if ([self.delegate respondsToSelector:@selector(request:DidFinishLoadingWithResult:)]) {
         [self.delegate request:self DidFinishLoadingWithResult:self.serverResponse];
     }

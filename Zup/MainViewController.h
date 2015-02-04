@@ -14,6 +14,8 @@
     BOOL isJump;
     UIActivityIndicatorView *spin;
     UIImageView *imgViewLoad;
+    
+    BOOL onlyReload;
 }
 
 @property (nonatomic) BOOL isFromPerfil;
@@ -32,9 +34,15 @@
 @property (retain, nonatomic) IBOutlet CustomButton *btRegister;
 @property (retain, nonatomic) IBOutlet CustomButton *btJump;
 
+@property (nonatomic, retain) IBOutlet UIView* tabExplore;
+@property (nonatomic, retain) IBOutlet UITabBarItem* tabSolicite;
+@property (nonatomic, retain) IBOutlet UITabBarItem* tabPerfil;
+@property (nonatomic, retain) IBOutlet UITabBarItem* tabEstatisticas;
+
 - (IBAction)btRegister:(id)sender;
 - (IBAction)btLogin:(id)sender;
 - (IBAction)btJump:(id)sender;
 - (void)didCancelButton:(id)sender;
+- (void)getReportCategories;
 
 @end

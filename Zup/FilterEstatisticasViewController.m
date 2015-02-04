@@ -7,6 +7,7 @@
 //
 
 #import "FilterEstatisticasViewController.h"
+#import "CellFiltrarCategoria.h"
 
 int positionY;
 
@@ -42,20 +43,11 @@ int positionY;
         [self.slider setMaximumTrackImage:clearImage forState:UIControlStateNormal];
         
         CGRect frame = self.slider.frame;
-        frame.origin.y +=4;
+        //frame.origin.y +=4;
         [self.slider setFrame:frame];
     
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    CustomButton *btFilter = nil;
-    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btFilter setFontSize:14];
-    [btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
-    [btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btFilter];
     
     [self.scroll addSubview:self.viewContent];
     
@@ -76,6 +68,64 @@ int positionY;
     
     [self createStatus];
 
+    self->selectedCategories = [NSMutableArray arrayWithArray:self.estatisticasVC.selectedCategories];
+    self->categories = [UserDefaults getReportRootCategories];
+    [self.tableView registerNib:[UINib nibWithNibName:@"CellFiltrarCategoria" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"CellFiltrarInventarioHeader" bundle:nil] forCellReuseIdentifier:@"CellHeader"];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
+    CGRect tframe = self.tableView.frame;
+    tframe.origin.y = self.viewSlider.frame.origin.y + 1 + self.viewSlider.frame.size.height;
+    tframe.size.height = self.view.frame.size.height - tframe.origin.y;
+    
+    [self.tableView setFrame:tframe];
+    
+    /*for(NSDictionary* dict in self->categories)
+    {
+        NSNumber* catid = [dict valueForKey:@"id"];
+        [self->selectedCategories addObject:catid];
+    }*/
+    
+    if(self.estatisticasVC.daysFilter == 30 * 6)
+    {
+        self.slider.value = 0;
+    }
+    else if(self.estatisticasVC.daysFilter == 30 * 3)
+    {
+        self.slider.value = 1;
+    }
+    else if(self.estatisticasVC.daysFilter == 30)
+    {
+        self.slider.value = 2;
+    }
+    else if(self.estatisticasVC.daysFilter == 7)
+    {
+        self.slider.value = 3;
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self->categories = [UserDefaults getReportRootCategories];
+    
+    NSMutableArray* elementsToRemove = [[NSMutableArray alloc] init];
+    for(NSNumber* num in self->selectedCategories)
+    {
+        if(![UserDefaults getCategory:[num intValue]])
+            [elementsToRemove addObject:num];
+    }
+    
+    [self->selectedCategories removeObjectsInArray:elementsToRemove];
+
+    
+    CustomButton *btFilter = nil;
+    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
+    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [btFilter setFontSize:14];
+    [btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
+    [btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:btFilter];
 }
 
 -(void)changeFont:(UIView *) view{
@@ -179,7 +229,10 @@ int positionY;
             break;
     }
 
-    [self.estatisticasVC refreshWithFilter:daysPassed categoryId:currentIdCat];
+    //[self.estatisticasVC refreshWithFilter:daysPassed categoryId:currentIdCat];
+    self.estatisticasVC.selectedCategories = self->selectedCategories;
+    self.estatisticasVC.daysFilter = daysPassed;
+    [self.estatisticasVC refreshWithFilter:daysPassed categoryIds:self->selectedCategories];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -226,4 +279,73 @@ int positionY;
     }];
 
 }
+
+
+- (BOOL)categoryIsSelected:(int)catid
+{
+    return [self->selectedCategories containsObject:[NSNumber numberWithInt:catid]];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self->categories count] + 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.item == 0)
+        return 30;
+    
+    return 80;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"Cell";
+
+    CellFiltrarCategoria *cell = (CellFiltrarCategoria *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+    if(cell == nil)
+    {
+        cell = [[CellFiltrarCategoria alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: cellIdentifier];
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setViewBackgroundColor:[self.view backgroundColor]];
+    
+    if (indexPath.item == 0) // Placeholder
+    {
+        [cell setPlaceholder];
+        return cell;
+    }
+    
+        
+    NSDictionary* cat = [self->categories objectAtIndex:indexPath.item - 1];
+    NSNumber *catid = [cat objectForKey:@"id"];
+        
+    BOOL selected = [self categoryIsSelected:[catid intValue]];
+        
+    [cell setvalues:cat selected:selected iconColored:selected];
+        
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary* cat = [self->categories objectAtIndex:indexPath.item - 1];
+    NSNumber *catid = [cat objectForKey:@"id"];
+    BOOL selected = [self categoryIsSelected:[catid intValue]];
+    
+    if(selected)
+        [self->selectedCategories removeObject:catid];
+    else
+        [self->selectedCategories addObject:catid];
+    
+    [tableView reloadData];
+}
+
 @end

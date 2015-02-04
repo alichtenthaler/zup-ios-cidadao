@@ -27,12 +27,23 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self getValues];
+    //[self getValues];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.daysFilter = 0;
+    NSMutableArray* arr = [[NSMutableArray alloc] init];
+    
+    for(NSDictionary* dict in [UserDefaults getReportRootCategories])
+    {
+        NSNumber* catid = [dict valueForKey:@"id"];
+        [arr addObject:catid];
+    }
+    
+    self.selectedCategories = arr;
     
     [self.spin setHidesWhenStopped:YES];
     NSString *titleStr = @"Estatísticas";
@@ -62,6 +73,7 @@
     
     [self.collectionView setContentMode:UIViewContentModeCenter];
     
+    [self getValues];
 }
 
 
@@ -77,6 +89,8 @@
         nav.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
         [nav.view.superview setBackgroundColor:[UIColor clearColor]];
     }
+    
+    [filterVC viewWillAppear:YES];
 }
 
 - (void)refreshWithFilter:(int)days categoryId:(int)categoryId {
@@ -89,6 +103,19 @@
     [serverOP setAction:@selector(didReceiveSendResponse:)];
     [serverOP setActionErro:@selector(didReceiveError:)];
     [serverOP getStatsWithFilter:days categoryId:categoryId];
+    
+}
+
+- (void)refreshWithFilter:(int)days categoryIds:(NSArray*)categoryIds {
+    
+    [self.collectionView setHidden:YES];
+    [self.spin startAnimating];
+    
+    ServerOperations *serverOP = [[ServerOperations alloc]init];
+    [serverOP setTarget:self];
+    [serverOP setAction:@selector(didReceiveSendResponse:)];
+    [serverOP setActionErro:@selector(didReceiveError:)];
+    [serverOP getStatsWithFilter:days categoryIds:categoryIds];
     
 }
 
@@ -199,6 +226,10 @@
     return cell;
 }
 
+- (void)setIsFromOtherTab:(BOOL)isFromOtherTab
+{
+    
+}
 
 - (void)didReceiveMemoryWarning
 {

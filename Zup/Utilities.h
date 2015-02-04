@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <CoreLocation/CoreLocation.h>
 
 @interface Utilities : NSObject
 
@@ -61,5 +61,13 @@
 + (UIImage *) changeColorForImage:(UIImage *)image toColor:(UIColor*)color;
 
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
+
++ (NSString*) defaultShareMessage;
++ (NSString*) socialShareTextForReportId:(int)reportId;
++ (NSString*) linkForReportId:(int)reportId;
+
++ (NSString*) getCurrentTenant;
++ (CLLocationCoordinate2D) getTenantInitialLocation;
++ (UIImage*) getTenantLaunchImage;
 
 @end

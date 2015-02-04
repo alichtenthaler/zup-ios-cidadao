@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SocialViewController">
             <connections>
                 <outlet property="btFacebool" destination="Bxy-eH-Y1v" id="qPj-aB-RHz"/>
+                <outlet property="btPlus" destination="k5S-Kb-1Fg" id="kyM-IC-qHs"/>
                 <outlet property="btPular" destination="F0Z-r2-QKf" id="lhY-Eo-DC0"/>
                 <outlet property="btTwitter" destination="Fxv-WI-7AE" id="DVp-01-E9Y"/>
                 <outlet property="lblTitle" destination="RgL-Av-3aD" id="C7h-Mw-zjo"/>

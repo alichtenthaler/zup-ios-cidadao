@@ -23,6 +23,7 @@
     GMSCoordinateBounds *boundsCurrent;
     FiltrarViewController *filtrarVC;
     BOOL isFromSolicit;
+    BOOL initializing;
 }
 
 @property (nonatomic) BOOL isFromOtherTab;

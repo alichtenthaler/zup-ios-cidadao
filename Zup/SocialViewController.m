@@ -60,6 +60,37 @@
 //    [self.navigationController.navigationBar addSubview:btCancel];
     
     [self.navigationItem setHidesBackButton:YES];
+    
+    BOOL facebookEnabled = [UserDefaults isFeatureEnabled:@"social_networks_facebook"];
+    BOOL twitterEnabled = [UserDefaults isFeatureEnabled:@"social_networks_twitter"];
+    BOOL plusEnabled = [UserDefaults isFeatureEnabled:@"social_networks_gplus"];
+    
+    CGRect frameFacebook = self.btFacebool.frame;
+    CGRect frameTwitter = self.btTwitter.frame;
+    CGRect framePlus = self.btPlus.frame;
+    
+    if(!facebookEnabled)
+    {
+        [self.btFacebool setHidden:YES];
+        frameTwitter.origin.x -= (frameFacebook.size.width / 2) + 10;
+        framePlus.origin.x -= (frameFacebook.size.width / 2) + 5;
+    }
+    if(!twitterEnabled)
+    {
+        [self.btTwitter setHidden:YES];
+        frameFacebook.origin.x += (frameTwitter.size.width / 2) + 5;
+        framePlus.origin.x -= (frameTwitter.size.width / 2) + 5;
+    }
+    if(!plusEnabled)
+    {
+        [self.btPlus setHidden:YES];
+        frameFacebook.origin.x += (framePlus.size.width / 2) + 5;
+        frameTwitter.origin.x += (framePlus.size.width / 2) + 10;
+    }
+    
+    self.btFacebool.frame = frameFacebook;
+    self.btTwitter.frame = frameTwitter;
+    self.btPlus.frame = framePlus;
 }
 
 - (void)back {
@@ -315,8 +346,8 @@
                 NSString *lined = [parts componentsJoinedByString:@"\n"];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alert show];
+                    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:lined delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    //[alert show];
                     
                     [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworTwitter];
                     [self gotoNextPage];

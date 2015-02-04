@@ -82,10 +82,25 @@
     
     UIActionSheet *actionSheet = nil;
     
+    BOOL canChoosePhoto = [UserDefaults isFeatureEnabled:@"allow_photo_album_access"];
     if (currentButtonTag < self.arrPhotos.count) {
-        actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", @"Remover foto", nil];
+        if(canChoosePhoto)
+        {
+            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", @"Remover foto", nil];
+        }
+        else
+        {
+            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", @"Remover foto", nil];
+        }
     } else {
-        actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", nil];
+        if(canChoosePhoto)
+        {
+            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", nil];
+        }
+        else
+        {
+            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", nil];
+        }
     }
     
     [actionSheet showInView:self.view];
@@ -109,7 +124,12 @@
 #pragma mark - Action Sheet Delegates
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
+    BOOL canChoosePhoto = [UserDefaults isFeatureEnabled:@"allow_photo_album_access"];
+    if(!canChoosePhoto)
+    {
+        // Fake button
+        buttonIndex++;
+    }
     if (buttonIndex == 2 && currentButtonTag < self.arrPhotos.count) {
         [self.arrPhotos removeObjectAtIndex:currentButtonTag];
         [self performSelector:@selector(manageButtons) withObject:nil afterDelay:0.1];
@@ -128,7 +148,9 @@
         return;
     }
 
-    [self presentViewController:controller animated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+       [self presentViewController:controller animated:YES completion:nil]; 
+    });
 
 }
 
