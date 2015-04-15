@@ -15,6 +15,8 @@ int RESOLVIDO = 3;
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CustomMap.h"
 
+#import "ComentarioViewController.h"
+
 @interface PerfilDetailViewController ()
 
 @end
@@ -38,7 +40,7 @@ int RESOLVIDO = 3;
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:)];
         [serverOp setActionErro:@selector(didReceiveError:data:)];
-        [serverOp getReportDetailsWithId:[self.dictMain valueForKey:@"id"]];
+        [serverOp getReportDetailsWithId:[[self.dictMain valueForKey:@"id"] intValue]];
     }
 }
 
@@ -178,6 +180,148 @@ int RESOLVIDO = 3;
         [self.lblTitle setHidden:YES];
     }
     
+    [self.indicatorComentarios startAnimating];
+    [self loadComments];
+}
+
+- (void)loadComments
+{
+    [self.indicatorComentarios startAnimating];
+    
+    ServerOperations *serverOp = [[ServerOperations alloc]init];
+    [serverOp setTarget:self];
+    [serverOp setAction:@selector(didReceiveComments:)];
+    [serverOp setActionErro:@selector(didReceiveCommentsError:data:)];
+    [serverOp getReportComments:[[self.dictMain valueForKeyPath:@"id"] intValue]];
+}
+
+- (void)didReceiveCommentsError:(NSError*)error data:(NSData*)data
+{
+    
+}
+
+- (void)didReceiveComments:(NSData*)data
+{
+    [self.indicatorComentarios stopAnimating];
+    
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    int toth;
+    if(![Utilities isIpad])
+        toth = self.tvDesc.frame.origin.y + self.tvDesc.frame.size.height;
+    else
+        toth = 0;
+    
+    int y = 0;
+
+    NSArray* comments = [[dict valueForKey:@"comments"] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        NSDateFormatter *form = [[NSDateFormatter alloc]init];
+        [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        
+        NSString* strDate = [obj1 valueForKey:@"created_at"];
+        strDate = [strDate substringToIndex:19];
+        strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+        
+        NSDate *date1 = [form dateFromString:strDate];
+        
+        strDate = [obj2 valueForKey:@"created_at"];
+        strDate = [strDate substringToIndex:19];
+        strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+        
+        NSDate *date2 = [form dateFromString:strDate];
+        
+        return [date2 compare:date1];
+
+    }];
+    
+    for(NSDictionary* comment in comments)
+    {
+        int visibility = [[comment valueForKey:@"visibility"] intValue];
+        BOOL mine = [[self.dictMain valueForKeyPath:@"user.id"] intValue] == [[UserDefaults getUserId] intValue]; // Esse relato é meu?
+        
+        if (visibility == 1 && (!mine || !self.isFromPerfil)) // Privado: só mostra se for meu e se for do perfil
+        {
+            continue;
+        }
+        else if(visibility == 2) // Interno
+        {
+            continue;
+        }
+        
+        BOOL last = comment == [comments objectAtIndex:comments.count-1];
+        UIView* view = [self createViewForComment:comment last:last];
+        
+        view.frame = CGRectMake(0, y, self.view.frame.size.width, view.frame.size.height);
+        
+        [self.containerComentarios addSubview:view];
+        
+        y += view.frame.size.height;
+        toth += view.frame.size.height;
+    }
+    
+    CGRect frame = self.containerComentarios.frame;
+    frame.size.height = y;
+    
+    self.containerComentarios.frame = frame;
+    [self.scroll setContentSize:CGSizeMake(self.view.frame.size.width, toth)];
+}
+
+- (UIView*) createViewForComment:(NSDictionary*)comment last:(BOOL)last
+{
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 0)];
+    view.backgroundColor = [UIColor colorWithWhite:.95 alpha:1];
+    
+    UILabel* lblMsg = [[UILabel alloc] initWithFrame:CGRectMake(30, 20, self.view.frame.size.width - 60, 18)];
+    
+    lblMsg.text = [comment valueForKey:@"message"];
+    lblMsg.numberOfLines = 0;
+    lblMsg.font = [Utilities fontOpensSansWithSize:13];
+    lblMsg.textColor = [UIColor colorWithWhite:.3 alpha:1];
+    [lblMsg sizeToFit];
+    
+    [view addSubview:lblMsg];
+    
+    UILabel* lblDate = [[UILabel alloc] initWithFrame:CGRectMake(30, lblMsg.frame.origin.y + lblMsg.frame.size.height + 10, self.view.frame.size.width - 60, 18)];
+    
+    NSString* strDate = [comment valueForKey:@"created_at"];
+    
+    NSDateFormatter *form = [[NSDateFormatter alloc]init];
+    [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    strDate = [strDate substringToIndex:19];
+    strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    
+    NSDate *date = [form dateFromString:strDate];
+    [form setDateFormat:@"dd/MM/yyyy HH:mm"];
+    NSString* datestr = [form stringFromDate:date];
+    
+    NSString* sentby = [NSString stringWithFormat:@"Enviado por %@\r%@", [Utilities getTenantName], datestr];
+    
+    lblDate.text = sentby;
+    lblDate.numberOfLines = 0;
+    lblDate.font = [Utilities fontOpensSansWithSize:11];
+    lblDate.textColor = [UIColor colorWithWhite:.5 alpha:1];
+    [lblDate sizeToFit];
+    
+    [view addSubview:lblDate];
+    
+    if(!last)
+    {
+        UIView* divider = [[UIView alloc] initWithFrame:CGRectMake(20, lblDate.frame.origin.y + lblDate.frame.size.height + 19, view.frame.size.width - 20, 1)];
+        divider.backgroundColor = [UIColor colorWithWhite:.8 alpha:1];
+    
+        [view addSubview:divider];
+    }
+    
+    int height = lblDate.frame.size.height + lblDate.frame.origin.y + 20;
+    
+    CGRect frame = view.frame;
+    frame.size.height = height;
+    
+    view.frame = frame;
+    
+    return view;
 }
 
 - (void)buildStatusWithColor:(NSString*)colorStr title:(NSString*)title {
@@ -234,19 +378,29 @@ int RESOLVIDO = 3;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    if(btCancel != nil)
+        return;
+    
+    UINavigationController* controller = self.navigationController;
+    if(!controller)
+        controller = self.navCtrl;
+    
+    self.navigationItem.hidesBackButton = YES;
+    
     btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 56, 35)];
     [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_normal-1"] forState:UIControlStateNormal];
     [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_active-1"] forState:UIControlStateHighlighted];
     [btCancel setFontSize:14];
     [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
     [btCancel addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btCancel];
+    [controller.navigationBar addSubview:btCancel];
 
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    
+    [self.exploreVC viewWillAppear:YES];
     [btCancel removeFromSuperview];
+    btCancel = nil;
     
 //    [self.navigationController popViewControllerAnimated:YES];
 
@@ -268,7 +422,9 @@ int RESOLVIDO = 3;
     
     for (NSDictionary *dict in arrImages) {
         UIImageView *imgV = [[UIImageView alloc]init];
-        [imgV setImageWithURL:[NSURL URLWithString:[dict valueForKeyPath:@"high"]]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+        NSURL *urlImage = [NSURL URLWithString:[dict valueForKeyPath:@"high"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
+        
+        [imgV setImageWithURL:urlImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
 
             if (i == arrImages.count-1
                 ) {
@@ -385,7 +541,11 @@ int RESOLVIDO = 3;
  
 
     if (![Utilities isIpad]) {
-      
+        CGRect frame = self.containerComentarios.frame;
+        frame.origin.y = self.tvDesc.frame.origin.y + self.tvDesc.frame.size.height;
+        self.containerComentarios.frame = frame;
+        
+        [self.scroll setContentSize:CGSizeMake(self.view.frame.size.width, frame.origin.y + frame.size.height)];
     } else {
         CGRect frame = self.viewBg.frame;
         frame.size.height = self.tvDesc.frame.size.height + 63;
@@ -409,6 +569,7 @@ int RESOLVIDO = 3;
 }
 
 - (void)popView {
+    [self viewWillDisappear:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

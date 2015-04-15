@@ -52,6 +52,7 @@
     MainViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"mainVC"];
     loginVC.isFromSolicit = YES;
     loginVC.relateVC = self;
+    loginVC.exploreVC = self.exploreVC;
     UINavigationController *navLogin = [[UINavigationController alloc]initWithRootViewController:loginVC];
     
     if ([Utilities isIpad]) {
@@ -346,14 +347,30 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BOOL isPhysicalCategory = (indexPath.item % 2) == 0;
+     BOOL isPhysicalCategory = [self isPhysicalCategory:indexPath.item];
+    //BOOL isPhysicalCategory = (indexPath.item % 2) == 0;
     if(indexPath.item == 0)
     {
         return 20;
     }
     else if(isPhysicalCategory)
     {
-        return 50;
+        CellFiltrarCategoria *cell = (CellFiltrarCategoria *)[tableView dequeueReusableCellWithIdentifier:@"Cell"];
+        
+        if(cell == nil)
+        {
+            cell = [[CellFiltrarCategoria alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+        }
+        
+        NSDictionary* cat = [self categoryAtIndex:indexPath.item];
+        NSNumber *catid = [cat objectForKey:@"id"];
+        
+        BOOL selected = [self isCategorySelected:cat];
+        
+        [cell setvalues:cat selected:selected iconColored:[self isRootCategorySelected:cat]];
+        
+        return cell.height;
+        //return 50;
     }
     else
     {

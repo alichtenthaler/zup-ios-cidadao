@@ -15,6 +15,8 @@
     NSString *tokenStr;
 }
 
+@property (strong, retain) UIViewController* exploreVC;
+
 @property (nonatomic, retain) IBOutlet UIView* toolbarView;
 @property (retain, nonatomic) IBOutletCollection(UILabel) NSArray *arrLabel;
 

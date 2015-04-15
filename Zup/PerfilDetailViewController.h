@@ -11,11 +11,15 @@
 @interface PerfilDetailViewController : UIViewController {
     CustomButton *btCancel;
 }
+@property (weak, nonatomic) UINavigationController* navCtrl;
+@property (weak, nonatomic) UIViewController* exploreVC;
+
 @property (weak, nonatomic) IBOutlet UIImageView* imgIcon;
 @property (weak, nonatomic) IBOutlet UILabel *lblStatus;
 @property (weak, nonatomic) IBOutlet UILabel *lblDesc;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 @property (nonatomic) BOOL isFromFeed;
+@property (nonatomic) BOOL isFromPerfil;
 @property (nonatomic) BOOL isFromExplore;
 @property (weak, nonatomic) IBOutlet UIView *viewBg;
 @property (strong, nonatomic) NSDictionary *dictMain;
@@ -29,6 +33,9 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollImages;
 @property (weak, nonatomic) IBOutlet UIScrollView *scroll;
 @property (weak, nonatomic) IBOutlet UITextView *tvDesc;
+
+@property (weak, nonatomic) IBOutlet UIView *containerComentarios;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicatorComentarios;
 
 @property (weak, nonatomic) IBOutlet CustomButton *btAberto;
 @property (weak, nonatomic) IBOutlet CustomButton *btAndamento;

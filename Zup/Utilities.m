@@ -183,6 +183,50 @@ static BOOL hasInternetChecked;
     return [emailTest evaluateWithObject:checkString];
 }
 
++ (BOOL)isValidCPF:(NSString*)cpf
+{
+    cpf = [cpf stringByReplacingOccurrencesOfString:@"." withString:@""];
+    cpf = [cpf stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    if([cpf length] != 11 ||
+       [cpf isEqualToString:@"00000000000"] || [cpf isEqualToString:@"11111111111"] ||
+       [cpf isEqualToString:@"22222222222"] || [cpf isEqualToString:@"33333333333"] ||
+       [cpf isEqualToString:@"44444444444"] || [cpf isEqualToString:@"55555555555"] ||
+       [cpf isEqualToString:@"66666666666"] || [cpf isEqualToString:@"77777777777"] ||
+       [cpf isEqualToString:@"88888888888"] || [cpf isEqualToString:@"99999999999"])
+        return NO;
+    
+    // Validar primeiro digito
+    int add = 0;
+    for(int i = 0; i < 9; i++)
+    {
+        int intVal = [cpf characterAtIndex:i] - '0';
+        add += intVal * (10 - i);
+    }
+    
+    int rev = 11 - (add % 11);
+    if(rev == 10 || rev == 11)
+        rev = 0;
+    
+    if([cpf characterAtIndex:9] - '0' != rev)
+        return NO;
+    
+    // Validar segundo dígito
+    add = 0;
+    for(int i = 0; i < 10; i++)
+    {
+        int intVal = [cpf characterAtIndex:i] - '0';
+        add += intVal * (11 - i);
+    }
+    rev = 11 - (add % 11);
+    if(rev == 10 || rev == 11)
+        rev = 0;
+    
+    if([cpf characterAtIndex:10] - '0' != rev)
+        return NO;
+    
+    return YES;
+}
+
 + (UIColor*)colorWithHexString:(NSString*)hex
 {
     NSString *cString = [[hex stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
@@ -464,7 +508,17 @@ typedef enum {
 
 + (NSString*) getCurrentTenant
 {
+#ifdef BOA_VISTA
+    return @"boa-vista";
+#elif defined(SBC)
     return @"sbc";
+#elif defined(FLORIPA)
+    return @"floripa";
+#elif defined(MACEIO)
+    return @"maceio";
+#else
+    return @"sbc";
+#endif
 }
 
 + (CLLocationCoordinate2D) getTenantInitialLocation
@@ -476,6 +530,14 @@ typedef enum {
     else if ([[Utilities getCurrentTenant] isEqualToString:@"boa-vista"])
     {
         return CLLocationCoordinate2DMake(2.807199,-60.6965615);
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"floripa"])
+    {
+        return CLLocationCoordinate2DMake(-27.5966512,-48.5463788);
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"maceio"])
+    {
+        return CLLocationCoordinate2DMake(-9.6473902,-35.7092091);
     }
     
     return CLLocationCoordinate2DMake(0, 0);
@@ -502,6 +564,40 @@ typedef enum {
     
     imgName = [NSString stringWithFormat:fmt, [Utilities getCurrentTenant]];
     return [UIImage imageNamed:imgName];
+}
+
++ (UIImage*) getTenantLoginImage
+{
+    NSString *imgName = [NSString stringWithFormat:@"logo_login_%@", [Utilities getCurrentTenant]];
+    return [UIImage imageNamed:imgName];
+}
+
++ (UIImage*) getTenantHeaderImage
+{
+    NSString *imgName = [NSString stringWithFormat:@"header_%@", [Utilities getCurrentTenant]];
+    return [UIImage imageNamed:imgName];
+}
+
++ (NSString*) getTenantName
+{
+    if ([[Utilities getCurrentTenant] isEqualToString:@"sbc"])
+    {
+        return @"Prefeitura de São Bernardo do Campo";
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"boa-vista"])
+    {
+        return @"Prefeitura de Boa Vista";
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"floripa"])
+    {
+        return @"Prefeitura de Florianópolis";
+    }
+    else if ([[Utilities getCurrentTenant] isEqualToString:@"maceio"])
+    {
+        return @"Prefeitura de Maceió";
+    }
+    
+    return @"-";
 }
 
 @end

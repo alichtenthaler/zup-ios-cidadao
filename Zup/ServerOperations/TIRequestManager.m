@@ -78,14 +78,29 @@ static TIRequestManager* _defaultManager;
     }
 }
 
--(void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro{
+-(void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro data:(NSData *)data{
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"self.%@ = %@", keyRequest, request];
     NSArray* arrayRequest = [self.RequestPerforming filteredArrayUsingPredicate:predicate];
     
     NSDictionary* dictionary = [arrayRequest objectAtIndex:0];
     TIRequestOperation* operation = [dictionary objectForKey:keyOperation];
     if (operation.target && operation.actionErro) {
-        [operation.target performSelector:operation.actionErro withObject:erro withObject:operation];
+        
+        @try {
+            NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:[operation.target methodSignatureForSelector:operation.actionErro]];
+
+            invocation.target = operation.target;
+            invocation.selector = operation.actionErro;
+            
+            //arguments 0 and 1 are self and _cmd respectively, automatically set by NSInvocation
+            [invocation setArgument:&(erro) atIndex:2];
+            [invocation setArgument:&(operation) atIndex:3];
+            [invocation setArgument:&(data) atIndex:4];
+            [invocation invoke];
+        }
+        @catch (NSException *exception) {
+            [operation.target performSelector:operation.actionErro withObject:erro withObject:operation];
+        }        
     }
     
     [self.RequestPerforming removeObject:dictionary];

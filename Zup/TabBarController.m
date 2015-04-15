@@ -8,6 +8,10 @@
 
 #import "TabBarController.h"
 #import "ExploreViewController.h"
+#import "RelateViewController.h"
+#import "PerfilViewController.h"
+
+#import "AppDelegate.h"
 
 @interface TabBarController ()
 
@@ -44,6 +48,16 @@
     tabBarItem2.title = @"Solicite";
     tabBarItem3.title = @"Minha conta";
     tabBarItem4.title = @"Estatísticas";
+    
+    UINavigationController* navController = [[self viewControllers] objectAtIndex:2];
+    PerfilViewController* perfilVC = [navController.viewControllers objectAtIndex:0];
+    
+    navController = [[self viewControllers] objectAtIndex:1];
+    RelateViewController* relateVC = [navController.viewControllers objectAtIndex:0];
+    
+    navController = [[self viewControllers] objectAtIndex:0];
+    perfilVC.exploreVC = [navController.viewControllers objectAtIndex:0];
+    relateVC.exploreVC = [navController.viewControllers objectAtIndex:0];
     
     if ([Utilities isIOS7]) {
         tabBarItem1.image = [[UIImage imageNamed:@"tab-bar_icon_explore_normal-1"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -154,6 +168,10 @@
     
     NSDictionary *dict = [[NSDictionary alloc]initWithDictionary:notification.userInfo];
     
+    AppDelegate* delegate = (AppDelegate*) [UIApplication sharedApplication].delegate;
+    if(dict == delegate.pendingReport)
+        delegate.pendingReport = nil;
+    
     NSString *lat = [Utilities checkIfNull:[dict valueForKeyPath:@"report.position.latitude"]];
     NSString *lng = [Utilities checkIfNull:[dict valueForKeyPath:@"report.position.longitude"]];
     
@@ -167,7 +185,6 @@
     [exploreVC setLocationWithClLocation:location zoom:0];
     exploreVC.isGoToReportDetail = YES;
     exploreVC.idCreatedReport = [[dict valueForKey:@"idReport"]intValue];
-    
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
@@ -210,7 +227,7 @@
     for (NSDictionary* flag in flags)
     {
         NSString* name = [flag valueForKey:@"name"];
-        NSString* status = [flag valueForKey:@"status_name"];
+        NSString* status = [flag valueForKey:@"status"];
         
         if([name isEqualToString:feature])
         {

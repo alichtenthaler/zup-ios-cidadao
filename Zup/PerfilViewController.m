@@ -73,6 +73,7 @@
     MainViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"mainVC"];
     loginVC.isFromPerfil = YES;
     loginVC.perfilVC = self;
+    loginVC.exploreVC = self.exploreVC;
     navLogin = [[UINavigationController alloc]initWithRootViewController:loginVC];
     
     if ([Utilities isIpad]) {
@@ -407,6 +408,7 @@
         nibName = @"PerfilDetailViewController";
     }
     PerfilDetailViewController *perfilDetailVC = [[PerfilDetailViewController alloc]initWithNibName:nibName bundle:nil];
+    perfilDetailVC.isFromPerfil = YES;
     
     if ([Utilities isIpad]) {
         perfilDetailVC.dictMain = [self.arrMain objectAtIndex:indexPath.row];

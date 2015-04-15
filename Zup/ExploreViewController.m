@@ -10,6 +10,7 @@
 #import "ListExploreViewController.h"
 #import "PerfilDetailViewController.h"
 #import "InfoWindow.h"
+#import "AppDelegate.h"
 
 int ZOOMLEVELDEFAULT = 16;
 
@@ -42,11 +43,38 @@ CLLocationCoordinate2D currentCoord;
     self->initializing = YES;
     
     [self initMap];
+    
+    NSString* imageName = [NSString stringWithFormat:@"explore_logo_%@", [Utilities getCurrentTenant]];
+    UIImage* logoImage = [UIImage imageNamed:imageName];
+    if(!logoImage)
+        logoImage = [UIImage imageNamed:@"explore_logo"];
+    
+    // Calcular largura da imagem redimensionada
+    float height = MIN(logoImage.size.height, 22.0f);
+    int hwidth = (logoImage.size.width / logoImage.size.height) * height;
 
-    viewLogo = [[UIView alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 24, 14, 48, 22)];
-    UIImageView *image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"explore_logo"]];
+    viewLogo = [[UIView alloc]initWithFrame:CGRectMake(self.view.bounds.size.width/2 - hwidth/2, (44-height)/2/*14*/, hwidth, height)];
+    UIImageView *image = [[UIImageView alloc]initWithImage:logoImage];
+    image.frame = CGRectMake(0, 0, hwidth, 22);
+    image.contentMode = UIViewContentModeScaleAspectFit;
     [viewLogo addSubview:image];
     [self.navigationController.navigationBar addSubview:viewLogo];
+    
+    /*UIView* viewHeader = [[UIView alloc]initWithFrame:CGRectMake(10, 0, self.view.bounds.size.width/2 - 34, 44)];
+    viewHeader.contentMode = UIViewContentModeScaleAspectFit;
+    viewHeader.backgroundColor = [UIColor redColor];
+    image = [[UIImageView alloc]initWithImage:[Utilities getTenantHeaderImage]];
+    [viewHeader addSubview:image];
+    [self.navigationController.navigationBar addSubview:viewHeader];*/
+    
+    viewHeader = [[UIImageView alloc]initWithImage:[Utilities getTenantHeaderImage]];
+    // Calcular largura da imagem redimensionada
+    int width = (viewHeader.image.size.width / viewHeader.image.size.height) * 34.0f;
+    int realwidth = MIN(self.view.bounds.size.width/2 - 64, width);
+    
+    viewHeader.frame = CGRectMake(10, 5, realwidth, 44 - 10); // self.view.bounds.size.width/2 - 64
+    viewHeader.contentMode = UIViewContentModeScaleAspectFit;
+    [self.navigationController.navigationBar addSubview:viewHeader];
     
     [self.searchBar setBackgroundImage:[UIImage new]];
     [self.searchBar setDelegate:self];
@@ -118,6 +146,7 @@ CLLocationCoordinate2D currentCoord;
     self.navigationController.navigationBarHidden = NO;
     [btFilter removeFromSuperview];
     [viewLogo setHidden:YES];
+    [viewHeader setHidden:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -131,6 +160,7 @@ CLLocationCoordinate2D currentCoord;
     [self.navigationController.navigationBar addSubview:btFilter];
     
     [viewLogo setHidden:NO];
+    [viewHeader setHidden:NO];
     
     if (isFromSolicit) {
         [self.arrMarkers removeAllObjects];
@@ -144,6 +174,20 @@ CLLocationCoordinate2D currentCoord;
        // [self requestWithNewPosition];
         [self createInventoryPoints];
         [self createPoints];
+    }
+    
+    [self performSelector:@selector(tryToShowPendingReport) withObject:nil afterDelay:1.0f];
+}
+
+- (void)tryToShowPendingReport
+{
+    AppDelegate* delegate = (AppDelegate*) [UIApplication sharedApplication].delegate;
+    if(delegate.pendingReport)
+    {
+        [self buildDetail:delegate.pendingReport];
+        //[[NSNotificationCenter defaultCenter]postNotificationName:@"backToMap" object:nil userInfo:delegate.pendingReport];
+        
+        delegate.pendingReport = nil;
     }
 }
 
@@ -750,6 +794,7 @@ CLLocationCoordinate2D currentCoord;
         PerfilDetailViewController *perfilDetailVC = [[PerfilDetailViewController alloc]initWithNibName:nibName bundle:nil];
         perfilDetailVC.isFromExplore = YES;
         perfilDetailVC.dictMain = dict;
+        perfilDetailVC.exploreVC = self;
         
         BOOL animated;
         
@@ -758,13 +803,15 @@ CLLocationCoordinate2D currentCoord;
         } else
             animated = YES;
         
+        perfilDetailVC.navCtrl = self.navigationController;
+        [perfilDetailVC viewWillAppear:YES];
+
         [self.navigationController pushViewController:perfilDetailVC animated:YES];
     } else {
         ListExploreViewController *listVC = [[ListExploreViewController alloc]init];
         listVC.isColeta = YES;
         listVC.dictMain = dict;
 
-        
         [self.navigationController pushViewController:listVC animated:YES];
     }
     

@@ -57,7 +57,7 @@ description:(NSString*)description
 -(BOOL)getAddressWithString:(NSString*)keyString;
 -(BOOL)getReportsForIdCategory:(int)idCategory;
 -(BOOL)getUserPostsWithPage:(int)page;
--(BOOL)getReportDetailsWithId:(NSString*)idCategory;
+-(BOOL)getReportDetailsWithId:(int)idCategory;
 
 -(BOOL)getInventoryForIdCategory:(int)idCategory;
 
@@ -80,6 +80,9 @@ description:(NSString*)description
 -(BOOL)getReportItemsForInventory:(NSString*)inventId;
 
 + (NSString*) baseWebUrl;
++ (NSString*) baseAPIUrl;
+
+- (BOOL)getReportComments:(int)reportId;
 
 
 @end

@@ -68,8 +68,8 @@
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
-    if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:)]) {
-        [self.delegate request:self DidFinishWithError:error];
+    if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:data:)]) {
+        [self.delegate request:self DidFinishWithError:error data:self.serverResponse];
     }
 }
 
@@ -78,8 +78,8 @@
     NSLog(@"STATUS_CODE: %i", self.statusCode);
     if (self.statusCode == 400 || self.statusCode == 404) {
         NSError* error = [NSError errorWithDomain:@"HTTP Error" code:self.statusCode userInfo:nil];
-        if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:)]) {
-            [self.delegate request:self DidFinishWithError:error];
+        if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:data:)]) {
+            [self.delegate request:self DidFinishWithError:error data:self.serverResponse];
         }
         
         NSLog(@"%@ yielded an error", [connection.originalRequest.URL absoluteString]);

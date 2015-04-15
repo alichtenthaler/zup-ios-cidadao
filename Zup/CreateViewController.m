@@ -171,7 +171,7 @@ UITextField *activeField;
     BOOL isNoCpf = NO;
     BOOL isNoCep = NO;
     
-    if (self.tfPhone.text.length != 13 && self.tfPhone.text.length != 14) {
+    if (self.tfPhone.text.length != 14 && self.tfPhone.text.length != 15) {
         self.tfPhone.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPhone.background = [Utilities changeColorForImage:self.tfPhone.background toColor:[UIColor redColor]];
         isEmpty = YES;
@@ -242,6 +242,16 @@ UITextField *activeField;
         return;
     }
     
+    if (![Utilities isValidCPF:self.tfCpf.text]) {
+        [Utilities alertWithError:@"CPF inválido!"];
+        
+        self.tfCpf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+        self.tfCpf.background = [Utilities changeColorForImage:self.tfCpf.background toColor:[UIColor redColor]];
+        
+        [self.scroll scrollsToTop];
+        return;
+    }
+    
     if (![self.tfConfirmPass.text isEqualToString:self.tfPass.text]) {
         [Utilities alertWithError:@"Confirmação de senha não coincide!"];
         
@@ -254,16 +264,30 @@ UITextField *activeField;
     }
     
     if ([Utilities isInternetActive]) {
+        [self.view endEditing:YES];
+        [self showLoadingOverlay];
+        
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:response:)];
-        [serverOp setActionErro:@selector(didReceiveError:data:)];
+        [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
         [serverOp createUser:self.tfEmail.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text];
     }
 }
 
+- (void)showLoadingOverlay
+{
+    self.loadingOverlay.hidden = NO;
+    [self.view bringSubviewToFront:self.loadingOverlay];
+}
+
+- (void)hideLoadingOverlay
+{
+    self.loadingOverlay.hidden = YES;
+}
+
 - (void)didReceiveData:(NSData*)data response:(NSURLResponse*)response{
-    
+    [self hideLoadingOverlay];
     
     if (![data isKindOfClass:[NSNull class]]) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
@@ -284,7 +308,8 @@ UITextField *activeField;
 
 
 - (void)login {
-
+    [self showLoadingOverlay];
+    
     if ([Utilities isInternetActive]) {
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
@@ -295,6 +320,8 @@ UITextField *activeField;
 }
 
 - (void)didReceiveLoginData:(NSData*)data {
+    [self hideLoadingOverlay];
+    
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     if (![Utilities checkIfError:dict]) {
@@ -310,6 +337,7 @@ UITextField *activeField;
 }
 
 - (void)didReceiveLoginError:(NSError*)error data:(NSData*)data {
+    [self hideLoadingOverlay];
     [Utilities alertWithServerError];
 }
 
@@ -351,8 +379,60 @@ UITextField *activeField;
     }
 }
 
-- (void)didReceiveError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithMessage:@"Erro ao cadastrar."];
+- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)op data:(NSData*)data {
+    [self hideLoadingOverlay];
+    
+    NSString* message;
+    if(data != nil)
+    {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        message = @"";
+
+        NSDictionary* fields = @{
+                                 @"name": self.tfName,
+                                 @"email": self.tfEmail,
+                                 @"password": self.tfPass,
+                                 @"password_confirmation": self.tfConfirmPass,
+                                 @"phone": self.tfPhone,
+                                 @"document": self.tfCpf,
+                                 @"address": self.tfAddress,
+                                 @"address_additional": self.tfComplement,
+                                 @"postal_code": self.tfCep,
+                                 @"district": self.tfBairro
+                                 };
+        
+        for(NSString* key in [fields keyEnumerator])
+        {
+            UITextField* field = [fields valueForKey:key];
+            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+        }
+        
+        NSDictionary* errorDict = [dict valueForKey:@"error"];
+        for(NSString* key in [errorDict keyEnumerator])
+        {
+            NSArray* messageArray = [errorDict valueForKey:key];
+            NSString* keymessages = @"";
+            
+            for(NSString* msg in messageArray)
+            {
+                keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+            }
+            
+            message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
+            
+            UITextField* field = [fields valueForKey:key];
+            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+            field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
+            
+            [self.scroll scrollsToTop];
+        }
+    }
+    else
+    {
+        message = [NSString stringWithFormat:@"Erro ao cadastrar.\r%@", error.localizedDescription];
+        [Utilities alertWithMessage:message];
+    }
 }
 
 - (void)didCancelButton {
@@ -536,16 +616,15 @@ UITextField *activeField;
     NSCharacterSet *nonNumberSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
     NSString *strNew = [string stringByTrimmingCharactersInSet:nonNumberSet];
     
-
     if (textField == self.tfCpf) {
-
+        
         if (strNew.length > 0) {
             return NO;
         }
         
-        
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
         if (range.location == 14) {
@@ -572,18 +651,21 @@ UITextField *activeField;
             return NO;
         }
         
+        
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
-        if (range.location == 14 /* 13 */) {
+        if (range.location == 15 /* 13, 14 */) {
             return NO;
         }
         
-        if (range.location == 8) {
+        if (range.location == 9) {
             NSString *str    = [NSString stringWithFormat:@"%@-",textField.text];
             textField.text   = str;
         }
+        
         
         if (range.location == 0) {
             NSString *str    = [NSString stringWithFormat:@"%@(",textField.text];
@@ -591,8 +673,18 @@ UITextField *activeField;
         }
         
         if (range.location == 3) {
-            NSString *str    = [NSString stringWithFormat:@"%@)",textField.text];
+            NSString *str    = [NSString stringWithFormat:@"%@) ",textField.text];
             textField.text   = str;
+        }
+        
+        if (range.location == 14) {
+            NSString* digits = [textField.text stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, textField.text.length)];
+            
+            NSString* ddd = [digits substringWithRange:NSMakeRange(0, 2)];
+            NSString* firstbit = [digits substringWithRange:NSMakeRange(2, 5)];
+            NSString* secondbit = [digits substringWithRange:NSMakeRange(7, 3)];
+            
+            textField.text = [NSString stringWithFormat:@"(%@) %@-%@", ddd, firstbit, secondbit];
         }
         
         return YES;
@@ -604,15 +696,17 @@ UITextField *activeField;
             return NO;
         }
         
+        
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
         if (range.location == 9) {
             [textField resignFirstResponder];
             return NO;
         }
-       
+        
         if (range.location == 5)
         {
             

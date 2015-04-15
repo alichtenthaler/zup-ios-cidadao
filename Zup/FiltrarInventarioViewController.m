@@ -72,10 +72,31 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSString *cellIdentifier = @"Cell";
+    
     if(indexPath.item == 0)
         return 100;
     else
-        return 80;
+    {
+        CellFiltrarCategoria *cell = (CellFiltrarCategoria *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+        if(cell == nil)
+        {
+            cell = [[CellFiltrarCategoria alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier: cellIdentifier];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        
+        NSDictionary* cat = [self->categories objectAtIndex:indexPath.item - 1];
+        NSNumber *catid = [cat objectForKey:@"id"];
+        
+        BOOL selected = [self categoryIsSelected:[catid intValue]];
+        
+        [cell setvalues:cat selected:selected iconColored:selected];
+        
+        return cell.height;
+        //return 80;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -152,13 +173,18 @@
 {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     
-    for(NSDictionary* cat in self->categories)
+    /*for(NSDictionary* cat in self->categories)
     {
         NSNumber* catid = [cat valueForKey:@"id"];
         if ([self isCategorySelected:cat])
         {
             [result addObject:catid];
         }
+    }*/
+    
+    for(NSNumber* catid in self->selectedCategories)
+    {
+        [result addObject:catid];
     }
     
     return result;

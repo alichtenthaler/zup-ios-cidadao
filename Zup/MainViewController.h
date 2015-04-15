@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PerfilViewController.h"
+#import "ExploreViewController.h"
 #import "RelateViewController.h"
 
 @interface MainViewController : UIViewController <UIScrollViewDelegate> {
@@ -17,6 +18,8 @@
     
     BOOL onlyReload;
 }
+
+@property (strong, nonatomic) UIViewController* exploreVC;
 
 @property (nonatomic) BOOL isFromPerfil;
 @property (nonatomic) BOOL isFromSolicit;
@@ -38,6 +41,8 @@
 @property (nonatomic, retain) IBOutlet UITabBarItem* tabSolicite;
 @property (nonatomic, retain) IBOutlet UITabBarItem* tabPerfil;
 @property (nonatomic, retain) IBOutlet UITabBarItem* tabEstatisticas;
+
+@property (nonatomic, retain) IBOutlet UIImageView* logoView;
 
 - (IBAction)btRegister:(id)sender;
 - (IBAction)btLogin:(id)sender;

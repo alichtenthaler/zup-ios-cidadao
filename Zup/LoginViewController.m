@@ -11,6 +11,7 @@
 #import "CreateViewController.h"
 #import "NavigationControllerViewController.h"
 #import "ForgotViewController.h"
+#import "RavenClient.h"
 
 @interface LoginViewController ()
 
@@ -134,7 +135,7 @@
         
         [self.mainVC getReportCategories];
 
-        if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
+        /*if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
             
             [self dismissViewControllerAnimated:YES completion:nil];
             [self.mainVC btJump:nil];
@@ -151,13 +152,16 @@
                     [self.relateVC setToken];
                 }
             }
-        }
+        }*/
         
         
     }
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
+    NSString* errorString = [NSString stringWithFormat:@"%@", error];
+    [[RavenClient sharedClient] captureMessage:errorString];
+    
     [Utilities alertWithServerError];
 }
 

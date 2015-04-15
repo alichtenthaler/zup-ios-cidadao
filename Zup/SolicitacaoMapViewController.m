@@ -230,20 +230,29 @@ ServerOperations *serverOperations;
     if (timerLoadingAddress) {
         [timerLoadingAddress invalidate];
     }
+    if(timerPlaceholder) {
+        [timerPlaceholder invalidate];
+    }
     
-    timerLoadingAddress = [NSTimer scheduledTimerWithTimeInterval:0.5
+    isGettingLocation = YES;
+    [self setPlaceholder];
+    [self getLocation];
+    /*timerLoadingAddress = [NSTimer scheduledTimerWithTimeInterval:0.5
                                                            target:self
                                                          selector:@selector(getLocation)
                                                          userInfo:nil
-                                                          repeats:NO];
+                                                          repeats:NO];*/
     
-    timerPlaceholder = [NSTimer scheduledTimerWithTimeInterval:5.0
+    // era 5s
+    /*timerPlaceholder = [NSTimer scheduledTimerWithTimeInterval:0.1
                                                            target:self
                                                          selector:@selector(setPlaceholder)
                                                          userInfo:nil
-                                                          repeats:NO];
+                                                          repeats:NO];*/
+    
+    //[self setPlaceholder];
 
-    isGettingLocation = YES;
+    //isGettingLocation = YES;
 }
 
 - (void)setPlaceholder {
@@ -256,9 +265,9 @@ ServerOperations *serverOperations;
 }
 
 - (void)didFailLoadAddress {
-    if (self.searchBar.text.length == 0 && !isSearch) {
+    /*if (self.searchBar.text.length == 0 && !isSearch) {
         self.searchBar.text = currentAddress;
-    }
+    }*/
 }
 
 - (void)getLocation {
@@ -318,7 +327,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     
     if ([dict valueForKey:@"results"]) {
    
-        if ([[dict valueForKey:@"results"]count] > 1) {
+        if ([[dict valueForKey:@"results"]count] > 0) {
             
             NSMutableString *str = [[NSMutableString alloc]init];
             

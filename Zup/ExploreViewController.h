@@ -16,6 +16,7 @@
 @interface ExploreViewController : UIViewController <CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate> {
     CustomButton *btFilter;
     UIView *viewLogo;
+    UIImageView* viewHeader;
     SearchTableViewController *searchTable;
     CLLocationCoordinate2D currentCoordinate;
     GMSMarker *markerSearch;

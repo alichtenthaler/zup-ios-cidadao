@@ -9,6 +9,8 @@
 
 #import "AppDelegate.h"
 #import "RavenClient.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 #import <GooglePlus/GooglePlus.h>
 
 
@@ -29,6 +31,16 @@
     }
 }
 
+/*- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    if ( application.applicationState == UIApplicationStateInactive || application.applicationState == UIApplicationStateBackground  )
+    {
+        //opened from a push notification when the app was on background
+        
+        NSLog(@"notification open: %@", userInfo);
+    }
+}*/
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
@@ -40,6 +52,8 @@
     NSLog(@"%@", kAPIkey);
     [GMSServices provideAPIKey:kAPIkey];
     
+    [Fabric with:@[CrashlyticsKit]];
+    
     if ([Utilities isIOS7])
         [[UIApplication sharedApplication]setStatusBarHidden:NO];
     else
@@ -48,7 +62,21 @@
     [RavenClient clientWithDSN:@"https://866d9108ceed4379aeac03d76b5eb393:15a3c8dae32f474e8cb6ce7199284909@app.getsentry.com/17326"];
     [[RavenClient sharedClient] setupExceptionHandler];
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationType)(UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge)];
+    UIApplication* app = [UIApplication sharedApplication];
+    if([app respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        NSLog(@"Registering for iOS 8 notifications");
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge)categories:nil];
+        [app registerUserNotificationSettings:settings];
+        [app registerForRemoteNotifications];
+    }
+    else
+    {
+        NSLog(@"Registering for iOS 7- notifications");
+        [app registerForRemoteNotificationTypes:(UIRemoteNotificationType)(UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge)];
+    }
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     return YES;
 }
@@ -72,18 +100,52 @@
 
 #pragma mark - Push
 
-- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
     [self processRemoteInfo:userInfo state:application.applicationState];
     
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+- (void) scheduleReportOpening:(int)reportId
+{
+    ServerOperations* op = [[ServerOperations alloc] init];
+    op.target = self;
+    op.action = @selector(didReceiveReport:);
+    [op getReportDetailsWithId:reportId];
+}
+
+- (void) didReceiveReport:(NSData*)data
+{
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    NSDictionary* report = [dict valueForKey:@"report"];
+    
+    self.pendingReport = report;
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMap" object:nil userInfo:dict];
 }
 
 - (void)processRemoteInfo:(NSDictionary*)userInfo state:(UIApplicationState)state {
     
-    if (state == UIApplicationStateActive) {
-    
-    } else if (state == UIApplicationStateBackground || state == UIApplicationStateInactive) {
+    //if (state == UIApplicationStateActive)
+    //{
+    //    NSLog(@"Active %@", userInfo);
+    //} else if (state == UIApplicationStateBackground || state == UIApplicationStateInactive) {
+    {
         
+        // kind = report;
+        // "object_id" = 1154;
+        // "user_id" = 51;
+        
+        if([[userInfo valueForKey:@"kind"] isEqualToString:@"report"])
+        {
+            NSLog(@"Opening report #%i!", [[userInfo valueForKey:@"object_id"] intValue]);
+        
+            [self scheduleReportOpening:[[userInfo valueForKey:@"object_id"] intValue]];
+        }
+        
+        NSLog(@"Background %@", userInfo);
     }
     
 }

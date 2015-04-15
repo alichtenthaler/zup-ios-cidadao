@@ -21,7 +21,9 @@
     SocialNetworkType socialType;
     GPPSignIn *signIn;
 }
+
 @property (nonatomic) BOOL isFromReportView;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *btFacebook;
 @property (weak, nonatomic) IBOutlet UIButton *btTwitter;
@@ -51,6 +53,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfAddress;
 @property (weak, nonatomic) IBOutlet UITextField *tfComplement;
 @property (weak, nonatomic) IBOutlet UITextField *tfCep;
+
+
+@property (weak, nonatomic) IBOutlet UIView* viewShareNotAvailable;
 
 @property (weak, nonatomic) SolicitacaoPublicarViewController *solicitView;
 @property (weak, nonatomic) PerfilViewController *perfilView;

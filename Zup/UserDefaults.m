@@ -59,7 +59,7 @@
     for (NSDictionary* flag in [UserDefaults getFeatureFlags])
     {
         NSString* name = [flag valueForKey:@"name"];
-        NSString* status = [flag valueForKey:@"status_name"];
+        NSString* status = [flag valueForKey:@"status"];
         
         if([name isEqualToString:feature])
         {

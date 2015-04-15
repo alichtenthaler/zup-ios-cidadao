@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="CqR-zL-wSf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="CqR-zL-wSf">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -85,6 +85,10 @@
                                     <action selector="btJump:" destination="ALS-YZ-L3p" eventType="touchUpInside" id="tzf-6z-Vrz"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_login_sbc" id="alX-Yh-cDy">
+                                <rect key="frame" x="36" y="438" width="248" height="79"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -96,6 +100,7 @@
                         <outlet property="btRegister" destination="ek9-Z2-lSi" id="fDH-NR-1uV"/>
                         <outlet property="lblTitle1" destination="e3U-Fv-O9b" id="3zX-q5-Xfh"/>
                         <outlet property="lblTitle2" destination="GbP-v6-oyW" id="mcr-WL-Ir4"/>
+                        <outlet property="logoView" destination="alX-Yh-cDy" id="IW1-ae-ufr"/>
                         <outlet property="pageControl" destination="yvN-dr-VJx" id="Pyr-XF-DHQ"/>
                         <outlet property="scroll" destination="r4t-hB-1Qx" id="N4n-td-Bk0"/>
                     </connections>
@@ -481,6 +486,7 @@
         <image name="btn_cadastro_active" width="140" height="45"/>
         <image name="btn_cadastro_normal" width="140" height="45"/>
         <image name="btn_login_normal" width="140" height="45"/>
+        <image name="logo_login_sbc" width="331" height="166"/>
         <image name="map_searchbox_inteiro" width="308" height="50"/>
         <image name="textbox_1linha-larga_normal" width="290" height="45"/>
     </resources>

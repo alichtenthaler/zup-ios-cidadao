@@ -11,6 +11,8 @@
 @interface FiltrarCategoriasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 {
     NSArray* categories;
+    NSArray* allcategories;
+    
     NSMutableArray* selectedCategories;
     NSMutableArray* expandedCategories;
     

@@ -32,6 +32,8 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"CellFiltrarCategoria" bundle:nil] forCellReuseIdentifier:@"Cell"];
     
     self->categories = [UserDefaults getReportRootCategories];
+    self->allcategories = [UserDefaults getReportCategories];
+    
     self->selectedCategories = [[NSMutableArray alloc] init];
     self->expandedCategories = [[NSMutableArray alloc] init];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -42,6 +44,23 @@
         
         [self selectCategory:catid];
     }
+}
+
+- (NSArray*) getReportSubCategories:(int)idCat
+{
+    NSMutableArray* result = [[NSMutableArray alloc] init];
+    
+    NSArray *arr = self->allcategories;
+    
+    for (NSDictionary *dict in arr)
+    {
+        if ([dict objectForKey:@"parent_id"] != nil && [[dict objectForKey:@"parent_id"] intValue] == idCat)
+        {
+            [result addObject:dict];
+        }
+    }
+    
+    return result;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,7 +120,7 @@
         
         BOOL selected = [self->selectedCategories containsObject:catid];
         BOOL expanded = [self->expandedCategories containsObject:catid];
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcategories = [self getReportSubCategories:[catid intValue]];
         
         idx++;
         
@@ -176,7 +195,7 @@
         
         NSNumber *catid = [cat objectForKey:@"id"];
         
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcategories = [self getReportSubCategories:[catid intValue]];
         BOOL expanded = [self->expandedCategories containsObject:catid];
         
         if(expanded)
@@ -219,7 +238,7 @@
         
         BOOL selected = [self->selectedCategories containsObject:catid];
         BOOL expanded = [self->expandedCategories containsObject:catid];
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcategories = [self getReportSubCategories:[catid intValue]];
         
         idx++;
         
@@ -271,7 +290,7 @@
         
         BOOL selected = [self->selectedCategories containsObject:catid];
         BOOL expanded = [self->expandedCategories containsObject:catid];
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcategories = [self getReportSubCategories:[catid intValue]];
         
         idx++;
         
@@ -325,7 +344,7 @@
         NSDictionary* cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
         NSNumber *catid = [cat objectForKey:@"id"];
         BOOL expanded = [self->expandedCategories containsObject:catid];
-        NSArray* subcategories = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcategories = [self getReportSubCategories:[catid intValue]];
         
         if([subcategories count] > 0)
             [cell setShowMoreExpanded:expanded];
@@ -361,13 +380,13 @@
 {
     NSNumber *catid = [cat objectForKey:@"id"];
     
-    if(![self isCategoryRoot:cat] || [[UserDefaults getReportSubCategories:[catid intValue]] count] < 1)
+    if(![self isCategoryRoot:cat] || [[self getReportSubCategories:[catid intValue]] count] < 1)
     {
         return [self->selectedCategories containsObject:catid];
     }
-    else if([[UserDefaults getReportSubCategories:[catid intValue]] count] > 0)
+    else if([[self getReportSubCategories:[catid intValue]] count] > 0)
     {
-        NSArray* subcats = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcats = [self getReportSubCategories:[catid intValue]];
         
         for(NSDictionary* subcat in subcats)
         {
@@ -422,7 +441,7 @@
         
         BOOL selected = [self isCategorySelected:cat];
         
-        if(![self isCategoryRoot:cat] || [[UserDefaults getReportSubCategories:[catid intValue]] count] < 1)
+        if(![self isCategoryRoot:cat] || [[self getReportSubCategories:[catid intValue]] count] < 1)
         {
             if(selected)
                 [self->selectedCategories removeObject:catid];
@@ -431,9 +450,9 @@
                 [self selectCategory:catid];
             }
         }
-        else if([[UserDefaults getReportSubCategories:[catid intValue]] count] > 0)
+        else if([[self getReportSubCategories:[catid intValue]] count] > 0)
         {
-            NSArray* subcats = [UserDefaults getReportSubCategories:[catid intValue]];
+            NSArray* subcats = [self getReportSubCategories:[catid intValue]];
             
             for(NSDictionary* subcat in subcats)
             {
@@ -454,7 +473,7 @@
     {
         NSDictionary* cat = [self categoryForExtensor:[self extensorNumberAtIndex:indexPath.item]];
         NSNumber *catid = [cat objectForKey:@"id"];
-        NSArray* subcats = [UserDefaults getReportSubCategories:[catid intValue]];
+        NSArray* subcats = [self getReportSubCategories:[catid intValue]];
         
         BOOL expanded = [self->expandedCategories containsObject:catid];
         
@@ -510,13 +529,18 @@
 {
     NSMutableArray* result = [[NSMutableArray alloc] init];
     
-    for(NSDictionary* cat in [UserDefaults getReportCategories])
+    /*for(NSDictionary* cat in [UserDefaults getReportCategories])
     {
         NSNumber* catid = [cat valueForKey:@"id"];
         if ([self isCategorySelected:cat])
         {
             [result addObject:catid];
         }
+    }*/
+    
+    for(NSNumber* catid in self->selectedCategories)
+    {
+        [result addObject:catid];
     }
     
     return result;

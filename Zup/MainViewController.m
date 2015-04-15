@@ -13,7 +13,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <CoreLocation/CoreLocation.h>
 #import "ExploreViewController.h"
-
+#import "RavenClient.h"
+#import "AppDelegate.h"
 
 @interface MainViewController ()
 
@@ -71,6 +72,9 @@
         
     }
     
+    self.logoView.image = [Utilities getTenantLoginImage];
+    if(![Utilities isIphone4inch])
+        self.logoView.hidden = YES;
 }
 
 - (void)requestLocation {
@@ -151,7 +155,7 @@
 
 - (void)parseCategory:(NSDictionary*)dict mutArr:(NSMutableArray*)mutArr arr:(NSArray*)arr
 {
-    NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"]];
+    NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
     
     UIImageView *imgV = [[UIImageView alloc]init];
     [imgV setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
@@ -162,7 +166,7 @@
         
         NSData *dataImgIcon = UIImagePNGRepresentation(image);
         
-        NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"]];
+        NSURL *urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         UIImageView *imgV = [[UIImageView alloc]init];
         [imgV setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
             
@@ -173,7 +177,7 @@
             NSData *dataImgMarker = UIImagePNGRepresentation(image);
             
             
-            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.disabled"]];
+            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.default.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
             
             UIImageView *imgV = [[UIImageView alloc]init];
             
@@ -212,6 +216,8 @@
                     }
                 }
                 
+                NSNumber* resolution_time_enabled = [dict valueForKey:@"resolution_time_enabled"];
+                NSNumber* private_resolution_time = [dict valueForKey:@"private_resolution_time"];
                 
                 NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:@{@"arbitrary" : [dict valueForKey:@"allows_arbitrary_position"],
                     @"iconData": dataImgIcon,
@@ -223,7 +229,9 @@
                     @"statuses" : arrStatus,
                     @"user_response_time" : [Utilities checkIfNull:[dict valueForKey:@"user_response_time"]],
                     @"color" :[dict valueForKey:@"color"],
-                    @"inventory_categories": arrCategories
+                    @"inventory_categories": arrCategories,
+                    @"resolution_time_enabled": resolution_time_enabled,
+                    @"private_resolution_time": private_resolution_time
                 }];
                 
                 if(![[dict valueForKey:@"parent_id"] isKindOfClass:[NSNull class]])
@@ -259,8 +267,8 @@
                 if (mutArr.count == [self totalCategoryCount:arr]) {
                     [UserDefaults setReportCategories:mutArr];
                     
-                    NSLog(@"Loaded %i inventory categories", mutArr.count);
-                    if(!self->onlyReload)
+                    NSLog(@"Loaded %i report categories", mutArr.count);
+                    //if(!self->onlyReload)
                         [self getInventoryCategories];
                 }
                 
@@ -286,6 +294,9 @@
 }
 
 - (void)didReceiveError:(NSError*)error {
+    NSString* errorString = [NSString stringWithFormat:@"%@", error];
+    [[RavenClient sharedClient] captureMessage:errorString];
+    
     [Utilities alertWithServerError];
 }
 
@@ -307,7 +318,7 @@
     
     for (NSDictionary *dict in arr) {
         
-        NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"]];
+        NSURL *urlIcon = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.active"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
         
         UIImageView *imgV = [[UIImageView alloc]init];
         [imgV setImageWithURL:urlIcon completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
@@ -319,7 +330,7 @@
             NSData *dataImgIcon = UIImagePNGRepresentation(image);
             
             
-            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.disabled"]];
+            NSURL *urlIconDisabled = [NSURL URLWithString:[dict valueForKeyPath:@"icon.retina.mobile.disabled"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
             
             [imgV setImageWithURL:urlIconDisabled completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
                 
@@ -329,7 +340,7 @@
                 
                 NSData *dataImgIconDisabled = UIImagePNGRepresentation(image);
                 
-                NSURL *urlPin = [NSURL URLWithString:[dict valueForKeyPath:@"pin.retina.mobile"]];
+                NSURL *urlPin = [NSURL URLWithString:[dict valueForKeyPath:@"pin.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
                 UIImageView *imgV = [[UIImageView alloc]init];
                 [imgV setImageWithURL:urlPin completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
                     
@@ -339,7 +350,7 @@
                     
                     NSData *dataImgPin = UIImagePNGRepresentation(image);
                     
-                    NSURL* urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"]];
+                    NSURL* urlMarker = [NSURL URLWithString:[dict valueForKeyPath:@"marker.retina.mobile"] relativeToURL:[NSURL URLWithString:[ServerOperations baseAPIUrl]]];
                     UIImageView* imgV = [[UIImageView alloc] init];
                     [imgV setImageWithURL:urlMarker completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
                         
@@ -370,6 +381,8 @@
                             
                             if(!self->onlyReload)
                                 [self getFeatureFlags];
+                            else
+                                [self goToMap];
                             
                         }
                     }];
@@ -388,8 +401,34 @@
         
         if(!self->onlyReload)
             [self getFeatureFlags];
+        else
+            [self goToMap];
     }
     
+}
+
+- (void)goToMap
+{
+    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [self btJump:nil];
+        
+    } else {
+        if (!self.isFromPerfil && !self.isFromSolicit) {
+            TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
+            [self.navigationController setNavigationBarHidden:YES];
+            [self.navigationController pushViewController:tabBar animated:YES];
+        } else {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.perfilVC getData];
+            if ([Utilities isIpad]) {
+                [self.relateVC setToken];
+            }
+        }
+        
+        
+    }
 }
 
 - (void)getFeatureFlags
@@ -407,8 +446,14 @@
     NSArray* flags = [dict valueForKey:@"flags"];
     [UserDefaults setFeatureFlags:flags];
     
+    if(![UserDefaults isFeatureEnabled:@"explore"])
+    {
+        [self.btJump removeFromSuperview];
+    }
+    
     if ([UserDefaults isUserLogged] && !self->onlyReload) {
-        [self btJump:nil];
+        [self goToMap];
+        //[self btJump:nil];
     }
     self->onlyReload = YES;
     
@@ -423,10 +468,16 @@
 }
 
 - (void)didReceiveFeatureFlagsError:(NSError*)error {
+    NSString* errorString = [NSString stringWithFormat:@"%@", error];
+    [[RavenClient sharedClient] captureMessage:errorString];
+    
     [Utilities alertWithServerError];
 }
 
 - (void)didReceiveInventoryError:(NSError*)error {
+    NSString* errorString = [NSString stringWithFormat:@"%@", error];
+    [[RavenClient sharedClient] captureMessage:errorString];
+    
     [Utilities alertWithServerError];
 }
 
@@ -570,6 +621,7 @@
     if (self.isFromPerfil || self.isFromSolicit) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
+        [self.exploreVC viewWillAppear:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
         
         return;

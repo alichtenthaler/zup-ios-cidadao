@@ -48,6 +48,9 @@
 
 @property (weak, nonatomic) IBOutlet CustomButton *btRegister;
 @property (weak, nonatomic) IBOutlet CustomButton *btLogin;
+
+@property (weak, nonatomic) IBOutlet UIView *loadingOverlay;
+
 - (IBAction)btTerms:(id)sender;
 
 

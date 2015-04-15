@@ -152,6 +152,15 @@ UITextField *activeField;
     self.btFacebook.frame = frameFacebook;
     self.btTwitter.frame = frameTwitter;
     self.btPlus.frame = framePlus;
+    
+    if(!facebookEnabled && !twitterEnabled && !plusEnabled)
+    {
+        self.viewShareNotAvailable.hidden = NO;
+    }
+    else
+    {
+        self.viewShareNotAvailable.hidden = YES;
+    }
 }
 
 - (void)setValues {
@@ -359,7 +368,8 @@ UITextField *activeField;
         }
         
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
         if (range.location == 14) {
@@ -388,14 +398,15 @@ UITextField *activeField;
 
         
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
-        if (range.location == 14 /* 13 */) {
+        if (range.location == 15 /* 13, 14 */) {
             return NO;
         }
         
-        if (range.location == 8) {
+        if (range.location == 9) {
             NSString *str    = [NSString stringWithFormat:@"%@-",textField.text];
             textField.text   = str;
         }
@@ -407,8 +418,18 @@ UITextField *activeField;
         }
         
         if (range.location == 3) {
-            NSString *str    = [NSString stringWithFormat:@"%@)",textField.text];
+            NSString *str    = [NSString stringWithFormat:@"%@) ",textField.text];
             textField.text   = str;
+        }
+        
+        if (range.location == 14) {
+            NSString* digits = [textField.text stringByReplacingOccurrencesOfString:@"[^0-9]" withString:@"" options:NSRegularExpressionSearch range:NSMakeRange(0, textField.text.length)];
+            
+            NSString* ddd = [digits substringWithRange:NSMakeRange(0, 2)];
+            NSString* firstbit = [digits substringWithRange:NSMakeRange(2, 5)];
+            NSString* secondbit = [digits substringWithRange:NSMakeRange(7, 3)];
+            
+            textField.text = [NSString stringWithFormat:@"(%@) %@-%@", ddd, firstbit, secondbit];
         }
         
         return YES;
@@ -422,7 +443,8 @@ UITextField *activeField;
 
         
         if (range.length > 0) {
-            [textField setText:@""];
+            //[textField setText:@""];
+            return YES;
         }
         
         if (range.location == 9) {
@@ -468,7 +490,7 @@ UITextField *activeField;
     BOOL isEmpty = NO;
     
     for (UITextField *tf in self.arrTf) {
-        if (tf.text.length == 0 && tf != self.tfPass && tf != self.tfConfirmPass && tf != self.tfComplement) {
+        if (tf.text.length == 0 && tf != self.tfComplement) {
             
             tf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
             tf.background = [Utilities changeColorForImage:tf.background toColor:[UIColor redColor]];
@@ -481,7 +503,7 @@ UITextField *activeField;
     BOOL isNoCpf = NO;
     BOOL isNoCep = NO;
     
-    if (self.tfPhone.text.length != 13 && self.tfPhone.text.length != 14) {
+    if (self.tfPhone.text.length != 14 && self.tfPhone.text.length != 15) {
         self.tfPhone.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPhone.background = [Utilities changeColorForImage:self.tfPhone.background toColor:[UIColor redColor]];
         isEmpty = YES;
@@ -520,7 +542,7 @@ UITextField *activeField;
         }
         
         for (UITextField *tf in self.arrTf) {
-            if (tf.text.length == 0 && tf != self.tfCep && tf != self.tfCpf && tf != self.tfPhone && tf != self.tfPass && tf != self.tfConfirmPass && tf != self.tfComplement) {
+            if (tf.text.length == 0 && tf != self.tfCep && tf != self.tfCpf && tf != self.tfPhone && tf != self.tfComplement) {
                 isSpecific = NO;
             }
         }
@@ -537,7 +559,6 @@ UITextField *activeField;
 }
 
 - (void)didReceiveData:(NSData*)data response:(NSURLResponse*)response{
-    
     
     if (![data isKindOfClass:[NSNull class]]) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];

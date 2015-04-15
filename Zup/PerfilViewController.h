@@ -20,6 +20,7 @@
     int totalCountSolicits;
 }
 
+@property (strong, nonatomic) UIViewController* exploreVC;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 @property (strong, nonatomic) NSMutableArray *arrMain;
 @property (strong, nonatomic) NSDictionary *dictUser;

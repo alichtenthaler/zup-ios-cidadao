@@ -12,7 +12,7 @@
 
 @protocol TIRequestDelegate <NSObject>
 
--(void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro;
+-(void)request:(TIRequest*)request DidFinishWithError:(NSError*)erro data:(NSData*)data;
 -(void)request:(TIRequest*)request DidFinishLoadingWithResult:(NSData*)result;
 
 @end

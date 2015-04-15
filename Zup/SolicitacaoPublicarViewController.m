@@ -237,21 +237,46 @@ NSString* linkTemp;
     if (![Utilities checkIfError:dict]) {
         
         NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.intValue];
+        NSNumber* resolution_time_enabled = [dictCat valueForKey:@"resolution_time_enabled"];
+        NSNumber* private_resolution_time = [dictCat valueForKey:@"private_resolution_time"];
         
         NSString* sentence;
         
         // Exibir tempo de resolução?
-        if([UserDefaults isFeatureEnabled:@"show_resolution_time_to_clients"])
+        if([UserDefaults isFeatureEnabled:@"show_resolution_time_to_clients"] && [resolution_time_enabled boolValue] && ![private_resolution_time boolValue])
         {
             int resolutionInt = [[dictCat valueForKey:@"resolution_time"]intValue];
         
-            int hours = resolutionInt/60/60/24;
-            NSString *timeStr = [NSString stringWithFormat:@"%i", hours];
+            //int hours = resolutionInt/60/60/24;
+            int time = resolutionInt / 60; // Minutes
+            NSString* unit = @"minutos";
+            
+            if(time == 1)
+                unit = @"minuto";
+            
+            if(time > 60)
+            {
+                time = time / 60;
+                unit = @"horas";
+                
+                if(time == 1)
+                    unit = @"hora";
+            }
+            if(time > 24)
+            {
+                time = time / 24;
+                unit = @"dias";
+                
+                if(time == 1)
+                    unit = @"dia";
+            }
+            
+            NSString *timeStr = [NSString stringWithFormat:@"%i %@", time, unit];
         
-            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: %@ Horas", [dict valueForKeyPath:@"report.protocol"], timeStr];
+            sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: %@", [dict valueForKeyPath:@"report.protocol"], timeStr];
         
-            if (hours < 1) {
-                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo de solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
+            if (resolutionInt / 60 / 60 < 1) {
+                sentence = [NSString stringWithFormat:@"Você será avisado quando sua solicitação for atualizada\nAnote seu protocolo: %@\nPrazo estimado para a solução: menos de uma hora", [dict valueForKeyPath:@"report.protocol"]];
             }
         }
         else

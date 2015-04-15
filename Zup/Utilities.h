@@ -47,6 +47,7 @@
 + (BOOL)isIOS7;
 
 + (BOOL)isValidEmail:(NSString *)checkString;
++ (BOOL)isValidCPF:(NSString*)cpf;
 
 + (UIColor*)colorWithHexString:(NSString*)hex;
 
@@ -69,5 +70,8 @@
 + (NSString*) getCurrentTenant;
 + (CLLocationCoordinate2D) getTenantInitialLocation;
 + (UIImage*) getTenantLaunchImage;
++ (NSString*) getTenantName;
++ (UIImage*) getTenantLoginImage;
++ (UIImage*) getTenantHeaderImage;
 
 @end
