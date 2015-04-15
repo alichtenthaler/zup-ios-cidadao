@@ -261,8 +261,8 @@ ServerOperations *serverOperations;
     NSMutableString *str = [[NSMutableString alloc]init];
     
     [str appendString:[self component:@"route" forAddress:mainResult]];
-    [str appendString:@", "];
-    [str appendString:[self component:@"street_number" forAddress:mainResult]];
+    //[str appendString:@", "];
+    //[str appendString:[self component:@"street_number" forAddress:mainResult]];
     
     userMarker.title = @"Posição atual";
     userMarker.snippet = str;
@@ -275,7 +275,7 @@ ServerOperations *serverOperations;
     NSArray* components = [address objectForKey:@"address_components"];
     for(NSDictionary* _component in components)
     {
-        NSString* value = [_component objectForKey:@"long_name"];
+        NSString* value = [_component objectForKey:@"short_name"];
         NSArray* types = [_component objectForKey:@"types"];
         
         for(NSString* typeName in types)
@@ -352,6 +352,13 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 }
 
 - (IBAction)btNext:(id)sender {
+    
+    if(!currentAddress || self.tfNumber.text.length < 1)
+    {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Preencher Endereço" message:@"É necessário preencher o endereço para enviar o relato." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
     
     if (!photoView) {
         photoView = [[SolicitacaoPhotoViewController alloc]initWithNibName:@"SolicitacaoPhotoViewController" bundle:nil];
@@ -787,8 +794,10 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         if (![newDict valueForKeyPath:@"geometry.location.lat"]) {
             return;
         }
+        
+        NSString* route = [self component:@"route" forAddress:newDict];
       
-        if (![[[[newDict valueForKey:@"address_components"]objectAtIndex:1]valueForKeyPath:@"short_name"]isEqualToString:self.searchBar.text]) {
+        if (![route isEqualToString:self.searchBar.text]) {
             return;
         }
         double lat = [[newDict valueForKeyPath:@"geometry.location.lat"]doubleValue];
