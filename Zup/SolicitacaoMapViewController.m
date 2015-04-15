@@ -325,6 +325,12 @@ didChangeCameraPosition:(GMSCameraPosition *)position {
 
 - (void)mapView:(GMSMapView *)mapView
 idleAtCameraPosition:(GMSCameraPosition *)position {
+    if(mapCameraChangeIsFromNumberChange)
+    {
+        mapCameraChangeIsFromNumberChange = NO;
+        return;
+    }
+    
     if ([[self.dictMain valueForKey:@"arbitrary"]boolValue]) {
         [self getLocationWithLoction:currentCoord];
     }
@@ -764,6 +770,8 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 
 
 - (void)btConfirm {
+    mapCameraChangeIsFromNumberChange = YES;
+    
     [self.tvReferencia resignFirstResponder];
     [self.tfNumber resignFirstResponder];
     [btFilter setHidden:YES];

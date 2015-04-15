@@ -34,6 +34,8 @@
     
     int locationJobId;
     int freeJobId;
+    
+    BOOL mapCameraChangeIsFromNumberChange;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *tvReferencia;
