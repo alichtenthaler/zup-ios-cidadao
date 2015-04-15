@@ -2798,7 +2798,7 @@
 		9C1530311AD99341004E0BB9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
@@ -2831,7 +2831,7 @@
 		9C1530321AD99341004E0BB9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";

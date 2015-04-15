@@ -225,43 +225,67 @@ ServerOperations *serverOperations;
     currentMarker = marker;
 }
 
-- (void)getLocationWithLoction:(CLLocationCoordinate2D)location {
+- (void)getLocationWithLoction:(CLLocationCoordinate2D)location
+{
+    [self.searchBar setText:@""];
+    [self.searchBar setPlaceholder:@"Carregando endereço..."];
     
-    if (timerLoadingAddress) {
-        [timerLoadingAddress invalidate];
-    }
-    if(timerPlaceholder) {
-        [timerPlaceholder invalidate];
-    }
+    int jobId = self->freeJobId++;
+    self->locationJobId = jobId;
     
-    isGettingLocation = YES;
-    [self setPlaceholder];
-    [self getLocation];
-    /*timerLoadingAddress = [NSTimer scheduledTimerWithTimeInterval:0.5
-                                                           target:self
-                                                         selector:@selector(getLocation)
-                                                         userInfo:nil
-                                                          repeats:NO];*/
-    
-    // era 5s
-    /*timerPlaceholder = [NSTimer scheduledTimerWithTimeInterval:0.1
-                                                           target:self
-                                                         selector:@selector(setPlaceholder)
-                                                         userInfo:nil
-                                                          repeats:NO];*/
-    
-    //[self setPlaceholder];
-
-    //isGettingLocation = YES;
+    [serverOperations CancelRequest];
+    serverOperations = [[ServerOperations alloc] init];
+    serverOperations.action = @selector(didReceiveAddress:withOperation:);
+    serverOperations.target = self;
+    serverOperations.jobId = jobId;
+    [serverOperations getAddressWitLatitude:location.latitude andLongitude:location.longitude];
+    //[self performSelector:@selector(didFailLoadAddress) withObject:nil afterDelay:5];
 }
 
-- (void)setPlaceholder {
-    if (isGettingLocation) {
-        [self.searchBar setText:@""];
-        [self.searchBar setPlaceholder:@"Carregando endereço..."];
+- (void) didReceiveAddress:(NSData*)data withOperation:(TIRequestOperation*)operation
+{
+    if(operation.jobId != self->locationJobId)
+        return;
+    
+    NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray* results = [dictionary valueForKey:@"results"];
+    NSDictionary* mainResult = [results objectAtIndex:0];
+    
+    NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
+    NSString* route = [self component:@"route" forAddress:mainResult];
+    
+    self.tfNumber.text = streetNumber;
+    self.searchBar.text = route;
+    self.searchBar.placeholder = @"Endereço";
+    
+    NSMutableString *str = [[NSMutableString alloc]init];
+    
+    [str appendString:[self component:@"route" forAddress:mainResult]];
+    [str appendString:@", "];
+    [str appendString:[self component:@"street_number" forAddress:mainResult]];
+    
+    userMarker.title = @"Posição atual";
+    userMarker.snippet = str;
+    
+    currentAddress = str;
+}
 
+- (NSString*) component:(NSString*)componentType forAddress:(NSDictionary*)address
+{
+    NSArray* components = [address objectForKey:@"address_components"];
+    for(NSDictionary* _component in components)
+    {
+        NSString* value = [_component objectForKey:@"long_name"];
+        NSArray* types = [_component objectForKey:@"types"];
+        
+        for(NSString* typeName in types)
+        {
+            if([typeName isEqualToString:componentType])
+                return value;
+        }
     }
-    [self performSelector:@selector(didFailLoadAddress) withObject:nil afterDelay:5];
+    
+    return @"UNAVAILABLE";
 }
 
 - (void)didFailLoadAddress {
@@ -311,62 +335,6 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     //    [self.mapView clear];
     
     [self getIventoryPoints];
-}
-
-- (void)didReceiveAddress:(NSData*)data withOperation:(TIRequestOperation*)operation {
-    if(operation.jobId != self->locationJobId)
-        return;
-    
-    isGettingLocation = NO;
-    
-    [timerPlaceholder invalidate];
-    
-    [self.searchBar setPlaceholder:@"Endereço"];
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    if ([dict valueForKey:@"results"]) {
-   
-        if ([[dict valueForKey:@"results"]count] > 0) {
-            
-            NSMutableString *str = [[NSMutableString alloc]init];
-            
-            if ([[[dict valueForKey:@"results"]objectAtIndex:0]valueForKey:@"address_components"]) {
-              
-                [str appendString:[[[[[dict valueForKey:@"results"]objectAtIndex:0]valueForKey:@"address_components"]objectAtIndex:1] valueForKey:@"short_name"]];
-                
-//                [str appendString:@", "];
-//                
-//                [str appendString:[[[[[dict valueForKey:@"results"]objectAtIndex:0]valueForKey:@"address_components"]objectAtIndex:0] valueForKey:@"short_name"]];
-                
-                BOOL ishave = NO;
-                for (NSDictionary *dictTemp in [[[dict valueForKey:@"results"]objectAtIndex:0]valueForKey:@"address_components"]) {
-                    
-                    for (NSString *strType in [dictTemp valueForKey:@"types"]) {
-                        if ([strType isEqualToString:@"street_number"]) {
-                            if (!isEditingNumber) {
-                                [self.tfNumber setText:[dictTemp valueForKey:@"short_name"]];
-                            }
-                            isEditingNumber = NO;
-                            ishave = YES;
-                        }
-                    }
-                }
-                if (!ishave) {
-                    [self.tfNumber setText:@""];
-                }
-                
-                userMarker.title = @"Posição atual";
-                userMarker.snippet = str;
-                
-                if (!isSearch) {
-                    [self.searchBar setText:str];
-                    currentAddress = str;
-                }
-                
-            }
-        }
-    }
 }
 
 - (BOOL)disablesAutomaticKeyboardDismissal {

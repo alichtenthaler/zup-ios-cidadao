@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Zup SBC (server sbc)</string>
+	<string>VcSBC (server sbc)</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -62,7 +62,7 @@
 	<key>FacebookAppID</key>
 	<string>205770772949525</string>
 	<key>FacebookDisplayName</key>
-	<string>Zup</string>
+	<string>VcSBC</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
