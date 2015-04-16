@@ -83,6 +83,7 @@ description:(NSString*)description
 + (NSString*) baseAPIUrl;
 
 - (BOOL)getReportComments:(int)reportId;
+- (BOOL) validateBoundariesWithLatitude:(float)latitude longitude:(float)longitude;
 
 
 @end

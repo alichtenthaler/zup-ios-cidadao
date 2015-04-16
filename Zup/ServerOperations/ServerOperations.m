@@ -56,6 +56,7 @@ NSString * const URLgetUserPosts = APIURL(@"reports/users/");
 NSString * const URLgetInventoryWithId = APIURL(@"reports/inventory/");
 NSString * const URLgetStats = APIURL(@"reports/stats");
 NSString * const URLgetFeatureFlags = APIURL(@"feature_flags");
+NSString * const URLvalidateBounds = APIURL(@"utils/city-boundary/validate");
 
 @implementation ServerOperations
 
@@ -529,6 +530,17 @@ categoryId:(NSString*)catId
     [postRequest setHTTPMethod:@"GET"];
     
     return [self StartRequest:postRequest];
+}
+
+- (BOOL) validateBoundariesWithLatitude:(float)latitude longitude:(float)longitude
+{
+    NSString* urlString = [NSString stringWithFormat:@"%@?latitude=%f&longitude=%f", URLvalidateBounds, latitude, longitude];
+    NSURL* url = [NSURL URLWithString:urlString];
+    
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+    [request setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:request];
 }
 
 

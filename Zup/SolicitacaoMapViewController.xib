@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6154.17" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.11"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SolicitacaoMapViewController">
@@ -13,6 +14,8 @@
                 <outlet property="titleLabel" destination="1cc-Gf-S7m" id="NBp-L6-TnS"/>
                 <outlet property="tvReferencia" destination="tX3-dj-Ehc" id="h7i-nu-l0T"/>
                 <outlet property="view" destination="1" id="3"/>
+                <outlet property="viewBottom" destination="sRU-Vp-miF" id="shy-VU-A4e"/>
+                <outlet property="viewInvalidPosition" destination="m2D-TL-9Rh" id="rke-c1-XL4"/>
                 <outlet property="viewSearchBar" destination="KGS-Fz-FMa" id="ZYy-NW-pYZ"/>
             </connections>
         </placeholder>
@@ -76,9 +79,23 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" id="hEu-a9-lnr" customClass="GMSMapView">
-                    <rect key="frame" x="0.0" y="86" width="320" height="339"/>
+                    <rect key="frame" x="0.0" y="86" width="320" height="346"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="m2D-TL-9Rh">
+                    <rect key="frame" x="0.0" y="405" width="320" height="27"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="O endereço não pertence ao município." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Q6p-k3-YUJ">
+                            <rect key="frame" x="0.0" y="3" width="320" height="21"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.35134607248858329" blue="0.28224095989907749" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Ponto de referência (ex: próximo ao ponto de ônibus)" textAlignment="center" id="tX3-dj-Ehc">
                     <rect key="frame" x="0.0" y="86" width="320" height="52"/>
@@ -91,12 +108,12 @@
                     </connections>
                 </textView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sRU-Vp-miF">
-                    <rect key="frame" x="0.0" y="424" width="320" height="56"/>
+                    <rect key="frame" x="0.0" y="432" width="320" height="48"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="0.95294123890000004" green="0.95294123890000004" blue="0.95294123890000004" alpha="1" colorSpace="deviceRGB"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="JRQ-TL-3AK">
-                    <rect key="frame" x="0.0" y="424" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="432" width="320" height="1"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="0.90196084980000002" green="0.90196084980000002" blue="0.90196084980000002" alpha="1" colorSpace="deviceRGB"/>
                 </imageView>
@@ -108,13 +125,22 @@
                         <color key="titleColor" red="0.0" green="0.65098041299999998" blue="0.79215693470000004" alpha="1" colorSpace="deviceRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <state key="disabled">
+                        <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
                     <connections>
                         <action selector="btNext:" destination="-1" eventType="touchUpInside" id="aTf-lW-CTl"/>
                     </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

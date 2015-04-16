@@ -103,6 +103,8 @@ ServerOperations *serverOperations;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeText) name:UITextFieldTextDidChangeNotification object:nil];
     
+    [self forceHideInvalidPosition];
+    
 //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(endText) name:UITextFieldTextDidEndEditingNotification object:nil];
 
 }
@@ -249,25 +251,37 @@ ServerOperations *serverOperations;
     
     NSDictionary* dictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     NSArray* results = [dictionary valueForKey:@"results"];
-    NSDictionary* mainResult = [results objectAtIndex:0];
     
-    NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
-    NSString* route = [self component:@"route" forAddress:mainResult];
+    if([results count] > 0)
+    {
+        NSDictionary* mainResult = [results objectAtIndex:0];
     
-    self.tfNumber.text = streetNumber;
-    self.searchBar.text = route;
-    self.searchBar.placeholder = @"Endereço";
+        NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
+        NSString* route = [self component:@"route" forAddress:mainResult];
     
-    NSMutableString *str = [[NSMutableString alloc]init];
+        self.tfNumber.text = streetNumber;
+        self.searchBar.text = route;
+        self.searchBar.placeholder = @"Endereço";
     
-    [str appendString:[self component:@"route" forAddress:mainResult]];
-    //[str appendString:@", "];
-    //[str appendString:[self component:@"street_number" forAddress:mainResult]];
+        NSMutableString *str = [[NSMutableString alloc]init];
     
-    userMarker.title = @"Posição atual";
-    userMarker.snippet = str;
+        [str appendString:[self component:@"route" forAddress:mainResult]];
+        //[str appendString:@", "];
+        //[str appendString:[self component:@"street_number" forAddress:mainResult]];
     
-    currentAddress = str;
+        userMarker.title = @"Posição atual";
+        userMarker.snippet = str;
+    
+        currentAddress = str;
+    }
+    else
+    {
+        self.tfNumber.text = @"";
+        self.searchBar.text = @"";
+        self.searchBar.placeholder = @"Endereço";
+        currentAddress = nil;
+        
+    }
 }
 
 - (NSString*) component:(NSString*)componentType forAddress:(NSDictionary*)address
@@ -331,8 +345,80 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         return;
     }
     
-    if ([[self.dictMain valueForKey:@"arbitrary"]boolValue]) {
+    if ([[self.dictMain valueForKey:@"arbitrary"]boolValue])
+    {
+        if([UserDefaults isFeatureEnabled:@"validate_city_boundaries"])
+        {
+            self.btNext.enabled = NO;
+            isBoundsOk = NO;
+            [self validateCityBoundaries];
+        }
+        else
+        {
+            [self hideInvalidPosition];
+            self.btNext.enabled = YES;
+            isBoundsOk = YES;
+        }
+        
         [self getLocationWithLoction:currentCoord];
+    }
+}
+
+- (void) showInvalidPosition
+{
+    int height = 27;
+    
+    [UIView animateWithDuration:.350 animations:^{
+        self.viewInvalidPosition.frame = CGRectMake(0, self.viewBottom.frame.origin.y - height, self.view.frame.size.width, height);
+    }];
+}
+
+- (void) hideInvalidPosition
+{
+    int height = 27;
+    
+    [UIView animateWithDuration:.350 animations:^{
+        self.viewInvalidPosition.frame = CGRectMake(0, self.viewBottom.frame.origin.y, self.view.frame.size.width, height);
+    }];
+}
+
+- (void) forceHideInvalidPosition
+{
+    int height = 27;
+    self.viewInvalidPosition.frame = CGRectMake(0, self.viewBottom.frame.origin.y, self.view.frame.size.width, height);
+}
+
+- (void) validateCityBoundaries
+{
+    self.btNext.enabled = NO;
+    isBoundsOk = NO;
+    
+    boundsValidationJobId = freeJobId++;
+    
+    ServerOperations* operation = [[ServerOperations alloc] init];
+    operation.target = self;
+    operation.action = @selector(didReceiveBoundsValidation:withOperation:);
+    [operation validateBoundariesWithLatitude:currentCoord.latitude longitude:currentCoord.longitude];
+}
+
+- (void) didReceiveBoundsValidation:(NSData*)data withOperation:(TIRequestOperation*)operation
+{
+    if(operation.jobId != boundsValidationJobId)
+        return;
+    
+    NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    if([[dict objectForKey:@"inside_boundaries"] boolValue])
+    {
+        [self hideInvalidPosition];
+        self.btNext.enabled = YES;
+        isBoundsOk = YES;
+    }
+    else
+    {
+        [self showInvalidPosition];
+        self.btNext.enabled = NO;
+        isBoundsOk = NO;
     }
 }
 

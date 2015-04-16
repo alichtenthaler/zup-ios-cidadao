@@ -36,6 +36,8 @@
     int freeJobId;
     
     BOOL mapCameraChangeIsFromNumberChange;
+    BOOL isBoundsOk;
+    int boundsValidationJobId;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *tvReferencia;
@@ -54,6 +56,9 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet CustomButton *btNext;
+
+@property (weak, nonatomic) IBOutlet UIView *viewInvalidPosition;
+@property (weak, nonatomic) IBOutlet UIView *viewBottom;
 
 @property (nonatomic, strong) NSMutableArray *arrMainInventory;
 @property (nonatomic, strong) NSMutableArray *arrMarkers;
