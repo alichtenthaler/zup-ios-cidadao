@@ -349,6 +349,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     {
         if([UserDefaults isFeatureEnabled:@"validate_city_boundaries"])
         {
+            [self hideInvalidPosition];
             self.btNext.enabled = NO;
             isBoundsOk = NO;
             [self validateCityBoundaries];
@@ -397,6 +398,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     
     ServerOperations* operation = [[ServerOperations alloc] init];
     operation.target = self;
+    operation.jobId = boundsValidationJobId;
     operation.action = @selector(didReceiveBoundsValidation:withOperation:);
     [operation validateBoundariesWithLatitude:currentCoord.latitude longitude:currentCoord.longitude];
 }
