@@ -98,7 +98,8 @@
     if ([Utilities isIpad]) {
         frame.origin.x = self.lblStatus.frame.origin.x + currentW - width + 228;
     } else {
-        frame.origin.x = self.lblStatus.frame.origin.x + currentW - width - 20;
+        //frame.origin.x = self.lblStatus.frame.origin.x + currentW - width - 20;
+        frame.origin.x = self.frame.size.width - width - 20 - 12;
     }
     
     

@@ -17,8 +17,9 @@
 @property (nonatomic) BOOL isFromPerfil;
 @property (nonatomic) BOOL isFromSolicit;
 
+@property (weak, nonatomic) IBOutlet CustomButton* btLogin;
 @property (weak, nonatomic) IBOutlet CustomButton *btForgot;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spin;
+@property (retain, nonatomic) IBOutlet UIActivityIndicatorView *spin;
 
 @property (weak, nonatomic) IBOutlet UITextField *tfEmail;
 @property (weak, nonatomic) IBOutlet UITextField *tfPass;

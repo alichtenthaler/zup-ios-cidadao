@@ -114,7 +114,8 @@ UITextField *activeField;
     if ([Utilities isIpad]) {
         [btCreate setFrame:CGRectMake(390, 5, 74, 35)];
     } else {
-        [btCreate setFrame:CGRectMake(240, 5, 74, 35)];
+        //[btCreate setFrame:CGRectMake(240, 5, 74, 35)];
+        [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 74 - 5, 5, 74, 35)];
     }
     [self.navigationController.navigationBar addSubview:btCreate];
     

@@ -117,6 +117,12 @@
     
     
     if ([Utilities isInternetActive]) {
+        self.tfEmail.enabled = NO;
+        self.tfPass.enabled = NO;
+        self.btForgot.enabled = NO;
+        self.btLogin.hidden = YES;
+        [self.spin startAnimating];
+        
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:)];
@@ -127,6 +133,12 @@
 
 - (void)didReceiveData:(NSData*)data {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    self.tfEmail.enabled = YES;
+    self.tfPass.enabled = YES;
+    self.btForgot.enabled = YES;
+    self.btLogin.hidden = NO;
+    [self.spin stopAnimating];
    
     if (![Utilities checkIfError:dict]) {
         [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
@@ -159,6 +171,12 @@
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
+    self.tfEmail.enabled = YES;
+    self.tfPass.enabled = YES;
+    self.btForgot.enabled = YES;
+    self.btLogin.hidden = NO;
+    [self.spin stopAnimating];
+    
     NSString* errorString = [NSString stringWithFormat:@"%@", error];
     [[RavenClient sharedClient] captureMessage:errorString];
     
@@ -203,8 +221,21 @@
     [btCreate setFontSize:14];
     [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
     [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
-    [btCreate setFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 79, 5, 74, 35)];
+    [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.bounds.size.width - 79, 5, 74, 35)];
     [self.navigationController.navigationBar addSubview:btCreate];
+    
+    self.spin = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spin.frame = CGRectMake(self.navigationController.navigationBar.bounds.size.width - 30, 12, 20, 20);
+    self.spin.hidesWhenStopped = YES;
+    [self.navigationController.navigationBar addSubview:self.spin];
+    
+    self.btLogin = btCreate;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.btLogin removeFromSuperview];
+    [self.spin removeFromSuperview];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
