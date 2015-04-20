@@ -56,6 +56,9 @@
 
 + (BOOL)isFeatureEnabled:(NSString*)feature
 {
+    if([feature isEqualToString:@"validate_city_boundaries"])
+        return NO;
+    
     for (NSDictionary* flag in [UserDefaults getFeatureFlags])
     {
         NSString* name = [flag valueForKey:@"name"];

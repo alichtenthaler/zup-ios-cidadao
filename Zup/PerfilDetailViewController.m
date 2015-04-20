@@ -353,8 +353,13 @@ int RESOLVIDO = 3;
     
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
     
+    CGRect rect = self.scrollImages.frame;
+    rect.size.width = self.view.frame.size.width;
+    rect.size.height = self.view.frame.size.width;
+    
     CustomMap *map = [[CustomMap alloc]init];
-    [map setFrame:self.scrollImages.frame];
+    [map setFrame:rect];
+    map.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
     
     if ([Utilities isIpad]) {
         [self.view addSubview:map];

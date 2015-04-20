@@ -484,7 +484,7 @@
 
 - (void)buildScroll {
     
-    float sideSize = self.view.frame.size.width;
+    float sideSize = self.scroll.frame.size.width; //self.view.frame.size.width;
     
     int count = 0;
     for (int i = 1; i < 6; i ++) {
@@ -507,7 +507,7 @@
         count ++;
     }
     
-    [self.scroll setContentSize:CGSizeMake(sideSize * count, sideSize)];
+    [self.scroll setContentSize:CGSizeMake(sideSize * count, 10)];
     [self.pageControl setNumberOfPages:count];
     
 }

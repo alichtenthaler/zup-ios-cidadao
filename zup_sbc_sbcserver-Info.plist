@@ -67,8 +67,8 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Explorar Pontos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>O aplicativo requer a sua localização para criar relatos e exibir itens próximos de você</string>
 	<key>TWITTER_CONSUMER_KEY</key>
 	<string>uQdvg6nwrHrgSow67ikEo8hLo</string>
 	<key>TWITTER_CONSUMER_SECRET</key>
