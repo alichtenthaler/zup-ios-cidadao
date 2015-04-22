@@ -200,7 +200,7 @@
 {
     if(!self->removedUnusedTabs)
     {
-        UITabBar *tabBar = self.tabBar;
+        //UITabBar *tabBar = self.tabBar;
     
         NSMutableIndexSet* itemsToRemove = [NSMutableIndexSet indexSet];
     

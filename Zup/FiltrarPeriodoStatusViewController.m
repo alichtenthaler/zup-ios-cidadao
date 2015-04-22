@@ -33,7 +33,7 @@
     self.arrButtonStatuses = [[NSMutableArray alloc]init];
     
     int i = 0;
-    int weight = 90;
+    //int weight = 90;
     for (NSDictionary *dict in arr) {
         
         [self createStatusForCategory:dict atPosition:i];

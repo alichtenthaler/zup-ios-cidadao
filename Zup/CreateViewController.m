@@ -111,12 +111,14 @@ UITextField *activeField;
     [btCreate setHighlighted:NO];
     
     [btCreate addTarget:self action:@selector(didCreateButton) forControlEvents:UIControlEventTouchUpInside];
-    if ([Utilities isIpad]) {
+    /*if ([Utilities isIpad]) {
         [btCreate setFrame:CGRectMake(390, 5, 74, 35)];
     } else {
         //[btCreate setFrame:CGRectMake(240, 5, 74, 35)];
         [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 74 - 5, 5, 74, 35)];
-    }
+    }*/
+    [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 74 - 5, 5, 74, 35)];
+    btCreate.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self.navigationController.navigationBar addSubview:btCreate];
     
 
@@ -140,11 +142,12 @@ UITextField *activeField;
     if (isFirstTime) {
         CGRect frame = btCreate.frame;
         
-        if ([Utilities isIpad]) {
+        /*if ([Utilities isIpad]) {
             frame.origin.x = 420;
         } else {
             frame.origin.x = 240;
-        }
+        }*/
+        frame.origin.x = self.navigationController.navigationBar.frame.size.width - frame.size.width - 5;
 
         [btCreate setFrame:frame];
     }

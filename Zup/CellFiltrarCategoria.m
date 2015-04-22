@@ -120,12 +120,31 @@
     self.selectIndicator.hidden = YES;
     
     CGRect frame = self.lblTitle.frame;
-    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 999)];
+    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
     
     frame.size.height = sz.height;
     self.lblTitle.frame = frame;
     
     self.separator.frame = CGRectMake(self.separator.frame.origin.x, self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height + 8, self.separator.frame.size.width, 1);
+}
+
+- (void)layoutSubviews
+{
+    CGRect frame = self.lblTitle.frame;
+    CGSize sz = [self.lblTitle.text sizeWithFont:self.lblTitle.font constrainedToSize:CGSizeMake(frame.size.width, 9999)];
+    
+    frame.size.height = sz.height;
+    self.lblTitle.frame = frame;
+    
+    self.separator.frame = CGRectMake(self.separator.frame.origin.x, self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height + 8, self.separator.frame.size.width, 1);
+    
+    frame = self.selectIndicator.frame;
+    frame.origin.y = self.lblTitle.frame.origin.y + ((self.lblTitle.frame.size.height - frame.size.height) / 2);
+    
+    self.selectIndicator.frame = frame;
+
+    
+    self.height = self.separator.frame.origin.y + self.separator.frame.size.height + 5;
 }
 
 - (void) setPlaceholder
