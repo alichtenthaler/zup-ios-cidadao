@@ -126,19 +126,13 @@
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:)];
-        [serverOp setActionErro:@selector(didReceiveError:data:)];
+        [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
         [serverOp authenticate:self.tfEmail.text pass:self.tfPass.text];
     }
 }
 
 - (void)didReceiveData:(NSData*)data {
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    
-    self.tfEmail.enabled = YES;
-    self.tfPass.enabled = YES;
-    self.btForgot.enabled = YES;
-    self.btLogin.hidden = NO;
-    [self.spin stopAnimating];
    
     if (![Utilities checkIfError:dict]) {
         [UserDefaults setUserId:[dict valueForKeyPath:@"user.id"]];
@@ -168,9 +162,17 @@
         
         
     }
+    else
+    {
+        self.tfEmail.enabled = YES;
+        self.tfPass.enabled = YES;
+        self.btForgot.enabled = YES;
+        self.btLogin.hidden = NO;
+        [self.spin stopAnimating];
+    }
 }
 
-- (void)didReceiveError:(NSError*)error data:(NSData*)data {
+- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)operation data:(NSData*)data {
     self.tfEmail.enabled = YES;
     self.tfPass.enabled = YES;
     self.btForgot.enabled = YES;
@@ -180,7 +182,15 @@
     NSString* errorString = [NSString stringWithFormat:@"%@", error];
     [[RavenClient sharedClient] captureMessage:errorString];
     
-    [Utilities alertWithServerError];
+    if(data != nil)
+    {
+        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSString* err = [dict valueForKey:@"error"];
+        [Utilities alertWithError:err];
+    }
+    else
+        [Utilities alertWithServerError];
 }
 
 - (void)didCancelButton {
