@@ -28,6 +28,7 @@ addressAdditional:(NSString*)addressAdditional
 
 
 -(BOOL)updateUser:(NSString*)email
+  currentPassword:(NSString*)currentPaassword
              pass:(NSString*)pass
              name:(NSString*)name
             phone:(NSString*)phone

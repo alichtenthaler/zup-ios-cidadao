@@ -93,6 +93,9 @@
         BOOL selected = [self categoryIsSelected:[catid intValue]];
         
         [cell setvalues:cat selected:selected iconColored:selected];
+        cell.frame = CGRectMake(0, 0, self.view.frame.size.width, 50);
+        [cell setNeedsLayout];
+        [cell layoutIfNeeded];
         
         return cell.height;
         //return 80;

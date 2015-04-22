@@ -79,7 +79,7 @@ UITextField *activeField;
     if (![Utilities isIpad]) {
         [self registerForKeyboardNotifications];
     } else {
-        CGRect framePass = self.tfPass.frame;
+        /*CGRect framePass = self.tfPass.frame;
         framePass.origin.x = 49;
         [self.tfPass setFrame:framePass];
         
@@ -101,7 +101,7 @@ UITextField *activeField;
         
         CGRect frameCep = self.tfCep.frame;
         frameCep.origin.x = 131;
-        [self.tfCep setFrame:frameCep];
+        [self.tfCep setFrame:frameCep];*/
     }
     
     [self getUserDetails];
@@ -464,7 +464,11 @@ UITextField *activeField;
 }
 
 - (void)updateUser {
-
+    if(self.tfPass.text.length > 0 && self.tfCurrentPassword.text.length == 0)
+    {
+        [Utilities alertWithError:@"Para criar uma nova senha é necessário digitar a senha atual."];
+        return;
+    }
     
     if (![self.tfConfirmPass.text isEqualToString:self.tfPass.text]) {
         [Utilities alertWithError:@"Confirmação de senha não coincide!"];
@@ -476,11 +480,17 @@ UITextField *activeField;
     }
     
     if ([Utilities isInternetActive]) {
+        for (UITextField* tf in self.arrTf)
+        {
+            tf.enabled = NO;
+        }
+        [self showOverlay];
+        
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:response:)];
-        [serverOp setActionErro:@selector(didReceiveError:data:)];
-        [serverOp updateUser:self.tfEmail.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text];
+        [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
+        [serverOp updateUser:self.tfEmail.text currentPassword:self.tfCurrentPassword.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text];
     }
 }
 
@@ -490,7 +500,7 @@ UITextField *activeField;
     BOOL isEmpty = NO;
     
     for (UITextField *tf in self.arrTf) {
-        if (tf.text.length == 0 && tf != self.tfComplement) {
+        if (tf.text.length == 0 && tf != self.tfComplement && tf != self.tfCurrentPassword && tf != self.tfPass && tf != self.tfConfirmPass) {
             
             tf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
             tf.background = [Utilities changeColorForImage:tf.background toColor:[UIColor redColor]];
@@ -559,6 +569,11 @@ UITextField *activeField;
 }
 
 - (void)didReceiveData:(NSData*)data response:(NSURLResponse*)response{
+    for (UITextField* tf in self.arrTf)
+    {
+        tf.enabled = YES;
+    }
+    [self hideOverlay];
     
     if (![data isKindOfClass:[NSNull class]]) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
@@ -581,8 +596,97 @@ UITextField *activeField;
     
 }
 
-- (void)didReceiveError:(NSError*)error data:(NSData*)data {
-    [Utilities alertWithMessage:error.localizedDescription];
+- (void) showOverlay
+{
+    btSalvar.hidden = YES;
+    
+    UIColor* fromColor = [UIColor clearColor];
+    UIColor* toColor = [UIColor colorWithWhite:1 alpha:.5];
+    
+    self.viewOverlay.backgroundColor = fromColor;
+    self.viewOverlay.hidden = NO;
+    
+    [UIView animateWithDuration:.250 animations:^{
+        self.viewOverlay.backgroundColor = toColor;
+    }];
+}
+
+- (void) hideOverlay
+{
+    btSalvar.hidden = NO;
+    
+    UIColor* fromColor = [UIColor colorWithWhite:1 alpha:.5];
+    UIColor* toColor = [UIColor clearColor];
+    
+    self.viewOverlay.backgroundColor = fromColor;
+    
+    [UIView animateWithDuration:.250 animations:^{
+        self.viewOverlay.backgroundColor = toColor;
+    } completion:^(BOOL finished) {
+        self.viewOverlay.hidden = YES;
+    }];
+}
+
+- (void)didReceiveError:(NSError*)error operation:(ServerOperations*)operation data:(NSData*)data {
+    for (UITextField* tf in self.arrTf)
+    {
+        tf.enabled = YES;
+    }
+    [self hideOverlay];
+    
+    NSString* message;
+    if(data != nil)
+    {
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        message = @"";
+        
+        NSDictionary* fields = @{
+                                 @"name": self.tfName,
+                                 @"email": self.tfEmail,
+                                 @"password": self.tfPass,
+                                 @"password_confirmation": self.tfConfirmPass,
+                                 @"phone": self.tfPhone,
+                                 @"document": self.tfCpf,
+                                 @"address": self.tfAddress,
+                                 @"address_additional": self.tfComplement,
+                                 @"postal_code": self.tfCep,
+                                 @"district": self.tfBairro,
+                                 @"current_password": self.tfCurrentPassword
+                                 };
+        
+        for(NSString* key in [fields keyEnumerator])
+        {
+            UITextField* field = [fields valueForKey:key];
+            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+        }
+        
+        NSDictionary* errorDict = [dict valueForKey:@"error"];
+        for(NSString* key in [errorDict keyEnumerator])
+        {
+            NSArray* messageArray = [errorDict valueForKey:key];
+            NSString* keymessages = @"";
+            
+            for(NSString* msg in messageArray)
+            {
+                keymessages = [keymessages stringByAppendingFormat:@"%@\r", msg];
+            }
+            
+            message = [message stringByAppendingFormat:@"%@: %@\r", key, keymessages];
+            
+            UITextField* field = [fields valueForKey:key];
+            field.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+            field.background = [Utilities changeColorForImage:self.tfEmail.background toColor:[UIColor redColor]];
+            
+            [self.scroll scrollsToTop];
+        }
+    }
+    else
+    {
+        message = [NSString stringWithFormat:@"Erro ao editar perfil.\r%@", error.localizedDescription];
+        [Utilities alertWithMessage:message];
+    }
+   // [Utilities alertWithMessage:error.localizedDescription];
 //    [Utilities alertWithMessage:@"Preencha os campos obrigatórios."];
 }
 

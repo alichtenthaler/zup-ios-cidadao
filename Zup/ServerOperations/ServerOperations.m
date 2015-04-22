@@ -192,6 +192,7 @@ addressAdditional:(NSString*)addressAdditional
 }
 
 -(BOOL)updateUser:(NSString*)email
+  currentPassword:(NSString*)currentPaassword
              pass:(NSString*)pass
              name:(NSString*)name
             phone:(NSString*)phone
@@ -211,6 +212,7 @@ addressAdditional:(NSString*)addressAdditional
                                @"id" : [UserDefaults getUserId],
                                @"token" : [UserDefaults getToken],
                                 @"email" : email,
+                                @"current_password": currentPaassword,
                                 @"password" : pass,
                                 @"password_confirmation" : pass,
                                 @"name" : name,
