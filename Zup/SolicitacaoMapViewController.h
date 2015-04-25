@@ -23,6 +23,7 @@
     GMSCoordinateBounds *boundsCurrent;
 
     CustomButton * btFilter;
+    UIActivityIndicatorView* activityIndicator;
     
     float zoomCurrent;
     BOOL isEditingNumber;

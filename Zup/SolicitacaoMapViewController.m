@@ -80,6 +80,12 @@ ServerOperations *serverOperations;
         [btFilter addTarget:self action:@selector(btConfirm) forControlEvents:UIControlEventTouchUpInside];
         [self.navigationController.navigationBar addSubview:btFilter];
         [btFilter setHidden:YES];
+    
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    int size = activityIndicator.frame.size.width;
+    activityIndicator.frame = CGRectMake(self.navigationController.navigationBar.frame.size.width - size - 10, (44 - size) / 2, size, size);
+    activityIndicator.hidesWhenStopped = YES;
+    [self.navigationController.navigationBar addSubview:activityIndicator];
 
     
     [self.navigationController.navigationBar addSubview:button];
@@ -104,7 +110,7 @@ ServerOperations *serverOperations;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeText) name:UITextFieldTextDidChangeNotification object:nil];
     
     [self forceHideInvalidPosition];
-    
+
 //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(endText) name:UITextFieldTextDidEndEditingNotification object:nil];
 
 }
@@ -121,6 +127,9 @@ ServerOperations *serverOperations;
             
             [self getLocationWithLoction:currentCoord];
         }
+        
+        boundsCurrent = [[GMSCoordinateBounds alloc]
+                         initWithRegion: self.mapView.projection.visibleRegion];
     }
     
 }
@@ -171,6 +180,8 @@ ServerOperations *serverOperations;
                                                             longitude:coordinate.longitude
                                                                  zoom:zoom];
     self.mapView.camera = camera;
+    boundsCurrent = [[GMSCoordinateBounds alloc]
+                     initWithRegion: self.mapView.projection.visibleRegion];
     
     
     [self.searchBar resignFirstResponder];
@@ -299,7 +310,7 @@ ServerOperations *serverOperations;
         }
     }
     
-    return @"UNAVAILABLE";
+    return @"";
 }
 
 - (void)didFailLoadAddress {
@@ -528,6 +539,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         [self moveSearchBarIsTop:YES];
     }
     
+    self.tfNumber.text = @"";
     [searchTable.view setHidden:NO];
     [searchTable.view setAlpha:0];
     [UIView animateWithDuration:0.7 animations:^{
@@ -560,12 +572,19 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 }
 
 - (void)requestAddresses {
-    NSString *strLocation = [NSString stringWithFormat:@"%@-%@", self.searchBar.text, self.tfNumber.text];
+    //NSString *strLocation = [NSString stringWithFormat:@"%@-%@", self.searchBar.text, self.tfNumber.text];
+    NSString *strLocation = self.searchBar.text;
+    if(self.tfNumber.text.length > 0)
+        strLocation = [strLocation stringByAppendingFormat:@"-%@", self.tfNumber.text];
+    
     [searchTable getLocationWithString:strLocation andLocation:boundsCurrent];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSString *strLocation = [NSString stringWithFormat:@"%@-%@", self.searchBar.text, self.tfNumber.text];
+    NSString *strLocation = self.searchBar.text;
+    if(self.tfNumber.text.length > 0)
+        strLocation = [strLocation stringByAppendingFormat:@"-%@", self.tfNumber.text];
+    
     [searchTable getLocationWithString:strLocation andLocation:boundsCurrent];
 }
 
@@ -863,6 +882,8 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     [self.tvReferencia resignFirstResponder];
     [self.tfNumber resignFirstResponder];
     [btFilter setHidden:YES];
+    
+    [activityIndicator startAnimating];
 
     NSString *strLocation = [NSString stringWithFormat:@"%@-%@", self.searchBar.text, self.tfNumber.text];
     [self getLocationWithString:strLocation andLocation:boundsCurrent];
@@ -880,10 +901,12 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 }
 
 - (void)didReceiveAddressLocal:(NSData*)data {
+    [activityIndicator stopAnimating];
+    
     NSDictionary *dict = [[NSDictionary alloc]init];
     dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
-    if ([dict valueForKey:@"results"]) {
+    if ([dict valueForKey:@"results"] && [[dict valueForKey:@"results"] count] > 0) {
         
         NSDictionary *newDict = [[dict valueForKey:@"results"]objectAtIndex:0];
         
@@ -909,6 +932,8 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
                                                                 longitude:coord.longitude
                                                                      zoom:self.mapView.camera.zoom];
         self.mapView.camera = camera;
+        boundsCurrent = [[GMSCoordinateBounds alloc]
+                         initWithRegion: self.mapView.projection.visibleRegion];
     }
 }
 

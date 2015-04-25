@@ -2804,7 +2804,7 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "d009bbe6-b42b-451a-af5b-cc3027f40757";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;
@@ -2837,7 +2837,7 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "d009bbe6-b42b-451a-af5b-cc3027f40757";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;

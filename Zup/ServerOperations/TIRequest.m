@@ -83,6 +83,12 @@
         }
         
         NSLog(@"%@ yielded an error", [connection.originalRequest.URL absoluteString]);
+        if(self.serverResponse != nil)
+        {
+            NSString* string = [[NSString alloc] initWithData:self.serverResponse encoding:NSUTF8StringEncoding];
+            
+            NSLog(@"%@", string);
+        }
         
     }else if ([self.delegate respondsToSelector:@selector(request:DidFinishLoadingWithResult:)]) {
         [self.delegate request:self DidFinishLoadingWithResult:self.serverResponse];
