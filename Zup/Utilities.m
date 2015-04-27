@@ -1,9 +1,6 @@
 //
 //  Utilities.m
-//  EAgora
-//
-//  Created by Renato Kuroe on 14/10/13.
-//  Copyright (c) 2013 Renato Toshio Kuroe. All rights reserved.
+//  Zup
 //
 
 #import "Utilities.h"

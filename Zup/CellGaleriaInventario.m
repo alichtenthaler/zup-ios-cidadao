@@ -2,9 +2,6 @@
 //  CellGaleriaInventario.m
 //  zup
 //
-//  Created by Igor Lira on 11/26/14.
-//  Copyright (c) 2014 ntxdev. All rights reserved.
-//
 
 #import "CellGaleriaInventario.h"
 

@@ -2,9 +2,6 @@
 //  SocialViewController.m
 //  Zup
 //
-//  Created by Renato Kuroe on 17/01/14.
-//  Copyright (c) 2014 Renato Kuroe. All rights reserved.
-//
 
 #import "SocialViewController.h"
 #import "TabBarController.h"

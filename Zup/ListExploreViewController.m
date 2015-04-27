@@ -2,9 +2,6 @@
 //  ListExploreViewController.m
 //  Zup
 //
-//  Created by Renato Kuroe on 02/12/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import "ListExploreViewController.h"
 #import "CellMinhaConta.h"

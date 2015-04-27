@@ -1,9 +1,6 @@
 //
 //  UserDefaults.h
-//  DengueMap
-//
-//  Created by Renato Toshio Kuroe on 07/06/13.
-//  Copyright (c) 2013 Renato Toshio Kuroe. All rights reserved.
+//  Zup
 //
 
 #import <Foundation/Foundation.h>

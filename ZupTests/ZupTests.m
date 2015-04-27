@@ -2,9 +2,6 @@
 //  ZupTests.m
 //  ZupTests
 //
-//  Created by Renato Kuroe on 23/11/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import <XCTest/XCTest.h>
 

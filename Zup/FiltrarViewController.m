@@ -1,9 +1,6 @@
- //
+//
 //  FiltrarViewController.m
 //  Zup
-//
-//  Created by Renato Kuroe on 24/11/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
 //
 
 #import "FiltrarViewController.h"

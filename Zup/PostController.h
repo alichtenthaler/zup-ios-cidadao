@@ -2,9 +2,6 @@
 //  PostController.h
 //  zup
 //
-//  Created by Renato Kuroe on 01/05/14.
-//  Copyright (c) 2014 ntxdev. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>

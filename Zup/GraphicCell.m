@@ -2,9 +2,6 @@
 //  GraphicCell.m
 //  Zup
 //
-//  Created by Renato Kuroe on 02/02/14.
-//  Copyright (c) 2014 Renato Kuroe. All rights reserved.
-//
 
 #import "GraphicCell.h"
 

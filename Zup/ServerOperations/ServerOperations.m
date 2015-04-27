@@ -2,9 +2,6 @@
 //  ServerOperations.m
 //  Ezzi
 //
-//  Created by Renato Kuroe on 01/02/13.
-//  Copyright (c) 2013 Tipis. All rights reserved.
-//
 
 #import "ServerOperations.h"
 #import "TIRequestOperation.h"

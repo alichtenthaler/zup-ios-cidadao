@@ -2,9 +2,6 @@
 //  ExploreViewController.m
 //  Zup
 //
-//  Created by Renato Kuroe on 23/11/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import "ExploreViewController.h"
 #import "ListExploreViewController.h"

@@ -2,9 +2,6 @@
 //  HeaderProfileCell.h
 //  Zup
 //
-//  Created by Renato Kuroe on 05/03/14.
-//  Copyright (c) 2014 Renato Kuroe. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 

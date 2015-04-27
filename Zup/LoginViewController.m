@@ -2,9 +2,6 @@
 //  LoginViewController.m
 //  Zup
 //
-//  Created by Renato Kuroe on 28/11/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import "LoginViewController.h"
 #import "TabBarController.h"

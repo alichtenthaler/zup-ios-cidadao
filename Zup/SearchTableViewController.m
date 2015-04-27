@@ -2,9 +2,6 @@
 //  SearchTableViewController.m
 //  Zup
 //
-//  Created by Renato Kuroe on 09/12/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import "SearchTableViewController.h"
 #import "SolicitacaoMapViewController.h"

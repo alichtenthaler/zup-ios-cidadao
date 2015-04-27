@@ -2,9 +2,6 @@
 //  SearchTableViewController.h
 //  Zup
 //
-//  Created by Renato Kuroe on 09/12/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>

@@ -3,9 +3,6 @@
 //  AppDelegate.m
 //  Zup
 //
-//  Created by Renato Kuroe on 23/11/13.
-//  Copyright (c) 2013 Renato Kuroe. All rights reserved.
-//
 
 #import "AppDelegate.h"
 #import "RavenClient.h"

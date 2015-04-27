@@ -2,9 +2,6 @@
 //  CustomMap.m
 //  Zup
 //
-//  Created by Renato Kuroe on 26/01/14.
-//  Copyright (c) 2014 Renato Kuroe. All rights reserved.
-//
 
 #import "CustomMap.h"
 
