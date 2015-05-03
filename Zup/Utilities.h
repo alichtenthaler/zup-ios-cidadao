@@ -71,4 +71,6 @@
 + (UIImage*) getTenantLoginImage;
 + (UIImage*) getTenantHeaderImage;
 
++ (UIImage*) iconForCluster:(NSDictionary*)cluster;
+
 @end

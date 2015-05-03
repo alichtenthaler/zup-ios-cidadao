@@ -337,7 +337,7 @@
     if (indexPath.row == 0 && ![Utilities isIpad]) {
         return 109;
     }
-    return 100;
+    return 110;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

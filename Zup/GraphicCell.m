@@ -35,6 +35,9 @@
     }
     
     NSString *colorStr = [dict valueForKey:@"color"];
+    if(colorStr == nil || [colorStr isKindOfClass:[NSNull class]])
+        colorStr = @"#ffffff";
+    
     colorStr = [colorStr stringByReplacingOccurrencesOfString:@"#" withString:@""];
     UIColor *color = [Utilities colorWithHexString:colorStr];
     [self.lblCount setTextColor:color];

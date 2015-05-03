@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zup/Utilities.m"
-            timestampString = "449128260.137924"
+            timestampString = "452386031.602166"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "566"
-            endingLineNumber = "566"
-            landmarkName = "+getTenantLaunchImage"
+            startingLineNumber = "567"
+            endingLineNumber = "567"
+            landmarkName = "+getTenantLoginImage"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

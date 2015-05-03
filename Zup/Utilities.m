@@ -227,6 +227,7 @@ static BOOL hasInternetChecked;
 + (UIColor*)colorWithHexString:(NSString*)hex
 {
     NSString *cString = [[hex stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+    cString = [cString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
     
     // String should be 6 or 8 characters
     if ([cString length] < 6) return [UIColor grayColor];
@@ -595,6 +596,48 @@ typedef enum {
     }
     
     return @"-";
+}
+
++ (UIImage*) iconForCluster:(NSDictionary*)cluster
+{
+    NSNumber* categoryId = [cluster objectForKey:@"category_id"];
+    NSDictionary* category = nil;
+    
+    if(categoryId && ![categoryId isKindOfClass:[NSNull class]])
+        category = [UserDefaults getCategory:[categoryId intValue]];
+    
+    UILabel* label = [[UILabel alloc] init];
+    label.text = [[cluster valueForKey:@"count"] stringValue];
+    label.font = [Utilities fontOpensSansBoldWithSize:26];
+    label.textColor = [UIColor whiteColor];
+    [label sizeToFit];
+    
+    int border = 5;
+    int padding = 10;
+    int size = MAX(label.frame.size.width, label.frame.size.height) + padding*2 + border*2;
+    
+    UIGraphicsBeginImageContext(CGSizeMake(size, size));
+    
+    [[UIColor whiteColor] setFill];
+    CGContextFillEllipseInRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, size, size));
+    
+    if(category)
+    {
+        [[Utilities colorWithHexString:[category objectForKey:@"color"]] setFill];
+    }
+    else
+        [[Utilities colorBlueLight] setFill];
+    
+    CGContextFillEllipseInRect(UIGraphicsGetCurrentContext(), CGRectMake(border, border, size - border*2, size - border*2));
+    
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), (size - label.frame.size.width) / 2, (size - label.frame.size.height) / 2);
+    [label.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 @end

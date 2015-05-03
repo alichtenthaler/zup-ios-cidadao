@@ -42,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfAddress;
 @property (weak, nonatomic) IBOutlet UITextField *tfComplement;
 @property (weak, nonatomic) IBOutlet UITextField *tfCep;
+@property (weak, nonatomic) IBOutlet UITextField* tfCidade;
 
 @property (weak, nonatomic) IBOutlet CustomButton *btRegister;
 @property (weak, nonatomic) IBOutlet CustomButton *btLogin;

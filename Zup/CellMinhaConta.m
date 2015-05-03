@@ -78,7 +78,7 @@
     UIColor *color = [Utilities colorWithHexString:strColor];
     [self.imgLine setBackgroundColor:color];
     
-    [self.lblStatus setFrame:CGRectMake(207, 67, 101, 21)];
+    [self.lblStatus setFrame:CGRectMake(207, 67 + 9, 101, 21)];
     [self.lblStatus setText:[Utilities checkIfNull:strStatus]];
     
     [self.lblStatus setBackgroundColor:color];

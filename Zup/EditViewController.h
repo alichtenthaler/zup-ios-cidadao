@@ -50,6 +50,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfAddress;
 @property (weak, nonatomic) IBOutlet UITextField *tfComplement;
 @property (weak, nonatomic) IBOutlet UITextField *tfCep;
+@property (weak, nonatomic) IBOutlet UITextField *tfCidade;
 
 @property (weak, nonatomic) IBOutlet UITextField *tfCurrentPassword;
 @property (weak, nonatomic) IBOutlet UIView *viewOverlay;

@@ -21,7 +21,8 @@
           address:(NSString*)address
 addressAdditional:(NSString*)addressAdditional
        postalCode:(NSString*)postalCode
-         district:(NSString*)district;
+         district:(NSString*)district
+             city:(NSString*)city;
 
 
 -(BOOL)updateUser:(NSString*)email
@@ -33,7 +34,8 @@ addressAdditional:(NSString*)addressAdditional
           address:(NSString*)address
 addressAdditional:(NSString*)addressAdditional
        postalCode:(NSString*)postalCode
-         district:(NSString*)district;
+         district:(NSString*)district
+             city:(NSString*)city;
 
 -(BOOL)post:(NSString*)latitude
   longitude:(NSString*)longitude

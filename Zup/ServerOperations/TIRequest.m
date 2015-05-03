@@ -11,7 +11,6 @@
 
 @interface TIRequest ()
 
-@property(nonatomic) NSInteger statusCode;
 
 @end
 

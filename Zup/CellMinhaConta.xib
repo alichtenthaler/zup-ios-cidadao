@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CellMinhaConta"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1" customClass="CellMinhaConta">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="101"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Protocolo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IaX-Ql-dfY">
@@ -24,11 +24,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="nh5-bV-9n7">
-                    <rect key="frame" x="0.0" y="0.0" width="5" height="101"/>
+                    <rect key="frame" x="0.0" y="0.0" width="5" height="110"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5Sw-5h-Ga0" customClass="CustomButton">
-                    <rect key="frame" x="206" y="66" width="102" height="20"/>
+                    <rect key="frame" x="206" y="75" width="102" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                     <state key="normal" title="EM ANDAMENTO" backgroundImage="label_status_em-andamento-1">
@@ -36,7 +36,7 @@
                     </state>
                 </button>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="as9-or-lt3" customClass="CustomButton">
-                    <rect key="frame" x="234" y="66" width="74" height="20"/>
+                    <rect key="frame" x="234" y="75" width="74" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                     <state key="normal" title="EM ABERTO" backgroundImage="label_status_em-aberto-1">
@@ -44,7 +44,7 @@
                     </state>
                 </button>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2Qq-zd-wxA" customClass="CustomButton">
-                    <rect key="frame" x="210" y="66" width="98" height="20"/>
+                    <rect key="frame" x="210" y="75" width="98" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                     <state key="normal" title="NÃO RESOLVIDO" backgroundImage="label_status_nao-resolvido-1">
@@ -52,7 +52,7 @@
                     </state>
                 </button>
                 <button hidden="YES" opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YYS-yN-d7z" customClass="CustomButton">
-                    <rect key="frame" x="234" y="66" width="73" height="20"/>
+                    <rect key="frame" x="234" y="75" width="73" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="10"/>
                     <state key="normal" title="RESOLVIDO" backgroundImage="label_status_resolvido-1">
@@ -70,7 +70,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="W3F-En-0i1">
-                    <rect key="frame" x="207" y="66" width="101" height="21"/>
+                    <rect key="frame" x="207" y="75" width="101" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                     <inset key="insetFor6xAndEarlier" minX="-10" minY="0.0" maxX="10" maxY="0.0"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -84,8 +84,8 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Protocolo" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hoo-sY-sX7">
-                    <rect key="frame" x="183" y="40" width="125" height="21"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Protocolo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hoo-sY-sX7">
+                    <rect key="frame" x="20" y="56" width="125" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="highlightedColor"/>

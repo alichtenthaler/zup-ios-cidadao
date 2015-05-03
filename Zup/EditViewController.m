@@ -182,7 +182,7 @@ UITextField *activeField;
     [self.tfAddress setText:[Utilities checkIfNull:[self.dictUser valueForKey:@"address"]]];
     [self.tfComplement setText:[Utilities checkIfNull:[self.dictUser valueForKey:@"address_additional"]]];
     [self.tfCep setText:[Utilities checkIfNull:[self.dictUser valueForKey:@"postal_code"]]];
-    
+    [self.tfCidade setText:[Utilities checkIfNull:[self.dictUser valueForKey:@"city"]]];
     
 }
 
@@ -348,6 +348,8 @@ UITextField *activeField;
     else if (textField == self.tfCep)
         [self.tfBairro becomeFirstResponder];
     else if (textField == self.tfBairro)
+        [self.tfCidade becomeFirstResponder];
+    else if(textField == self.tfCidade)
         [textField resignFirstResponder];
     
     return YES;
@@ -487,7 +489,7 @@ UITextField *activeField;
         [serverOp setTarget:self];
         [serverOp setAction:@selector(didReceiveData:response:)];
         [serverOp setActionErro:@selector(didReceiveError:operation:data:)];
-        [serverOp updateUser:self.tfEmail.text currentPassword:self.tfCurrentPassword.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text];
+        [serverOp updateUser:self.tfEmail.text currentPassword:self.tfCurrentPassword.text pass:self.tfPass.text name:self.tfName.text phone:self.tfPhone.text document:self.tfCpf.text address:self.tfAddress.text addressAdditional:self.tfComplement.text postalCode:self.tfCep.text district:self.tfBairro.text city:self.tfCidade.text];
     }
 }
 
@@ -649,6 +651,7 @@ UITextField *activeField;
                                  @"address_additional": self.tfComplement,
                                  @"postal_code": self.tfCep,
                                  @"district": self.tfBairro,
+                                 @"city": self.tfCidade,
                                  @"current_password": self.tfCurrentPassword
                                  };
         

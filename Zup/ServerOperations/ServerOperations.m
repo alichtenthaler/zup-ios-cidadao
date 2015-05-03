@@ -16,9 +16,11 @@
     #define BASE_URL @"http://zup-api-boa-vista.cognita.ntxdev.com.br/"
 #elif defined(SBC)
     //#define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
-    #define BASE_URL @"http://zup-api-sbc.cognita.ntxdev.com.br/"
+    //#define BASE_URL @"http://zup-api-sbc.cognita.ntxdev.com.br/"
+    #define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
 #elif defined(SBC_SBC)
-    #define BASE_URL @"http://dti-zuphmg-01:9292/"
+    #define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
+    //#define BASE_URL @"http://dti-zuphmg-01:9292/"
 #elif defined(FLORIPA)
     #define BASE_URL @"http://zup-api-florianopolis.cognita.ntxdev.com.br/"
 #elif defined(MACEIO)
@@ -45,7 +47,7 @@ NSString * const URLpost = APIURL(@"reports/");
 NSString * const URLreportCategoriesList = APIURL(@"reports/categories?display_type=full&token=");
 NSString * const URLgetAddressStreey = @"http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
 NSString * const URLgetItems = APIURL(@"inventory/items");
-NSString * const URLgetReportItems = APIURL(@"reports/items");
+NSString * const URLgetReportItems = APIURL(@"search/reports/items");
 NSString * const URLgetReportItemsForInventory = APIURL(@"reports/items?inventory_item_id=");
 NSString * const URLgetInventoryCategories = APIURL(@"inventory/categories?display_type=full");
 NSString * const URLgetReportsForCategory = APIURL(@"reports/");
@@ -150,7 +152,8 @@ NSString * const URLvalidateBounds = APIURL(@"utils/city-boundary/validate");
           address:(NSString*)address
 addressAdditional:(NSString*)addressAdditional
        postalCode:(NSString*)postalCode
-         district:(NSString*)district{
+         district:(NSString*)district
+             city:(NSString*)city {
     
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", URLcreate]];
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
@@ -172,6 +175,7 @@ addressAdditional:(NSString*)addressAdditional
                                 @"address_additional" : addressAdditional,
                                 @"postal_code" : postalCode,
                                 @"district" : district,
+                                @"city": city,
                                 @"device_token" : token,
                                 @"device_type" : @"ios"
                                 };
@@ -197,7 +201,8 @@ addressAdditional:(NSString*)addressAdditional
           address:(NSString*)address
 addressAdditional:(NSString*)addressAdditional
        postalCode:(NSString*)postalCode
-         district:(NSString*)district{
+         district:(NSString*)district
+             city:(NSString*)city {
     
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", URLupdateUser, [UserDefaults getUserId]]];
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
@@ -218,7 +223,8 @@ addressAdditional:(NSString*)addressAdditional
                                 @"address" : address,
                                 @"address_additional" : addressAdditional,
                                 @"postal_code" : postalCode,
-                                @"district" : district
+                                @"district" : district,
+                                @"city": city
                                 };
     
     [postRequest setHTTPMethod:@"PUT"];
@@ -348,7 +354,7 @@ addressAdditional:(NSString*)addressAdditional
     else maxCount = maxMarkersCountiPhone4;
     
     // display_type=basic
-    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description", URLgetReportItems, latitude, longitude, radius, maxCount, zoom];
+    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, latitude, longitude, radius, maxCount, zoom];
 
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
     

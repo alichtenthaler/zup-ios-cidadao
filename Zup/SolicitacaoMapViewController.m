@@ -16,6 +16,8 @@ ServerOperations *serverOperations;
 
 @interface SolicitacaoMapViewController ()
 
+@property (nonatomic, retain) NSDictionary* currentAddressDesc;
+
 @end
 
 @implementation SolicitacaoMapViewController
@@ -265,7 +267,7 @@ ServerOperations *serverOperations;
         NSDictionary* mainResult = [results objectAtIndex:0];
     
         NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
-        NSString* route = [self component:@"route" forAddress:mainResult];
+        NSString* route = [self longNameOfComponent:@"route" forAddress:mainResult];
     
         self.tfNumber.text = streetNumber;
         self.searchBar.text = route;
@@ -273,7 +275,7 @@ ServerOperations *serverOperations;
     
         NSMutableString *str = [[NSMutableString alloc]init];
     
-        [str appendString:[self component:@"route" forAddress:mainResult]];
+        [str appendString:[self longNameOfComponent:@"route" forAddress:mainResult]];
         //[str appendString:@", "];
         //[str appendString:[self component:@"street_number" forAddress:mainResult]];
     
@@ -281,6 +283,7 @@ ServerOperations *serverOperations;
         userMarker.snippet = str;
     
         currentAddress = str;
+        self.currentAddressDesc = mainResult;
     }
     else
     {
@@ -288,7 +291,7 @@ ServerOperations *serverOperations;
         self.searchBar.text = @"";
         self.searchBar.placeholder = @"Endereço";
         currentAddress = nil;
-        
+        self.currentAddressDesc = nil;
     }
 }
 
@@ -298,6 +301,24 @@ ServerOperations *serverOperations;
     for(NSDictionary* _component in components)
     {
         NSString* value = [_component objectForKey:@"short_name"];
+        NSArray* types = [_component objectForKey:@"types"];
+        
+        for(NSString* typeName in types)
+        {
+            if([typeName isEqualToString:componentType])
+                return value;
+        }
+    }
+    
+    return @"";
+}
+
+- (NSString*) longNameOfComponent:(NSString*)componentType forAddress:(NSDictionary*)address
+{
+    NSArray* components = [address objectForKey:@"address_components"];
+    for(NSDictionary* _component in components)
+    {
+        NSString* value = [_component objectForKey:@"long_name"];
         NSArray* types = [_component objectForKey:@"types"];
         
         for(NSString* typeName in types)
@@ -466,10 +487,47 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         photoView = [[SolicitacaoPhotoViewController alloc]initWithNibName:@"SolicitacaoPhotoViewController" bundle:nil];
     }
     
+    NSMutableString* address = [[NSMutableString alloc] init];
     if (currentAddress == nil) {
         currentAddress = @"";
     } else {
         currentAddress = [NSString stringWithFormat:@"%@, %@", currentAddress, self.tfNumber.text];
+    }
+    
+    if(self.currentAddressDesc != nil) {
+        [address appendString:[self longNameOfComponent:@"route" forAddress:self.currentAddressDesc]];
+        [address appendString:@", "];
+        [address appendString:self.tfNumber.text];
+        
+        // getSubLocality
+        NSString* subLocality = [self component:@"neighborhood" forAddress:self.currentAddressDesc];
+        NSString* city = [self component:@"administrative_area_level_2" forAddress:self.currentAddressDesc];
+        NSString* state = [self component:@"administrative_area_level_1" forAddress:self.currentAddressDesc];
+        NSString* postal = [self component:@"postal_code" forAddress:self.currentAddressDesc];
+        
+        if(subLocality)
+        {
+            [address appendString:@" - "];
+            [address appendString:subLocality];
+        }
+        
+        if(city)
+        {
+            [address appendString:@", "];
+            [address appendString:city];
+            
+            if(state)
+            {
+                [address appendString:@" - "];
+                [address appendString:state];
+            }
+        }
+        
+        if(postal)
+        {
+            [address appendString:@", "];
+            [address appendString:postal];
+        }
     }
     
     NSMutableDictionary *dictTemp = [[NSMutableDictionary alloc]init];
@@ -480,10 +538,10 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     } else {
         [dictTemp setObject:[NSString stringWithFormat:@"%f", currentCoord.latitude] forKey:@"latitude"];
         [dictTemp setObject:[NSString stringWithFormat:@"%f", currentCoord.longitude] forKey:@"longitude"];
-        [dictTemp setObject:currentAddress forKey:@"address"];
+        [dictTemp setObject:address forKey:@"address"];
         [dictTemp setObject:@"" forKey:@"inventory_category_id"];
         [dictTemp setObject:[self.dictMain valueForKey:@"id"] forKey:@"catId"];
-        [dictTemp setObject:currentAddress forKey:@"address"];
+        [dictTemp setObject:address forKey:@"address"];
         [dictTemp setObject:self.tvReferencia.text forKey:@"reference"];
     }
     

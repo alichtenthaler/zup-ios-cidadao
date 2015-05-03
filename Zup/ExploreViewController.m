@@ -349,13 +349,28 @@ CLLocationCoordinate2D currentCoord;
     }
 }
 
+- (void)clearMap
+{
+    [self.arrMain removeAllObjects];
+    
+    for(GMSMarker* marker in self.arrMarkers)
+    {
+        marker.map = nil;
+    }
+    
+    [self.arrMarkers removeAllObjects];
+}
+
 - (void)didReceiveData:(NSData*)data {
+    
+    [self clearMap];
     
     _isReportsLoading = NO;
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     NSArray *arr = [dict valueForKey:@"reports"];
+    NSArray* arrClusters = [dict valueForKey:@"clusters"];
     
     for (NSDictionary *dict in arr) {
         if (![self.arrMain containsObject:dict]) {
@@ -367,9 +382,9 @@ CLLocationCoordinate2D currentCoord;
     if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
     else maxCount = maxMarkersCountiPhone4;
     
-    int markersCount = [self.arrMain count];
+    NSUInteger markersCount = [self.arrMain count];
     if (markersCount > maxCount) {
-        int markersToRemove = self.arrMain.count - maxCount;
+        unsigned long markersToRemove = self.arrMain.count - maxCount;
         
         for (int i = 0; i < markersToRemove; i ++) {
             
@@ -393,11 +408,32 @@ CLLocationCoordinate2D currentCoord;
     }
     
     [self createPoints];
+    [self createPointsForClusters:arrClusters];
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
     [Utilities alertWithServerError];
     _isReportsLoading = NO;
+}
+
+- (void)createPointsForClusters:(NSArray*)clusters
+{
+    for(NSDictionary* cluster in clusters)
+    {
+        float lat = [[[cluster valueForKeyPath:@"position"] objectAtIndex:0] floatValue];
+        float lon = [[[cluster valueForKeyPath:@"position"] objectAtIndex:1] floatValue];
+        
+        GMSMarker* marker = [[GMSMarker alloc] init];
+        marker.position = CLLocationCoordinate2DMake(lat, lon);
+        marker.map = self.mapView;
+        
+        UIImage* img = [Utilities iconForCluster:cluster];
+        img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
+        marker.icon = img;
+        marker.userData = @{ @"isCluster": @YES };
+        
+        [self.arrMarkers addObject:marker];
+    }
 }
 
 - (void)createPoints {
@@ -659,6 +695,8 @@ CLLocationCoordinate2D currentCoord;
 }
 
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
+    if([[[marker userData] valueForKey:@"isCluster"] boolValue])
+        return nil;
     
     InfoWindow *view = [[InfoWindow alloc]initWithNibName:@"InfoWindow" bundle:nil];
     [view.view setFrame:CGRectMake(0, 0, 219, 57)];
@@ -706,6 +744,17 @@ CLLocationCoordinate2D currentCoord;
 
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker {
+    if([[[marker userData] valueForKey:@"isCluster"] boolValue])
+    {
+        GMSCameraPosition* camera = [GMSCameraPosition cameraWithLatitude:marker.position.latitude
+                                                                longitude:marker.position.longitude
+                                                                     zoom:self.mapView.camera.zoom + 1];
+        
+        [self.mapView animateToCameraPosition:camera];
+        [self mapView:mapView didChangeCameraPosition:camera];
+        
+        return NO;
+    }
     
     isMoving = YES;
     

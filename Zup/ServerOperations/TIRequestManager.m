@@ -9,6 +9,7 @@
 #import "TIRequestManager.h"
 #import "TIRequest.h"
 #import "ServerOperations.h"
+#import "RavenClient.h"
 
 static NSString * const keyRequest = @"REQUEST";
 static NSString * const keyOperation = @"OPERATION";
@@ -102,6 +103,9 @@ static TIRequestManager* _defaultManager;
             [operation.target performSelector:operation.actionErro withObject:erro withObject:operation];
         }        
     }
+    
+    NSString* sentryMessage = [NSString stringWithFormat:@"HTTP Request failed:\r\nURL: %@\r\nMethod: %@\r\nResponse Status: %i\r\n%@", request.currentConnection.originalRequest.URL, request.currentConnection.originalRequest.HTTPMethod, request.statusCode, erro.description];
+    [[RavenClient sharedClient] captureMessage:sentryMessage];
     
     [self.RequestPerforming removeObject:dictionary];
     [self checkStatus];

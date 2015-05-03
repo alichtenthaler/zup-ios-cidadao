@@ -12,6 +12,7 @@
                 <outlet property="tfAddress" destination="GUV-iT-pj5" id="UOy-4l-k95"/>
                 <outlet property="tfBairro" destination="NGw-y6-mo1" id="NvH-qH-rgq"/>
                 <outlet property="tfCep" destination="LV7-zR-u10" id="Zdb-DR-fxk"/>
+                <outlet property="tfCidade" destination="xbe-EX-olF" id="Ttf-2q-Tk7"/>
                 <outlet property="tfComplement" destination="GqU-Sx-UQA" id="3qK-DS-ibJ"/>
                 <outlet property="tfConfirmPass" destination="tXU-tc-Utr" id="mSc-r8-yCi"/>
                 <outlet property="tfCpf" destination="zlI-xy-G9j" id="ubQ-KF-5la"/>
@@ -31,6 +32,7 @@
                 <outletCollection property="arrTf" destination="GqU-Sx-UQA" id="ag0-xP-dbF"/>
                 <outletCollection property="arrTf" destination="NGw-y6-mo1" id="Cdg-IJ-cui"/>
                 <outletCollection property="arrTf" destination="LV7-zR-u10" id="9W0-lq-4vE"/>
+                <outletCollection property="arrTf" destination="xbe-EX-olF" id="41Q-Gc-25a"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -55,11 +57,11 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="mKE-F9-AqV">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="486"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="506"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="oWO-XI-XSz">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="486"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="506"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nome" minimumFontSize="17" background="textbox_1linha-larga_normal" id="U1v-2h-KbS">
@@ -135,6 +137,15 @@
                                 <outlet property="delegate" destination="-1" id="cmK-fz-dRa"/>
                             </connections>
                         </textField>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Cidade" minimumFontSize="17" background="textbox_1linha-larga_normal" id="xbe-EX-olF">
+                            <rect key="frame" x="15" y="391" width="290" height="45"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="6xd-0T-Itq"/>
+                            </connections>
+                        </textField>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Complemento" minimumFontSize="17" background="textbox_1linha-curta_normal" id="GqU-Sx-UQA">
                             <rect key="frame" x="15" y="285" width="140" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -154,13 +165,13 @@
                             </connections>
                         </textField>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ao criar uma conta, você concorda com os nossos" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dpw-K6-ZeJ">
-                            <rect key="frame" x="15" y="399" width="290" height="37"/>
+                            <rect key="frame" x="15" y="449" width="290" height="37"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="x0A-Wh-tXa" customClass="CustomButton">
-                            <rect key="frame" x="69" y="413" width="111" height="28"/>
+                            <rect key="frame" x="69" y="463" width="111" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="15" maxY="0.0"/>
@@ -173,7 +184,7 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Wl0-ui-Uxi">
-                            <rect key="frame" x="66" y="434" width="100" height="1"/>
+                            <rect key="frame" x="66" y="484" width="100" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.0078431377187371254" green="0.58431375026702881" blue="0.71764707565307617" alpha="1" colorSpace="deviceRGB"/>
                         </imageView>
@@ -183,6 +194,7 @@
             </subviews>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="254" y="849"/>
         </scrollView>
     </objects>
     <resources>

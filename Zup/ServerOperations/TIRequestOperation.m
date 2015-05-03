@@ -17,6 +17,7 @@
 
 -(BOOL)StartRequest:(NSURLRequest*)request{
     NSMutableURLRequest* newreq = [request mutableCopy];
+    
     newreq.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
     request = newreq;
     

@@ -293,7 +293,8 @@ int RESOLVIDO = 3;
     [form setDateFormat:@"dd/MM/yyyy HH:mm"];
     NSString* datestr = [form stringFromDate:date];
     
-    NSString* sentby = [NSString stringWithFormat:@"Enviado por %@\r%@", [Utilities getTenantName], datestr];
+    //NSString* sentby = [NSString stringWithFormat:@"Enviado por %@\r%@", [Utilities getTenantName], datestr];
+    NSString* sentby = [NSString stringWithFormat:@"Resposta do Município enviada: %@", datestr];
     
     lblDate.text = sentby;
     lblDate.numberOfLines = 0;
