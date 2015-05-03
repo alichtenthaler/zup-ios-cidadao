@@ -46,7 +46,7 @@ NSString * const URLgetPoints = APIURL(@"reports/users/");
 NSString * const URLpost = APIURL(@"reports/");
 NSString * const URLreportCategoriesList = APIURL(@"reports/categories?display_type=full&token=");
 NSString * const URLgetAddressStreey = @"http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=";
-NSString * const URLgetItems = APIURL(@"inventory/items");
+NSString * const URLgetItems = APIURL(@"search/inventory/items");
 NSString * const URLgetReportItems = APIURL(@"search/reports/items");
 NSString * const URLgetReportItemsForInventory = APIURL(@"reports/items?inventory_item_id=");
 NSString * const URLgetInventoryCategories = APIURL(@"inventory/categories?display_type=full");
@@ -287,7 +287,7 @@ addressAdditional:(NSString*)addressAdditional
     radius = radius;
 
     // display_type=basic
-    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&limit=%i&zoom=%f&return_fields=position,inventory_category_id,category_id,id", URLgetItems, latitude, longitude, radius, maxCount, zoom];
+    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&limit=%i&zoom=%i&clusterize=true&return_fields=position,inventory_category_id,category_id,id,count", URLgetItems, latitude, longitude, radius, maxCount, (int)zoom];
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
     
@@ -306,7 +306,7 @@ addressAdditional:(NSString*)addressAdditional
     
     // display_type=basic
     if ([categoryIds count] == 0) {
-        strUrl = [NSString stringWithFormat:APIURL(@"inventory/items?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f&return_fields=position,inventory_category_id,category_id,id"), maxCount,radius, latitude, longitude, zoom];
+        strUrl = [NSString stringWithFormat:APIURL(@"search/inventory/items?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%i&clusterize=true&return_fields=position,inventory_category_id,category_id,id,count"), maxCount,radius, latitude, longitude, (int)zoom];
     } else {
         NSMutableString* catIds = [[NSMutableString alloc] init];
         int i = 0;
@@ -317,7 +317,7 @@ addressAdditional:(NSString*)addressAdditional
             [catIds appendString:param];
             i++;
         }
-        strUrl = [NSString stringWithFormat:APIURL(@"inventory/items?%@limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f&return_fields=position,inventory_category_id,category_id,id"), catIds, maxCount,radius, latitude, longitude, zoom];
+        strUrl = [NSString stringWithFormat:APIURL(@"search/inventory/items?%@limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%i&clusterize=true&return_fields=position,inventory_category_id,category_id,id,count"), catIds, maxCount,radius, latitude, longitude, (int)zoom];
     }
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
@@ -336,7 +336,7 @@ addressAdditional:(NSString*)addressAdditional
 //    NSString *strUrl = @"http://staging.zup.sapience.io/inventory/items?limit=30&position%5Bdistance%5D=518.0249592829191&position%5Blatitude%5D=-23.5481173&position%5Blongitude%5D=-46.63609300000002&zoom=17";
     
     // display_type=basic
-    NSString *strUrl = [NSString stringWithFormat:APIURL(@"inventory/items?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%f&inventory_category_id=%i&return_fields=position,inventory_category_id,category_id,id"), maxCount,radius, latitude, longitude, zoom, catId];
+    NSString *strUrl = [NSString stringWithFormat:APIURL(@"search/inventory/items?limit=%i&position[distance]=%f&position[latitude]=%f&position[longitude]=%f&zoom=%i&clusterize=true&inventory_category_id=%i&return_fields=position,inventory_category_id,category_id,id&count"), maxCount,radius, latitude, longitude, (int)zoom, catId];
     
 //    NSString *strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&limit=%i&zoom=%f&inventory_category_id=%@", URLgetItems, latitude, longitude, radius, maxCount, zoom, catId];
     

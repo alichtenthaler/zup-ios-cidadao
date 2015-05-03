@@ -363,9 +363,12 @@ CLLocationCoordinate2D currentCoord;
 
 - (void)didReceiveData:(NSData*)data {
     
-    [self clearMap];
-    
     _isReportsLoading = NO;
+    
+    if(self.isNoReports)
+        return;
+    
+    [self clearMap];
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
@@ -408,7 +411,7 @@ CLLocationCoordinate2D currentCoord;
     }
     
     [self createPoints];
-    [self createPointsForClusters:arrClusters];
+    [self createPointsForClusters:arrClusters inventory:NO];
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
@@ -416,7 +419,7 @@ CLLocationCoordinate2D currentCoord;
     _isReportsLoading = NO;
 }
 
-- (void)createPointsForClusters:(NSArray*)clusters
+- (void)createPointsForClusters:(NSArray*)clusters inventory:(BOOL)inv
 {
     for(NSDictionary* cluster in clusters)
     {
@@ -427,7 +430,7 @@ CLLocationCoordinate2D currentCoord;
         marker.position = CLLocationCoordinate2DMake(lat, lon);
         marker.map = self.mapView;
         
-        UIImage* img = [Utilities iconForCluster:cluster];
+        UIImage* img = [Utilities iconForCluster:cluster inventory:inv];
         img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
         marker.icon = img;
         marker.userData = @{ @"isCluster": @YES };
@@ -551,6 +554,11 @@ CLLocationCoordinate2D currentCoord;
     
     _isInventoryLoading = NO;
     
+    if(self.isNoInventories)
+        return;
+    
+    [self clearMap];
+    
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
     
@@ -562,8 +570,11 @@ CLLocationCoordinate2D currentCoord;
         }
     }
     
+    NSArray* clusters = [dict valueForKey:@"clusters"];
+    
     
     [self createInventoryPoints];
+    [self createPointsForClusters:clusters inventory:YES];
 }
 
 - (void)didReceiveIventoryError:(NSError*)error data:(NSData*)data {

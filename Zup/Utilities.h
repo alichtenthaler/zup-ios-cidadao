@@ -71,6 +71,6 @@
 + (UIImage*) getTenantLoginImage;
 + (UIImage*) getTenantHeaderImage;
 
-+ (UIImage*) iconForCluster:(NSDictionary*)cluster;
++ (UIImage*) iconForCluster:(NSDictionary*)cluster inventory:(BOOL)inv;
 
 @end

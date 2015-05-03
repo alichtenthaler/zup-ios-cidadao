@@ -598,13 +598,18 @@ typedef enum {
     return @"-";
 }
 
-+ (UIImage*) iconForCluster:(NSDictionary*)cluster
++ (UIImage*) iconForCluster:(NSDictionary*)cluster inventory:(BOOL)inv
 {
     NSNumber* categoryId = [cluster objectForKey:@"category_id"];
     NSDictionary* category = nil;
     
     if(categoryId && ![categoryId isKindOfClass:[NSNull class]])
-        category = [UserDefaults getCategory:[categoryId intValue]];
+    {
+        if(inv)
+            category = [UserDefaults getInventoryCategory:[categoryId intValue]];
+        else
+            category = [UserDefaults getCategory:[categoryId intValue]];
+    }
     
     UILabel* label = [[UILabel alloc] init];
     label.text = [[cluster valueForKey:@"count"] stringValue];

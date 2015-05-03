@@ -367,7 +367,8 @@
                                                    @"title" : [dict valueForKey:@"title"],
                                                    @"description" : [Utilities checkIfNull:[dict valueForKey:@"description"]],
                                                    @"sectionsData" : sectionsData,
-                                                   @"plot_format" : [dict valueForKey:@"plot_format"]
+                                                   @"plot_format" : [dict valueForKey:@"plot_format"],
+                                                   @"color": [dict valueForKey:@"color"]
                                                    };
                         
                         [mutArr addObject:tempDict];
