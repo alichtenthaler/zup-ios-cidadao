@@ -4,29 +4,215 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Pods-zup-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-zup-SDWebImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Pods-zup.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
+		</dict>
+		<key>Pods-zupTests-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zupTests-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zupTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_boavista-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_boavista-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_boavista.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_floripa-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_floripa-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_floripa.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_maceio-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_maceio-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_maceio.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc_sbcserver-ISO8601DateFormatter.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc_sbcserver-SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-zup_sbc_sbcserver.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>340BECA2CA60241FB019C6D0</key>
+		<key>141DB33C705FF17F07279D86</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D77582BAA145B1B9194EC82C</key>
+		<key>28A418E04695EADAAE84AE69</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3E42F716766187469B2BE4E2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>46BD735D860C7E44C40E5A26</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5233EDB95C29B446508A06E0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>532E4FC770BC59151A5C619B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>535A909A44762858680B85ED</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6684DB2BF0D330DE2AB3804D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6C69DBF344777D1BF7D31832</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6F449B74280ACABB2EB58BCA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7BDCBF20AE021697D952ED46</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8D5B68CA2F77CBBEC73867ED</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A2D3C1E0C69E5590C3168DB2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A976D5EA46F7AC4CB577E6D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AC1965DA5EE70EDDF7E63D1B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BF9A540584AF4C2DE5BB62FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C22CF2C3B989C4761B162FB0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C9FE2A275E4B5EBDA934F43F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD842A8AD2098232A2B97EC8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E5BD44F0ED708933DDAA293D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F3217085F9E4266FC8EC6B7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

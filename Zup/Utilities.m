@@ -7,6 +7,7 @@
 #import "Reachability.h"
 #import <CoreLocation/CoreLocation.h>
 #import "UIApplication+name.h"
+#import <ISO8601DateFormatter/ISO8601DateFormatter.h>
 
 @implementation Utilities
 
@@ -264,11 +265,13 @@ static BOOL hasInternetChecked;
 
 + (NSString *)calculateNumberOfDaysPassed:(NSString*)strDate {
     
-    NSDateFormatter *form = [[NSDateFormatter alloc]init];
-    [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    ISO8601DateFormatter* form = [[ISO8601DateFormatter alloc] init];
     
-    strDate = [strDate substringToIndex:19];
-    strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    //NSDateFormatter *form = [[NSDateFormatter alloc]init];
+    //[form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    //strDate = [strDate substringToIndex:19];
+    //strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
     NSDate *earlier = [form dateFromString:strDate];
     
@@ -311,13 +314,15 @@ static BOOL hasInternetChecked;
 
 + (int)calculateDaysPassed:(NSString*)strDate {
     
-    NSDateFormatter *form = [[NSDateFormatter alloc]init];
+    ISO8601DateFormatter* formatter = [[ISO8601DateFormatter alloc] init];
+    
+    /*NSDateFormatter *form = [[NSDateFormatter alloc]init];
     [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
     strDate = [strDate substringToIndex:19];
-    strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];*/
     
-    NSDate *earlier = [form dateFromString:strDate];
+    NSDate *earlier = [formatter dateFromString:strDate];
     
     NSDate *today = [NSDate date];
     
