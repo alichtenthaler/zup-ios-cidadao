@@ -5,6 +5,7 @@
 
 #import "SolicitacaoPhotoViewController.h"
 #import "SolicitacaoPublicarViewController.h"
+#import "UIApplication+name.h"
 
 @interface SolicitacaoPhotoViewController ()
 
@@ -83,20 +84,20 @@
     if (currentButtonTag < self.arrPhotos.count) {
         if(canChoosePhoto)
         {
-            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", @"Remover foto", nil];
+            actionSheet = [[UIActionSheet alloc]initWithTitle:[UIApplication displayName] delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", @"Remover foto", nil];
         }
         else
         {
-            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", @"Remover foto", nil];
+            actionSheet = [[UIActionSheet alloc]initWithTitle:[UIApplication displayName] delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", @"Remover foto", nil];
         }
     } else {
         if(canChoosePhoto)
         {
-            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", nil];
+            actionSheet = [[UIActionSheet alloc]initWithTitle:[UIApplication displayName] delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Escolher foto do álbum", @"Tirar foto", nil];
         }
         else
         {
-            actionSheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", nil];
+            actionSheet = [[UIActionSheet alloc]initWithTitle:[UIApplication displayName] delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Tirar foto", nil];
         }
     }
     

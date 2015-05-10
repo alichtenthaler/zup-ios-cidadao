@@ -6,6 +6,7 @@
 #import "Utilities.h"
 #import "Reachability.h"
 #import <CoreLocation/CoreLocation.h>
+#import "UIApplication+name.h"
 
 @implementation Utilities
 
@@ -104,7 +105,7 @@ static BOOL hasInternetChecked;
 }
 
 + (void)alertWithMessage:(NSString*)message {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Zup" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
 

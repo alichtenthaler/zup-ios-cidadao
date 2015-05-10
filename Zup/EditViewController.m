@@ -5,6 +5,7 @@
 
 #import "EditViewController.h"
 #import "NSString+MD5.h"
+#import "UIApplication+name.h"
 
 UITextField *activeField;
 
@@ -729,7 +730,7 @@ UITextField *activeField;
 }
 
 - (void)openActionSheet {
-    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"Zup" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Desvincular", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:[UIApplication displayName] delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:nil otherButtonTitles:@"Desvincular", nil];
     
     if ([Utilities isIpad]) {
         [sheet showInView:self.view];
@@ -739,7 +740,7 @@ UITextField *activeField;
 }
 
 - (void)showAlertView {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Zup" message:@"Ao vincular uma nova rede social, a conexão anterior será desativada." delegate:self cancelButtonTitle:@"Cancelar" otherButtonTitles:@"OK", nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Ao vincular uma nova rede social, a conexão anterior será desativada." delegate:self cancelButtonTitle:@"Cancelar" otherButtonTitles:@"OK", nil];
     [alert show];
 }
 
@@ -907,7 +908,7 @@ UITextField *activeField;
             }
             else
             {
-                [Utilities alertWithMessage:@"Zup não tem permissão para acessar sua conta do Twitter"];
+                [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]]];
                 
                 [self.spin stopAnimating];
                 

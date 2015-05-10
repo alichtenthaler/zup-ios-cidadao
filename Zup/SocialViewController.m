@@ -5,6 +5,7 @@
 
 #import "SocialViewController.h"
 #import "TabBarController.h"
+#import "UIApplication+name.h"
 
 @interface SocialViewController ()
 
@@ -301,7 +302,7 @@
             }
             else
             {
-                [Utilities alertWithMessage:@"Zup não tem permissão para acessar sua conta do Twitter"];
+                [Utilities alertWithMessage:[NSString stringWithFormat:@"O %@ não tem permissão para acessar sua conta do Twitter", [UIApplication displayName]]];
                 
                 [self.spin stopAnimating];
                 [self.viewSocialButtons setUserInteractionEnabled:YES];

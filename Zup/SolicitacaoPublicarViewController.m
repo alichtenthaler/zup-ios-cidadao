@@ -9,6 +9,7 @@
 #import "PostController.h"
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
+#import "UIApplication+name.h"
 
 @interface SolicitacaoPublicarViewController ()
 
@@ -208,12 +209,14 @@ NSString* linkTemp;
                address:[self.dictMain valueForKey:@"address"]
                 images:[self.dictMain valueForKey:@"photos"]
             categoryId:[self.dictMain valueForKey:@"catId"]
-             reference:textStrRef];
-        
-        
+             reference:textStrRef
+              district:[self.dictMain valueForKey:@"district"]
+                  city:[self.dictMain valueForKey:@"city"]
+                 state:[self.dictMain valueForKey:@"state"]
+               country:[self.dictMain valueForKey:@"country"]];        
         
     } else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Zup" message:@"Sem conexão com a internet. Tentar novamente?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim", nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Sem conexão com a internet. Tentar novamente?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim", nil];
         [alert show];
     }
 }

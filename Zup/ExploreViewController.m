@@ -429,7 +429,7 @@ CLLocationCoordinate2D currentCoord;
         GMSMarker* marker = [[GMSMarker alloc] init];
         marker.position = CLLocationCoordinate2DMake(lat, lon);
         marker.map = self.mapView;
-        
+    
         UIImage* img = [Utilities iconForCluster:cluster inventory:inv];
         img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
         marker.icon = img;

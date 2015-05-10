@@ -115,6 +115,7 @@
 		88EDEC6E18554EF2001F84EE /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88EDEC6C18554EF2001F84EE /* InfoWindow.xib */; };
 		88F48AA11842B490009788D7 /* FiltrarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F48A9F1842B490009788D7 /* FiltrarViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		88F48AA21842B490009788D7 /* FiltrarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88F48AA01842B490009788D7 /* FiltrarViewController.xib */; };
+		9C028A731AFFDE42007B77D9 /* UIApplication+name.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C028A721AFFDE42007B77D9 /* UIApplication+name.m */; };
 		9C0A7CE41A26CFB10036421C /* XLMediaZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0A7CE11A26CFB10036421C /* XLMediaZoom.m */; };
 		9C0A7CE51A26CFB10036421C /* XLVideoZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0A7CE31A26CFB10036421C /* XLVideoZoom.m */; };
 		9C0A7CE81A26D0460036421C /* UIImageView+Zoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0A7CE71A26D0460036421C /* UIImageView+Zoom.m */; };
@@ -951,6 +952,8 @@
 		88F48A9E1842B490009788D7 /* FiltrarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltrarViewController.h; sourceTree = "<group>"; };
 		88F48A9F1842B490009788D7 /* FiltrarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltrarViewController.m; sourceTree = "<group>"; };
 		88F48AA01842B490009788D7 /* FiltrarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FiltrarViewController.xib; sourceTree = "<group>"; };
+		9C028A711AFFDE42007B77D9 /* UIApplication+name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+name.h"; sourceTree = "<group>"; };
+		9C028A721AFFDE42007B77D9 /* UIApplication+name.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+name.m"; sourceTree = "<group>"; };
 		9C0A7CE01A26CFB10036421C /* XLMediaZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XLMediaZoom.h; path = XL/XLMediaZoom.h; sourceTree = "<group>"; };
 		9C0A7CE11A26CFB10036421C /* XLMediaZoom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XLMediaZoom.m; path = XL/XLMediaZoom.m; sourceTree = "<group>"; };
 		9C0A7CE21A26CFB10036421C /* XLVideoZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XLVideoZoom.h; path = XL/XLVideoZoom.h; sourceTree = "<group>"; };
@@ -1482,6 +1485,8 @@
 				88387CEF18404C180059C826 /* Reachability */,
 				9CC6B0DE1A26C81100460BBF /* ImageCache.h */,
 				9CC6B0DF1A26C81100460BBF /* ImageCache.m */,
+				9C028A711AFFDE42007B77D9 /* UIApplication+name.h */,
+				9C028A721AFFDE42007B77D9 /* UIApplication+name.m */,
 			);
 			name = Singleton;
 			sourceTree = "<group>";
@@ -2257,6 +2262,7 @@
 				9C8351AF1A26C07300C43A91 /* CellGaleriaInventario.m in Sources */,
 				88387CCC184048290059C826 /* PerfilViewController.m in Sources */,
 				9CA848091A8436F80026E79D /* ComentarioViewController.m in Sources */,
+				9C028A731AFFDE42007B77D9 /* UIApplication+name.m in Sources */,
 				88615F4F1881B238006F9147 /* NSData+MD5.m in Sources */,
 				88615F501881B238006F9147 /* NSString+MD5.m in Sources */,
 				88B184981911F869002F0BC9 /* PostController.m in Sources */,

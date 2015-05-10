@@ -494,18 +494,27 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         currentAddress = [NSString stringWithFormat:@"%@, %@", currentAddress, self.tfNumber.text];
     }
     
+    NSString* route = nil;
+    NSString* subLocality = nil;
+    NSString* city = nil;
+    NSString* state = nil;
+    NSString* postal = nil;
+    NSString* country = nil;
+    
     if(self.currentAddressDesc != nil) {
         [address appendString:[self longNameOfComponent:@"route" forAddress:self.currentAddressDesc]];
         [address appendString:@", "];
         [address appendString:self.tfNumber.text];
         
         // getSubLocality
-        NSString* subLocality = [self component:@"neighborhood" forAddress:self.currentAddressDesc];
-        NSString* city = [self component:@"administrative_area_level_2" forAddress:self.currentAddressDesc];
-        NSString* state = [self component:@"administrative_area_level_1" forAddress:self.currentAddressDesc];
-        NSString* postal = [self component:@"postal_code" forAddress:self.currentAddressDesc];
+        route = [self longNameOfComponent:@"route" forAddress:self.currentAddressDesc];
+        subLocality = [self component:@"neighborhood" forAddress:self.currentAddressDesc];
+        city = [self component:@"administrative_area_level_2" forAddress:self.currentAddressDesc];
+        state = [self component:@"administrative_area_level_1" forAddress:self.currentAddressDesc];
+        postal = [self component:@"postal_code" forAddress:self.currentAddressDesc];
+        country = [self component:@"country" forAddress:self.currentAddressDesc];
         
-        if(subLocality)
+        /*if(subLocality)
         {
             [address appendString:@" - "];
             [address appendString:subLocality];
@@ -527,7 +536,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         {
             [address appendString:@", "];
             [address appendString:postal];
-        }
+        }*/
     }
     
     NSMutableDictionary *dictTemp = [[NSMutableDictionary alloc]init];
@@ -538,11 +547,14 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     } else {
         [dictTemp setObject:[NSString stringWithFormat:@"%f", currentCoord.latitude] forKey:@"latitude"];
         [dictTemp setObject:[NSString stringWithFormat:@"%f", currentCoord.longitude] forKey:@"longitude"];
-        [dictTemp setObject:address forKey:@"address"];
         [dictTemp setObject:@"" forKey:@"inventory_category_id"];
         [dictTemp setObject:[self.dictMain valueForKey:@"id"] forKey:@"catId"];
-        [dictTemp setObject:address forKey:@"address"];
+        [dictTemp setObject:(address ? address : [NSNull null]) forKey:@"address"];
         [dictTemp setObject:self.tvReferencia.text forKey:@"reference"];
+        [dictTemp setObject:(subLocality ? subLocality : [NSNull null]) forKey:@"district"];
+        [dictTemp setObject:(city ? city : [NSNull null]) forKey:@"city"];
+        [dictTemp setObject:(state ? state : [NSNull null]) forKey:@"state"];
+        [dictTemp setObject:(country ? country : [NSNull null]) forKey:@"country"];
     }
     
     photoView.dictMain = [NSMutableDictionary dictionaryWithDictionary:dictTemp];

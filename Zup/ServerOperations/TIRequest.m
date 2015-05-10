@@ -11,14 +11,21 @@
 
 @interface TIRequest ()
 
+@property int failCount;
 
 @end
 
 @implementation TIRequest
 
 -(BOOL)startConnection:(NSURLRequest*)request{
-    
-    self.currentConnection = [[[NSURLConnection alloc]initWithRequest:request delegate:self startImmediately:YES]autorelease];
+    self.failCount = 0;
+    self.request = request;
+    return [self sendRequest];
+}
+
+- (BOOL) sendRequest
+{
+    self.currentConnection = [[[NSURLConnection alloc]initWithRequest:self.request delegate:self startImmediately:YES]autorelease];
     
     if (self.currentConnection) {
         self.serverResponse = [NSMutableData data];
@@ -58,18 +65,35 @@
 - (void)connection:(NSURLConnection *)connection
   didFailWithError:(NSError *)error
 {
-    // release the connection, and the data object
-    
-    // receivedData is declared as a method instance elsewhere
+    // increment the failure count
+    self.failCount++;
     
     // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
+    NSLog(@"Connection failed %i times! Error - %@ %@",
+          self.failCount, [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
-    if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:data:)]) {
-        [self.delegate request:self DidFinishWithError:error data:self.serverResponse];
+    // send error trigger if failed too many times
+    if(self.failCount == 3)
+    {
+        
+        // release the connection, and the data object
+        
+        // receivedData is declared as a method instance elsewhere
+        
+        if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:data:)]) {
+            [self.delegate request:self DidFinishWithError:error data:self.serverResponse];
+        }
+        
+        return;
     }
+    else
+    {
+        // try again
+        [self sendRequest];
+    }
+    
+    
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection

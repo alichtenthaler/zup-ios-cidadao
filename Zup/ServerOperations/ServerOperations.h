@@ -44,7 +44,11 @@ description:(NSString*)description
     address:(NSString*)address
      images:(NSArray*)images
  categoryId:(NSString*)catId
-  reference:(NSString*)reference;
+  reference:(NSString*)reference
+   district:(NSString*)district
+       city:(NSString*)city
+      state:(NSString*)state
+    country:(NSString*)country;
 
 
 -(BOOL)recoveryPass:(NSString*)pass;

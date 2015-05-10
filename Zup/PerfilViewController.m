@@ -11,6 +11,7 @@
 //#import "LoginViewController.h"
 #import "MainViewController.h"
 #import "HeaderProfileCell.h"
+#import "UIApplication+name.h"
 
 @interface PerfilViewController ()
 
@@ -286,7 +287,7 @@
 
 - (void)logout {
     
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Zup" message:@"Você tem certeza?" delegate:self cancelButtonTitle:@"Cancelar" otherButtonTitles:@"Sair", nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Você tem certeza?" delegate:self cancelButtonTitle:@"Cancelar" otherButtonTitles:@"Sair", nil];
     [alert show];
     
 }

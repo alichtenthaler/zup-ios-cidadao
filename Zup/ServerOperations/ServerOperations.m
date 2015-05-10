@@ -425,8 +425,12 @@ inventory_item_id:(NSString*)inventory_item_id
 description:(NSString*)description
     address:(NSString*)address
      images:(NSArray*)images
-categoryId:(NSString*)catId
-  reference:(NSString*)reference{
+ categoryId:(NSString*)catId
+  reference:(NSString*)reference
+   district:(NSString*)district
+       city:(NSString*)city
+      state:(NSString*)state
+    country:(NSString*)country {
     
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@/items", URLpost, catId]];
     
@@ -459,6 +463,10 @@ categoryId:(NSString*)catId
                                     @"description" : description,
                                     @"reference" : reference,
                                     @"address" : address,
+                                    @"district": district,
+                                    @"city": city,
+                                    @"state": state,
+                                    @"country": country,
                                     @"images" : [NSArray arrayWithArray:arr],
                                     @"token" : [UserDefaults getToken],
                                     @"id" : [UserDefaults getUserId],
