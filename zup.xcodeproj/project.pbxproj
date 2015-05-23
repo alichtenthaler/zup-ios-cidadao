@@ -326,7 +326,6 @@
 		9C5ECE561AA7DAA000BD1791 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C392EB61A883F85003450E9 /* Crashlytics.framework */; };
 		9C5ECE571AA7DAA000BD1791 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E7018480080000018E2 /* AssetsLibrary.framework */; };
 		9C5ECE581AA7DAA000BD1791 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E70E6E1847F983000018E2 /* Accounts.framework */; };
-		9C5ECE591AA7DAA000BD1791 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88EDEC6718550F83001F84EE /* SDWebImage.framework */; };
 		9C5ECE5A1AA7DAA000BD1791 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE4C1846C05500722148 /* QuartzCore.framework */; };
 		9C5ECE5B1AA7DAA000BD1791 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE4A1846C04A00722148 /* OpenGLES.framework */; };
 		9C5ECE5C1AA7DAA000BD1791 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88D0AE481846C04400722148 /* libz.dylib */; };
@@ -636,6 +635,16 @@
 		9C7FDF5B1A027FDF00416CF5 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C7FDF5A1A027FDF00416CF5 /* GoogleMaps.framework */; };
 		9C8351AF1A26C07300C43A91 /* CellGaleriaInventario.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8351AD1A26C07300C43A91 /* CellGaleriaInventario.m */; };
 		9C8351B01A26C07300C43A91 /* CellGaleriaInventario.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C8351AE1A26C07300C43A91 /* CellGaleriaInventario.xib */; };
+		9C93052C1B0E210A006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		9C93052E1B0E2144006E4087 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */; };
+		9C93052F1B0E2151006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		9C9305301B0E219C006E4087 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */; };
+		9C9305311B0E21A9006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		9C9305321B0E21AE006E4087 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */; };
+		9C9305331B0E21B3006E4087 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */; };
+		9C9305341B0E21B9006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		9C9305351B0E21C4006E4087 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052B1B0E210A006E4087 /* libsqlite3.dylib */; };
+		9C9305361B0E21C7006E4087 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */; };
 		9CA81D961AE5B5300071AC89 /* libPods-zup.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA81D951AE5B5300071AC89 /* libPods-zup.a */; };
 		9CA81E251AE5B63E0071AC89 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88387CD5184048930059C826 /* TabBarController.m */; };
 		9CA81E261AE5B63E0071AC89 /* CustomMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 887406A5189558C50097D896 /* CustomMap.m */; };
@@ -986,7 +995,7 @@
 		9C392EB71A883F85003450E9 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		9C4CD2CB1AC2E1A6001812B2 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
 		9C4CD2CC1AC2E1A6001812B2 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
-		9C5ECE951AA7DAA000BD1791 /* zup_sbc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zup_sbc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C5ECE951AA7DAA000BD1791 /* vcsbc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vcsbc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C5ECE961AA7DAA100BD1791 /* zup_sbc-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zup_sbc-Info.plist"; path = "/Users/igorlira/Documents/Projetos/zup-ios-cidadao/zup_sbc-Info.plist"; sourceTree = "<absolute>"; };
 		9C6792EB1AC51B0C0024A726 /* zup_floripa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = zup_floripa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6792EC1AC51B0D0024A726 /* zup_floripa-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "zup_floripa-Info.plist"; path = "/Users/igorlira/Documents/Projetos/zup-ios-cidadao/zup_floripa-Info.plist"; sourceTree = "<absolute>"; };
@@ -1002,6 +1011,19 @@
 		9C8351AC1A26C07300C43A91 /* CellGaleriaInventario.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellGaleriaInventario.h; sourceTree = "<group>"; };
 		9C8351AD1A26C07300C43A91 /* CellGaleriaInventario.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellGaleriaInventario.m; sourceTree = "<group>"; };
 		9C8351AE1A26C07300C43A91 /* CellGaleriaInventario.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CellGaleriaInventario.xib; sourceTree = "<group>"; };
+		9C9305211B0E20C3006E4087 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAI.h; path = Analytics/GAI.h; sourceTree = "<group>"; };
+		9C9305221B0E20C3006E4087 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIDictionaryBuilder.h; path = Analytics/GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		9C9305231B0E20C3006E4087 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceFields.h; path = Analytics/GAIEcommerceFields.h; sourceTree = "<group>"; };
+		9C9305241B0E20C3006E4087 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProduct.h; path = Analytics/GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		9C9305251B0E20C3006E4087 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProductAction.h; path = Analytics/GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		9C9305261B0E20C3006E4087 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommercePromotion.h; path = Analytics/GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		9C9305271B0E20C3006E4087 /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIFields.h; path = Analytics/GAIFields.h; sourceTree = "<group>"; };
+		9C9305281B0E20C3006E4087 /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAILogger.h; path = Analytics/GAILogger.h; sourceTree = "<group>"; };
+		9C9305291B0E20C3006E4087 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = Analytics/GAITrackedViewController.h; sourceTree = "<group>"; };
+		9C93052A1B0E20C3006E4087 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = Analytics/GAITracker.h; sourceTree = "<group>"; };
+		9C93052B1B0E210A006E4087 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalyticsServices.a; path = Analytics/libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		9C93053F1B0E23E1006E4087 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		9CA81D931AE5B44A0071AC89 /* libPods-zup.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-zup.a"; path = "Pods/../build/Release-iphoneos/libPods-zup.a"; sourceTree = "<group>"; };
 		9CA81D951AE5B5300071AC89 /* libPods-zup.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-zup.a"; path = "Pods/../build/Release-iphoneos/libPods-zup.a"; sourceTree = "<group>"; };
 		9CA81D971AE5B5DD0071AC89 /* libPods-zup.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-zup.a"; path = "Pods/../build/Release-iphoneos/libPods-zup.a"; sourceTree = "<group>"; };
@@ -1038,6 +1060,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C93052C1B0E210A006E4087 /* libsqlite3.dylib in Frameworks */,
 				9CA81D961AE5B5300071AC89 /* libPods-zup.a in Frameworks */,
 				88E70E6D1847F96B000018E2 /* Twitter.framework in Frameworks */,
 				88387CD818404A1C0059C826 /* MapKit.framework in Frameworks */,
@@ -1059,6 +1082,7 @@
 				88D0AE3F1846BFFB00722148 /* CoreLocation.framework in Frameworks */,
 				88D0AE3D1846BFF400722148 /* CoreData.framework in Frameworks */,
 				88E70E7B184800C4000018E2 /* GooglePlus.framework in Frameworks */,
+				9C93052E1B0E2144006E4087 /* libGoogleAnalyticsServices.a in Frameworks */,
 				9C392EB91A883F85003450E9 /* Fabric.framework in Frameworks */,
 				88D0AE3B1846BFED00722148 /* AVFoundation.framework in Frameworks */,
 				88387CFA18404DBB0059C826 /* SystemConfiguration.framework in Frameworks */,
@@ -1122,6 +1146,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9305301B0E219C006E4087 /* libGoogleAnalyticsServices.a in Frameworks */,
+				9C93052F1B0E2151006E4087 /* libsqlite3.dylib in Frameworks */,
 				9C5ECE501AA7DAA000BD1791 /* Twitter.framework in Frameworks */,
 				9C5ECE511AA7DAA000BD1791 /* MapKit.framework in Frameworks */,
 				9C5ECE521AA7DAA000BD1791 /* Security.framework in Frameworks */,
@@ -1131,7 +1157,6 @@
 				9C5ECE561AA7DAA000BD1791 /* Crashlytics.framework in Frameworks */,
 				9C5ECE571AA7DAA000BD1791 /* AssetsLibrary.framework in Frameworks */,
 				9C5ECE581AA7DAA000BD1791 /* Accounts.framework in Frameworks */,
-				9C5ECE591AA7DAA000BD1791 /* SDWebImage.framework in Frameworks */,
 				9C5ECE5A1AA7DAA000BD1791 /* QuartzCore.framework in Frameworks */,
 				9C5ECE5B1AA7DAA000BD1791 /* OpenGLES.framework in Frameworks */,
 				9C5ECE5C1AA7DAA000BD1791 /* libz.dylib in Frameworks */,
@@ -1159,6 +1184,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9305321B0E21AE006E4087 /* libGoogleAnalyticsServices.a in Frameworks */,
+				9C9305311B0E21A9006E4087 /* libsqlite3.dylib in Frameworks */,
 				9C6792A61AC51B0C0024A726 /* Twitter.framework in Frameworks */,
 				9C6792A71AC51B0C0024A726 /* MapKit.framework in Frameworks */,
 				9C6792A81AC51B0C0024A726 /* Security.framework in Frameworks */,
@@ -1196,6 +1223,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9305341B0E21B9006E4087 /* libsqlite3.dylib in Frameworks */,
+				9C9305331B0E21B3006E4087 /* libGoogleAnalyticsServices.a in Frameworks */,
 				9C6793311AC522F20024A726 /* Twitter.framework in Frameworks */,
 				9C6793321AC522F20024A726 /* MapKit.framework in Frameworks */,
 				9C6793331AC522F20024A726 /* Security.framework in Frameworks */,
@@ -1233,6 +1262,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C9305361B0E21C7006E4087 /* libGoogleAnalyticsServices.a in Frameworks */,
+				9C9305351B0E21C4006E4087 /* libsqlite3.dylib in Frameworks */,
 				9CA81E641AE5B63E0071AC89 /* Twitter.framework in Frameworks */,
 				9CA81E651AE5B63E0071AC89 /* MapKit.framework in Frameworks */,
 				9CA81E661AE5B63E0071AC89 /* Security.framework in Frameworks */,
@@ -1271,6 +1302,7 @@
 		88387C7D184045DC0059C826 = {
 			isa = PBXGroup;
 			children = (
+				9C9305201B0E20B2006E4087 /* Analytics */,
 				9C392EB61A883F85003450E9 /* Crashlytics.framework */,
 				9C392EB71A883F85003450E9 /* Fabric.framework */,
 				88387C8F184045DC0059C826 /* Zup */,
@@ -1291,7 +1323,7 @@
 			children = (
 				88387C86184045DC0059C826 /* zup.app */,
 				88387CAD184045DC0059C826 /* zupTests.xctest */,
-				9C5ECE951AA7DAA000BD1791 /* zup_sbc.app */,
+				9C5ECE951AA7DAA000BD1791 /* vcsbc.app */,
 				9C6792EB1AC51B0C0024A726 /* zup_floripa.app */,
 				9C6793761AC522F20024A726 /* zup_maceio.app */,
 				9C1530331AD99341004E0BB9 /* zup_sbc_sbcserver.app */,
@@ -1303,6 +1335,7 @@
 		88387C88184045DC0059C826 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C93052B1B0E210A006E4087 /* libsqlite3.dylib */,
 				9CA81D971AE5B5DD0071AC89 /* libPods-zup.a */,
 				9CA81D951AE5B5300071AC89 /* libPods-zup.a */,
 				9CA81D931AE5B44A0071AC89 /* libPods-zup.a */,
@@ -1348,6 +1381,7 @@
 		88387C8F184045DC0059C826 /* Zup */ = {
 			isa = PBXGroup;
 			children = (
+				9C9305371B0E2289006E4087 /* Instances */,
 				9C67937D1AC526E50024A726 /* Maceio.xcassets */,
 				9C67937A1AC526A70024A726 /* Floripa.xcassets */,
 				9C0A7CDF1A26CF9C0036421C /* XL */,
@@ -1692,6 +1726,32 @@
 			name = XL;
 			sourceTree = "<group>";
 		};
+		9C9305201B0E20B2006E4087 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				9C93052D1B0E2144006E4087 /* libGoogleAnalyticsServices.a */,
+				9C9305211B0E20C3006E4087 /* GAI.h */,
+				9C9305221B0E20C3006E4087 /* GAIDictionaryBuilder.h */,
+				9C9305231B0E20C3006E4087 /* GAIEcommerceFields.h */,
+				9C9305241B0E20C3006E4087 /* GAIEcommerceProduct.h */,
+				9C9305251B0E20C3006E4087 /* GAIEcommerceProductAction.h */,
+				9C9305261B0E20C3006E4087 /* GAIEcommercePromotion.h */,
+				9C9305271B0E20C3006E4087 /* GAIFields.h */,
+				9C9305281B0E20C3006E4087 /* GAILogger.h */,
+				9C9305291B0E20C3006E4087 /* GAITrackedViewController.h */,
+				9C93052A1B0E20C3006E4087 /* GAITracker.h */,
+			);
+			name = Analytics;
+			sourceTree = "<group>";
+		};
+		9C9305371B0E2289006E4087 /* Instances */ = {
+			isa = PBXGroup;
+			children = (
+				9C93053F1B0E23E1006E4087 /* Constants.h */,
+			);
+			name = Instances;
+			sourceTree = "<group>";
+		};
 		A39A41E313649D3AB50A22FF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1791,7 +1851,7 @@
 			);
 			name = zup_sbc;
 			productName = Zup;
-			productReference = 9C5ECE951AA7DAA000BD1791 /* zup_sbc.app */;
+			productReference = 9C5ECE951AA7DAA000BD1791 /* vcsbc.app */;
 			productType = "com.apple.product-type.application";
 		};
 		9C6792661AC51B0C0024A726 /* zup_floripa */ = {
@@ -1869,6 +1929,9 @@
 					88387CAC184045DC0059C826 = {
 						TestTargetID = 88387C85184045DC0059C826;
 					};
+					9C5ECE101AA7DAA000BD1791 = {
+						DevelopmentTeam = 8U89B7P2NY;
+					};
 				};
 			};
 			buildConfigurationList = 88387C81184045DC0059C826 /* Build configuration list for PBXProject "zup" */;
@@ -1885,10 +1948,10 @@
 			projectRoot = "";
 			targets = (
 				88387C85184045DC0059C826 /* zup */,
+				9C6792F11AC522F20024A726 /* zup_maceio */,
 				88387CAC184045DC0059C826 /* zupTests */,
 				9C5ECE101AA7DAA000BD1791 /* zup_sbc */,
 				9C6792661AC51B0C0024A726 /* zup_floripa */,
-				9C6792F11AC522F20024A726 /* zup_maceio */,
 				9C152FAE1AD99341004E0BB9 /* zup_sbc_sbcserver */,
 				9CA81E221AE5B63E0071AC89 /* zup_boavista */,
 			);
@@ -3021,6 +3084,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup;
@@ -3054,6 +3118,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup;
@@ -3131,7 +3196,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/zup_sbc_sbcserver-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_sbc_sbcserver;
 				PROVISIONING_PROFILE = "18103823-94f4-4d88-9236-ed50d686d3f5";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3162,7 +3227,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = SBC_SBC;
 				INFOPLIST_FILE = "$(SRCROOT)/zup_sbc_sbcserver-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_sbc_sbcserver;
 				PROVISIONING_PROFILE = "18103823-94f4-4d88-9236-ed50d686d3f5";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3177,8 +3242,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Filipe Thomaz (2EAHE9LMP4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Filipe Thomaz (2EAHE9LMP4)";
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3196,12 +3261,17 @@
 				);
 				INFOPLIST_FILE = "zup_sbc-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = zup_sbc;
-				PROVISIONING_PROFILE = "6d0c0a8c-c46a-403f-9fa1-47f62f6a55ab";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LIBTOOLFLAGS = "$(inherited)";
+				PRODUCT_NAME = vcsbc;
+				PROVISIONING_PROFILE = "cfbe2422-d68d-4f4f-905a-8e95d8da6d76";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -3212,8 +3282,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_sbc;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Instituto TIM (8U89B7P2NY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Instituto TIM (8U89B7P2NY)";
 				COMPRESS_PNG_FILES = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3228,11 +3298,17 @@
 				GCC_PREPROCESSOR_DEFINITIONS = SBC;
 				INFOPLIST_FILE = "zup_sbc-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = zup_sbc;
-				PROVISIONING_PROFILE = "6d0c0a8c-c46a-403f-9fa1-47f62f6a55ab";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LIBTOOLFLAGS = "$(inherited)";
+				PRODUCT_NAME = vcsbc;
+				PROVISIONING_PROFILE = "c7a3779e-5d90-4239-964f-b8a78054baf5";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -3262,7 +3338,11 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/zup_floripa-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_floripa;
 				PROVISIONING_PROFILE = "3b04f531-bd80-4900-ba4b-1b3f1796ceaa";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3293,7 +3373,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = FLORIPA;
 				INFOPLIST_FILE = "$(SRCROOT)/zup_floripa-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_floripa;
 				PROVISIONING_PROFILE = "3b04f531-bd80-4900-ba4b-1b3f1796ceaa";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3327,7 +3411,11 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/zup_maceio-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_maceio;
 				PROVISIONING_PROFILE = "72dfc221-674e-4349-9b3d-7d83c4a9aee3";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3358,7 +3446,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = MACEIO;
 				INFOPLIST_FILE = "$(SRCROOT)/zup_maceio-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				OTHER_LDFLAGS = "-ObjC";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Analytics",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_maceio;
 				PROVISIONING_PROFILE = "72dfc221-674e-4349-9b3d-7d83c4a9aee3";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3395,6 +3487,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_boavista;
@@ -3433,6 +3526,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/build/Release-iphoneos",
+					"$(PROJECT_DIR)/Analytics",
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup_boavista;

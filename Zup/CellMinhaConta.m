@@ -74,6 +74,9 @@
         }
     }
     
+    if([strColor isKindOfClass:[NSNull class]])
+        strColor = @"#ffffff";
+    
     strColor = [strColor stringByReplacingOccurrencesOfString:@"#" withString:@""];
     UIColor *color = [Utilities colorWithHexString:strColor];
     [self.imgLine setBackgroundColor:color];

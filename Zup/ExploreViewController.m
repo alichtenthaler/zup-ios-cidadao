@@ -92,6 +92,13 @@ CLLocationCoordinate2D currentCoord;
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(didPan:)];
     self.mapView.gestureRecognizers = @[panRecognizer];
     
+    self.isDayFilter = YES;
+    self.dayFilter = 7;
+}
+
+- (void)setDayFilter:(int)dayFilter
+{
+    self->_dayFilter = dayFilter;
 }
 
 - (void)initMap {
@@ -345,12 +352,19 @@ CLLocationCoordinate2D currentCoord;
         [serverOperationsReport setTarget:self];
         [serverOperationsReport setAction:@selector(didReceiveData:)];
         [serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
-        [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
+        
+        if([self->_arrFilterIDs count] > 0)
+        {
+            [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:_arrFilterIDs];
+        }
+        else
+            [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
     }
 }
 
 - (void)clearMap
 {
+    [self.arrMainInventory removeAllObjects];
     [self.arrMain removeAllObjects];
     
     for(GMSMarker* marker in self.arrMarkers)
@@ -361,6 +375,109 @@ CLLocationCoordinate2D currentCoord;
     [self.arrMarkers removeAllObjects];
 }
 
+- (void) clearClusters
+{
+    NSMutableArray* itemsToRemove = [[NSMutableArray alloc] init];
+    
+    for(GMSMarker* marker in self.arrMarkers)
+    {
+        if([[marker.userData valueForKey:@"isCluster"] boolValue])
+        {
+            marker.map = nil;
+            [itemsToRemove addObject:marker];
+        }
+    }
+    
+    [self.arrMarkers removeObjectsInArray:itemsToRemove];
+}
+
+- (void) clearNonClusters
+{
+    NSMutableArray* itemsToRemove = [[NSMutableArray alloc] init];
+    
+    for(GMSMarker* marker in self.arrMarkers)
+    {
+        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
+        {
+            marker.map = nil;
+            [itemsToRemove addObject:marker];
+        }
+    }
+    
+    [self.arrMarkers removeObjectsInArray:itemsToRemove];
+}
+
+- (GMSMarker*) nearestClusterToMarker:(GMSMarker*)marker withArrayOfMarkers:(NSArray*)markers
+{
+    GMSMarker* nearest = nil;
+    CLLocationDistance nearestDistance = CLLocationDistanceMax;
+    
+    for(GMSMarker* m in markers)
+    {
+        if([[m.userData valueForKey:@"isCluster"] boolValue])
+        {
+            CLLocation* loc1 = [[CLLocation alloc] initWithLatitude:marker.position.latitude longitude:marker.position.longitude];
+            
+            CLLocation* loc2 = [[CLLocation alloc] initWithLatitude:m.position.latitude longitude:m.position.longitude];
+            
+            CLLocationDistance dist = [loc1 distanceFromLocation:loc2];
+            
+            if(dist < nearestDistance)
+            {
+                nearest = m;
+                nearestDistance = dist;
+            }
+        }
+    }
+    
+    return nearest;
+}
+
+- (GMSMarker*) clusterForReport:(int)reportId withArrayOfMarkers:(NSArray*)markers
+{
+    for(GMSMarker* m in markers)
+    {
+        if([[m.userData valueForKey:@"isCluster"] boolValue])
+        {
+            NSArray* reportIds = [m.userData valueForKey:@"reports_ids"];
+            if(reportIds && [reportIds containsObject:[NSNumber numberWithInt:reportId]])
+                return m;
+        }
+    }
+    
+    return nil;
+}
+
+- (void) removeMarkers:(NSArray*)markers exceptFor:(NSArray*)arr
+{
+    NSMutableArray* objsToRemove = [[NSMutableArray alloc] init];
+    for(GMSMarker* marker in markers)
+    {
+        if(![arr containsObject:marker])
+        {
+            marker.map = nil;
+            [objsToRemove addObject:marker];
+        }
+    }
+    [self.arrMarkers removeObjectsInArray:objsToRemove];
+}
+
+- (BOOL) arrayOfMarkers:(NSArray*)array hasReport:(int)reportId
+{
+    for(GMSMarker* marker in array)
+    {
+        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
+        {
+            NSNumber* _id = [marker.userData valueForKey:@"id"];
+            if(_id && !(_id.class == [NSNull class]) && [_id intValue] == reportId)
+               return YES;
+        }
+    }
+               
+    return NO;
+}
+
+
 - (void)didReceiveData:(NSData*)data {
     
     _isReportsLoading = NO;
@@ -368,7 +485,13 @@ CLLocationCoordinate2D currentCoord;
     if(self.isNoReports)
         return;
     
-    [self clearMap];
+    //[self clearMap];
+    //NSArray* oldItems = [self.arrMain copy];
+    NSArray* markersToRemoveFromMap = [self.arrMarkers copy];
+    //[self clearMap];
+    
+    [self.arrMain removeAllObjects];
+    [self.arrMarkers removeAllObjects];
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
@@ -410,8 +533,40 @@ CLLocationCoordinate2D currentCoord;
         
     }
     
-    [self createPoints];
+    [self createPointsWithOldMarkers:markersToRemoveFromMap];
     [self createPointsForClusters:arrClusters inventory:NO];
+    
+    // Prematurely remove clusters
+    for(GMSMarker* marker in markersToRemoveFromMap)
+    {
+        if([[marker.userData valueForKey:@"isCluster"] boolValue])
+            marker.map = nil;
+    }
+    
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        for(GMSMarker* marker in markersToRemoveFromMap)
+        {
+            marker.map = nil;
+        }
+    }];
+    [CATransaction setAnimationDuration:.350];
+    
+    for(GMSMarker* marker in markersToRemoveFromMap)
+    {
+        if(![[marker.userData valueForKey:@"isCluster"] boolValue])
+        {
+            int _id = [[marker.userData valueForKey:@"id"] intValue];
+            GMSMarker* cluster = [self clusterForReport:_id withArrayOfMarkers:self.arrMarkers];
+            
+            marker.position = cluster.position;
+            marker.opacity = 0;
+        }
+    }
+
+    [CATransaction commit];
+    
+    //[self removeMarkers:markersToRemoveFromMap exceptFor:self.arrMarkers];
 }
 
 - (void)didReceiveError:(NSError*)error data:(NSData*)data {
@@ -433,49 +588,100 @@ CLLocationCoordinate2D currentCoord;
         UIImage* img = [Utilities iconForCluster:cluster inventory:inv];
         img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
         marker.icon = img;
-        marker.userData = @{ @"isCluster": @YES };
+        marker.userData = @{ @"isCluster": @YES, @"reports_ids": [cluster valueForKey:@"items_ids"] };
         
         [self.arrMarkers addObject:marker];
     }
 }
 
-- (void)createPoints {
+- (void)createPointsWithOldMarkers:(NSArray*)markers {
+    NSMutableArray* changes = [[NSMutableArray alloc] init];
     
     for (NSDictionary *dict in self.arrMain) {
+        GMSMarker* marker;
+        
+        BOOL passesCategoryValidation = NO;
+        BOOL passesDaysValidation = NO;
+        BOOL passesStatusValidation = NO;
         
         if (self.arrFilterIDs.count > 0) {
             
             int intId = [[dict valueForKey:@"category_id"]intValue];
             NSNumber *numberId = [NSNumber numberWithInt:intId];
             
+            if ([self.arrFilterIDs containsObject:numberId])
+                passesCategoryValidation = YES;
+        }
+        else
+            passesCategoryValidation = YES;
+        
+        if(self.statusToFilterId != 0)
+        {
+            int statusId = [[dict  valueForKey:@"status_id"]intValue];
+            if(statusId == self.statusToFilterId)
+                passesStatusValidation = YES;
+        }
+        else
+            passesStatusValidation = YES;
+        
+        if(self.isDayFilter)
+        {
             int daysPassed = [Utilities calculateDaysPassed:[dict valueForKey:@"created_at"]];
             
-            BOOL isDayFiltered = NO;
-            
-            if (self.isDayFilter) {
-                if (self.dayFilter > daysPassed) {
-                    isDayFiltered = YES;
-                }
-            } else {
-                isDayFiltered = YES;
-            }
-            
-            int statusId = [[dict  valueForKey:@"status_id"]intValue];
-            
-            if ([self.arrFilterIDs containsObject:numberId] && (statusId == self.statusToFilterId || self.statusToFilterId == 0) && isDayFiltered) {
-                
-                [self setLocationWithCoordinate:dict];
-            }
-            else
+            if (self.dayFilter >= daysPassed)
             {
-                NSLog(@"Some condition");
-            }
-        } else {
-            if (!self.isNoReports) {
-                [self setLocationWithCoordinate:dict];
+                passesDaysValidation = YES;
             }
         }
+        else
+            passesDaysValidation = YES;
+    
+        if(passesCategoryValidation && passesDaysValidation && passesStatusValidation)
+        {
+            marker = [self setLocationWithCoordinate:dict];
+        }
+        else
+        {
+            continue;
+        }
+        
+        int _id = [[dict valueForKey:@"id"] intValue];
+        if(![self arrayOfMarkers:markers hasReport:_id])
+        {
+            CLLocationCoordinate2D pos = marker.position;
+            GMSMarker* nearestCluster = [self clusterForReport:_id withArrayOfMarkers:markers];
+            
+            NSDictionary* changeDict = @{
+                                         @"marker": marker,
+                                         @"fromLat": @(nearestCluster.position.latitude),
+                                         @"fromLon": @(nearestCluster.position.longitude),
+                                         @"toLat": @(marker.position.latitude),
+                                         @"toLon": @(marker.position.longitude),
+                                         @"fromAlpha": @(0.0f),
+                                         @"toAlpha": @(1.0f)
+                                         };
+            
+            if(nearestCluster)
+                [changes addObject:changeDict];
+        }
     }
+    
+    for(NSDictionary* changeDict in changes)
+    {
+        GMSMarker* marker = [changeDict valueForKey:@"marker"];
+        marker.position = CLLocationCoordinate2DMake([[changeDict valueForKey:@"fromLat"] floatValue], [[changeDict valueForKey:@"fromLon"] floatValue]);
+        marker.opacity = [[changeDict valueForKey:@"fromAlpha"] floatValue];
+    }
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:.350];
+    for(NSDictionary* changeDict in changes)
+    {
+        GMSMarker* marker = [changeDict valueForKey:@"marker"];
+        marker.position = CLLocationCoordinate2DMake([[changeDict valueForKey:@"toLat"] floatValue], [[changeDict valueForKey:@"toLon"] floatValue]);
+        marker.opacity = [[changeDict valueForKey:@"toAlpha"] floatValue];
+    }
+    [CATransaction commit];
     
     if (self.isGoToReportDetail) {
         
@@ -614,7 +820,7 @@ CLLocationCoordinate2D currentCoord;
     [self getIventoryPoints];
 }
 
-- (void)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
+- (GMSMarker*)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
                                  snippet:(NSString*)snippet
                                draggable:(BOOL)draggable
                                     type:(int)type
@@ -646,12 +852,14 @@ CLLocationCoordinate2D currentCoord;
     for (GMSMarker *tempMarker in self.arrMarkers) {
         int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
         if (tempMarkerId == markerId) {
-            return;
+            return tempMarker;
         }
     }
     
     marker.Map = self.mapView;
     [self.arrMarkers addObject:marker];
+    
+    return marker;
 }
 
 #pragma mark - Get Inventory List
@@ -688,7 +896,7 @@ CLLocationCoordinate2D currentCoord;
 
 #pragma mark - Map Handle
 
-- (void)setLocationWithCoordinate:(NSDictionary*)dict{
+- (GMSMarker*)setLocationWithCoordinate:(NSDictionary*)dict{
     
     NSString *latStr = [dict valueForKeyPath:@"position.latitude"];
     
@@ -697,9 +905,9 @@ CLLocationCoordinate2D currentCoord;
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latStr.floatValue, lngStr.floatValue);
     
     if ([dict valueForKey:@"inventory_category_id"]) {
-        [self setMarkerInventoryWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"inventory_category_id"]intValue] userData:dict];
+        return [self setMarkerInventoryWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"inventory_category_id"]intValue] userData:dict];
     } else {
-        [self setMarkerWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"category_id"]intValue] userData:dict];
+        return [self setMarkerWithCoordinate:coord snippet:nil draggable:NO type:[[dict valueForKey:@"category_id"]intValue] userData:dict];
         
     }
     
@@ -719,7 +927,7 @@ CLLocationCoordinate2D currentCoord;
     return view.view;
 }
 
-- (void)setMarkerWithCoordinate:(CLLocationCoordinate2D)coordinate
+- (GMSMarker*)setMarkerWithCoordinate:(CLLocationCoordinate2D)coordinate
                         snippet:(NSString*)snippet
                       draggable:(BOOL)draggable
                            type:(int)type
@@ -746,11 +954,13 @@ CLLocationCoordinate2D currentCoord;
     for (GMSMarker *tempMarker in self.arrMarkers) {
         int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
         if (tempMarkerId == markerId) {
-            return;
+            return tempMarker;
         }
     }
     marker.Map = self.mapView;
     [self.arrMarkers addObject:marker];
+    
+    return marker;
 }
 
 

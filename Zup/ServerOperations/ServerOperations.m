@@ -347,6 +347,38 @@ addressAdditional:(NSString*)addressAdditional
     return [self StartRequest:postRequest];
 }
 
+-(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds
+{
+    int maxCount = 0;
+    if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
+    else maxCount = maxMarkersCountiPhone4;
+    
+    NSString* strUrl;
+    
+    // display_type=basic
+    if ([categoryIds count] == 0) {
+        strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, latitude, longitude, radius, maxCount, zoom];
+    } else {
+        NSMutableString* catIds = [[NSMutableString alloc] init];
+        int i = 0;
+        for(NSNumber* catid in categoryIds)
+        {
+            NSString* param = [NSString stringWithFormat:@"category_id[]=%i&", [catid intValue]];
+            
+            [catIds appendString:param];
+            i++;
+        }
+        
+        strUrl = [NSString stringWithFormat:@"%@?%@position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, catIds, latitude, longitude, radius, maxCount, zoom];
+    }
+    
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    [postRequest setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:postRequest];
+}
+
 -(BOOL)getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom{
     
     int maxCount = 0;

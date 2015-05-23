@@ -72,7 +72,32 @@ int RESOLVIDO = 3;
     
     [self.lblSubtitle setFont:[Utilities fontOpensSansBoldWithSize:10]];
     
-    [self.lblAddress setText:[self.dictMain valueForKey:@"address"]];
+    NSMutableString* address = [[NSMutableString alloc] init];
+    [address appendString:[self.dictMain valueForKey:@"address"]];
+    
+    NSString* subLocality = [self.dictMain valueForKey:@"district"];
+    NSString* city = [self.dictMain valueForKey:@"city"];
+    NSString* state = [self.dictMain valueForKey:@"state"];
+    
+    if(subLocality && ![subLocality isKindOfClass:[NSNull class]])
+    {
+        [address appendString:@" - "];
+        [address appendString:subLocality];
+    }
+     
+    if(city && ![city isKindOfClass:[NSNull class]])
+    {
+        [address appendString:@", "];
+        [address appendString:city];
+     
+        if(state && ![state isKindOfClass:[NSNull class]])
+        {
+            [address appendString:@" - "];
+            [address appendString:state];
+        }
+    }
+    
+    [self.lblAddress setText:address];
     [self.lblAddress setFont:[Utilities fontOpensSansLightWithSize:11]];
     
     [self.lblDesc setText:[Utilities checkIfNull:[self.dictMain valueForKey:@"reference"]]];

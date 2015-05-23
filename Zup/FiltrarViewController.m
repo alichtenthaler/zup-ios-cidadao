@@ -82,7 +82,7 @@ int currentIdCategory;
     [self setTab:@"categorias"];
     
     self.exploreView.statusToFilterId = 0;
-    self.exploreView.dayFilter = 30 * 6;
+    self.exploreView.dayFilter = 7; //30 * 6;
     
     [self.viewContent addSubview:self.viewCategorias];
     [self.viewContent addSubview:self.viewPeriodoStatus];

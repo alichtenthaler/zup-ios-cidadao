@@ -27,14 +27,17 @@ static ImageCache* _defaultCache = nil;
     return _defaultCache;
 }
 
-- (UIImage*)imageWithId:(int)imageid
+//- (UIImage*)imageWithId:(int)imageid
+- (UIImage*)imageWithName:(NSString*)key
 {
-    NSString* key = [[NSNumber numberWithInt:imageid] stringValue];
+    //NSString* key = [[NSNumber numberWithInt:imageid] stringValue];
     return [self->images valueForKey:key];
 }
-- (void)addImage:(UIImage*)image withId:(int)imageid
+
+//- (void)addImage:(UIImage*)image withId:(int)imageid
+- (void)addImage:(UIImage*)image withName:(NSString*)key
 {
-    NSString* key = [[NSNumber numberWithInt:imageid] stringValue];
+    //NSString* key = [[NSNumber numberWithInt:imageid] stringValue];
     [self->images setValue:image forKey:key];
 }
 

@@ -16,6 +16,9 @@ ServerOperations *serverOperations;
 
 @interface SolicitacaoMapViewController ()
 
+@property (nonatomic, retain) NSString* oldSearch;
+@property (nonatomic, retain) NSString* oldNumber;
+
 @property (nonatomic, retain) NSDictionary* currentAddressDesc;
 
 @end
@@ -191,25 +194,28 @@ ServerOperations *serverOperations;
 
 - (void) buildPoint {
     
-    NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.integerValue];
+    NSDictionary *dictCat = [UserDefaults getCategory:self.catStr.intValue];
     
     UIImage *image = [UIImage imageWithData:[dictCat valueForKey:@"markerData"]];
     
     image = [Utilities imageWithImage:image scaledToSize:CGSizeMake(image.size.width/2, image.size.height/2)];
 
     self.imageMarkerPositionCenter = [[UIImageView alloc]initWithImage:image];
+    self.imageMarkerPositionCenter.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     
-    if ([Utilities isIpad]) {
-        [self.imageMarkerPositionCenter setCenter:CGPointMake(778/2, 944/2)];
-    } else {
+    //if ([Utilities isIpad]) {
+    //    [self.imageMarkerPositionCenter setCenter:CGPointMake(778/2, 944/2)];
+    //} else {
+        CGPoint positionMap = self.mapView.frame.origin;
         CGPoint centerMap = self.mapView.center;
+        [self.imageMarkerPositionCenter setCenter:CGPointMake(positionMap.x + (self.mapView.frame.size.width / 2), positionMap.y + (self.mapView.frame.size.height / 2))];
         
-        if ([Utilities isIphone4inch]) {
+        /*if ([Utilities isIphone4inch]) {
             [self.imageMarkerPositionCenter setCenter:CGPointMake(centerMap.x += 2, centerMap.y)];
         } else {
             [self.imageMarkerPositionCenter setCenter:CGPointMake(centerMap.x += 2, centerMap.y-55)];
-        }
-    }
+        }*/
+    //}
     
     [self.view addSubview:self.imageMarkerPositionCenter];
     
@@ -579,6 +585,12 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         searchTable.solicitacaoView = self;
         searchTable.isExplore = NO;
         
+        UITapGestureRecognizer* gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelSearch)];
+        
+        UIView *backgroundView = [[UIView alloc] init];
+        [backgroundView addGestureRecognizer:gr];
+        searchTable.tableView.backgroundView = backgroundView;
+        
         if ([Utilities isIpad]) {
             [searchTable.view setFrame:CGRectMake(self.view.center.x - searchTable.view.frame.size.width/2,
                                                   self.viewSearchBar.frame.origin.y + self.viewSearchBar.frame.size.height + 60,
@@ -601,6 +613,9 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         
     }
     
+    self.oldSearch = self.searchBar.text;
+    self.oldNumber = self.tfNumber.text;
+    
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self moveSearchBarIsTop:YES];
@@ -615,6 +630,16 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     
     isSearch = YES;
     
+}
+
+- (void)cancelSearch {
+    self.searchBar.text = self.oldSearch;
+    self.tfNumber.text = self.oldNumber;
+    
+    [self.searchBar resignFirstResponder];
+    [self.tfNumber resignFirstResponder];
+    
+    [self closeSearchTable];
 }
 - (void)closeSearchTable {
     [searchTable.view setHidden:YES];
@@ -838,7 +863,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 }
 
 
-- (void)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
+- (GMSMarker*)setMarkerInventoryWithCoordinate:(CLLocationCoordinate2D)coordinate
                                  snippet:(NSString*)snippet
                                draggable:(BOOL)draggable
                                     type:(int)type
@@ -869,12 +894,14 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     for (GMSMarker *tempMarker in self.arrMarkers) {
         int tempMarkerId = [[tempMarker.userData valueForKey:@"id"]intValue];
         if (tempMarkerId == markerId) {
-            return;
+            return tempMarker;
         }
     }
     
     marker.Map = self.mapView;
     [self.arrMarkers addObject:marker];
+    
+    return marker;
 }
 
 #pragma mark - Map Handle

@@ -73,7 +73,7 @@
       "orientation" : "portrait",
       "idiom" : "ipad",
       "extent" : "to-status-bar",
-      "filename" : "launch_sbc_ipad-1.png",
+      "filename" : "launch_sbc_ipad_nosb.png",
       "scale" : "1x"
     },
     {
@@ -99,7 +99,7 @@
       "orientation" : "portrait",
       "idiom" : "ipad",
       "extent" : "to-status-bar",
-      "filename" : "launch_sbc_ipad@2x-1.png",
+      "filename" : "launch_sbc_ipad_nosb@2x.png",
       "scale" : "2x"
     },
     {

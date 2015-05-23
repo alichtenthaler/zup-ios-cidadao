@@ -8,6 +8,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "UIApplication+name.h"
 #import <ISO8601DateFormatter/ISO8601DateFormatter.h>
+#import "ImageCache.h"
 
 @implementation Utilities
 
@@ -608,6 +609,7 @@ typedef enum {
 {
     NSNumber* categoryId = [cluster objectForKey:@"category_id"];
     NSDictionary* category = nil;
+    UIColor* color = [Utilities colorBlueLight];
     
     if(categoryId && ![categoryId isKindOfClass:[NSNull class]])
     {
@@ -616,6 +618,19 @@ typedef enum {
         else
             category = [UserDefaults getCategory:[categoryId intValue]];
     }
+    
+    if(category)
+    {
+        color = [Utilities colorWithHexString:[category objectForKey:@"color"]];
+    }
+    
+    CGColorRef col = [color CGColor];
+    const CGFloat* components = CGColorGetComponents(col);
+    
+    NSString* iconId = [NSString stringWithFormat:@"cluster_%i_%i_%i_%i", (int)(components[0] * 255), (int)(components[1] * 255), (int)(components[2] * 255), [[cluster valueForKey:@"count"] intValue]];
+    UIImage* cachedImage = [[ImageCache defaultCache] imageWithName:iconId];
+    if(cachedImage)
+        return cachedImage;
     
     UILabel* label = [[UILabel alloc] init];
     label.text = [[cluster valueForKey:@"count"] stringValue];
@@ -632,12 +647,7 @@ typedef enum {
     [[UIColor whiteColor] setFill];
     CGContextFillEllipseInRect(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, size, size));
     
-    if(category)
-    {
-        [[Utilities colorWithHexString:[category objectForKey:@"color"]] setFill];
-    }
-    else
-        [[Utilities colorBlueLight] setFill];
+    [color setFill];
     
     CGContextFillEllipseInRect(UIGraphicsGetCurrentContext(), CGRectMake(border, border, size - border*2, size - border*2));
     
@@ -647,6 +657,8 @@ typedef enum {
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
+    
+    [[ImageCache defaultCache] addImage:image withName:iconId];
     
     return image;
 }

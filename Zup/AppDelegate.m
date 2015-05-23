@@ -9,7 +9,8 @@
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import <GooglePlus/GooglePlus.h>
-
+#import "GAI.h"
+#import "Constants.h"
 
 @implementation AppDelegate
 
@@ -48,6 +49,12 @@
     
     NSLog(@"%@", kAPIkey);
     [GMSServices provideAPIKey:kAPIkey];
+    
+#if defined(PRODUCTION) && defined(GAID)
+    NSLog(@"Initializing GA");
+    // Initialize tracker.
+    [[GAI sharedInstance] trackerWithTrackingId:GAID];
+#endif
     
     [Fabric with:@[CrashlyticsKit]];
     

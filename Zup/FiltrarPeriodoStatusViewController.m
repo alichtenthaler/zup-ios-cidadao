@@ -229,7 +229,9 @@
         
     }
     
-    self->dayFilter = 30* 6;
+    self->dayFilter = 7;
+    self.slider.value = 3;
+    //self->dayFilter = 30 * 6;
 }
 
 - (void)didReceiveMemoryWarning

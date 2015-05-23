@@ -71,6 +71,7 @@ description:(NSString*)description
 
 -(BOOL) getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds;
 
+-(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds;
 -(BOOL)getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom;
 
 -(BOOL)getInventoryDetailsWithId:(NSString*)idCategory idItem:(NSString*)idItem;
