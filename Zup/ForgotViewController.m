@@ -33,14 +33,25 @@
     [btCancel addTarget:self action:@selector(didCancelButton) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:btCancel];
     
-    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 65, 5, 60, 35)];
+    //CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 65, 5, 60, 35)];
+    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
     [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
     [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
     [btCreate setFontSize:14];
     
     [btCreate setTitle:@"Enviar" forState:UIControlStateNormal];
     [btCreate addTarget:self action:@selector(didSendButton) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btCreate];
+    //[self.navigationController.navigationBar addSubview:btCreate];
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithCustomView:btCreate];
+    [item setImageInsets:UIEdgeInsetsMake(0, 0, 100, 0)];
+    
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc]
+                             initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                             target:nil
+                             action:nil];
+    negativeSpacer.width = -10;
+    
+    self.navigationItem.rightBarButtonItems = @[negativeSpacer, item];
 
     NSString *titleStr = @"Esqueceu a senha?";
    
@@ -65,7 +76,7 @@
 - (void)didSendButton {
     
     if (![Utilities isValidEmail:self.tfemail.text]) {
-        [Utilities alertWithError:@"Insira um e-mail válido!"];
+        //[Utilities alertWithError:@"Insira um e-mail válido!"];
         return;
     }
     

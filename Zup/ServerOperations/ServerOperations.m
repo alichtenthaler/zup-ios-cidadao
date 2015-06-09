@@ -659,10 +659,11 @@ description:(NSString*)description
 
 -(BOOL)getStatsWithFilter:(int)days categoryIds:(NSArray*)categoryIds{
     
-    NSDate *today = [NSDate date];
+    /*NSDate *today = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *strToday = [formatter stringFromDate:today];
+    NSString *strToday = [formatter stringFromDate:today];*/
+    NSString* strToday = [Utilities getDateStringFromDaysPassed:-1];
     
     NSString *earlierStr = [Utilities getDateStringFromDaysPassed:days];
     
