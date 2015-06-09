@@ -8,6 +8,7 @@
 #import "PerfilDetailViewController.h"
 #import "InfoWindow.h"
 #import "AppDelegate.h"
+#import "ImageCache.h"
 
 int ZOOMLEVELDEFAULT = 16;
 
@@ -353,12 +354,25 @@ CLLocationCoordinate2D currentCoord;
         [serverOperationsReport setAction:@selector(didReceiveData:)];
         [serverOperationsReport setActionErro:@selector(didReceiveError:data:)];
         
+        NSArray* searchCategories = nil;
+        NSDate* searchDate = nil;
+        NSArray* searchStatuses = nil;
+        
         if([self->_arrFilterIDs count] > 0)
+            searchCategories = self->_arrFilterIDs;
+        
+        searchDate = [Utilities todayMinusDays:self->_dayFilter];
+        if(self->_statusToFilterId != 0)
+            searchStatuses = @[[NSNumber numberWithInt:self->_statusToFilterId]];
+        
+        [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:searchCategories sinceDate:searchDate statuses:searchStatuses];
+        
+        /*if([self->_arrFilterIDs count] > 0)
         {
             [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom categoryIds:_arrFilterIDs];
         }
         else
-            [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];
+            [serverOperationsReport getReportItemsForPosition:currentCoordinate.latitude longitude:currentCoordinate.longitude radius:distance zoom:self.mapView.camera.zoom];*/
     }
 }
 
@@ -515,6 +529,11 @@ CLLocationCoordinate2D currentCoord;
         for (int i = 0; i < markersToRemove; i ++) {
             
             NSDictionary *dict = [self.arrMain objectAtIndex:0];
+            if(![self markerPassesValidation:dict])
+            {
+                [self.arrMain removeObjectAtIndex:0];
+                continue;
+            }
             
             int markerId = [[dict valueForKey:@"id"]intValue];
             
@@ -578,6 +597,20 @@ CLLocationCoordinate2D currentCoord;
 {
     for(NSDictionary* cluster in clusters)
     {
+        /*BOOL passesCategoryValidation = NO;
+        
+        if (self.arrFilterIDs.count > 0) {
+            NSNumber* numberId = [cluster valueForKey:@"category_id"];
+            
+            if ([numberId isKindOfClass:[NSNull class]] || [self.arrFilterIDs containsObject:numberId])
+                passesCategoryValidation = YES;
+        }
+        else
+            passesCategoryValidation = YES;
+        
+        if(!passesCategoryValidation)
+            continue;*/
+        
         float lat = [[[cluster valueForKeyPath:@"position"] objectAtIndex:0] floatValue];
         float lon = [[[cluster valueForKeyPath:@"position"] objectAtIndex:1] floatValue];
         
@@ -594,49 +627,56 @@ CLLocationCoordinate2D currentCoord;
     }
 }
 
+- (BOOL)markerPassesValidation:(NSDictionary*)dict
+{
+    /*BOOL passesCategoryValidation = NO;
+    BOOL passesDaysValidation = NO;
+    BOOL passesStatusValidation = NO;
+    
+    if (self.arrFilterIDs.count > 0) {
+        
+        int intId = [[dict valueForKey:@"category_id"]intValue];
+        NSNumber *numberId = [NSNumber numberWithInt:intId];
+        
+        if ([self.arrFilterIDs containsObject:numberId])
+            passesCategoryValidation = YES;
+    }
+    else
+        passesCategoryValidation = YES;
+    
+    if(self.statusToFilterId != 0)
+    {
+        int statusId = [[dict  valueForKey:@"status_id"]intValue];
+        if(statusId == self.statusToFilterId)
+            passesStatusValidation = YES;
+    }
+    else
+        passesStatusValidation = YES;
+    
+    if(self.isDayFilter)
+    {
+        int daysPassed = [Utilities calculateDaysPassed:[dict valueForKey:@"created_at"]];
+        
+        if (self.dayFilter >= daysPassed)
+        {
+            passesDaysValidation = YES;
+        }
+    }
+    else
+        passesDaysValidation = YES;
+    
+    return passesCategoryValidation && passesDaysValidation && passesStatusValidation;*/
+    
+    return YES;
+}
+
 - (void)createPointsWithOldMarkers:(NSArray*)markers {
     NSMutableArray* changes = [[NSMutableArray alloc] init];
     
     for (NSDictionary *dict in self.arrMain) {
         GMSMarker* marker;
-        
-        BOOL passesCategoryValidation = NO;
-        BOOL passesDaysValidation = NO;
-        BOOL passesStatusValidation = NO;
-        
-        if (self.arrFilterIDs.count > 0) {
-            
-            int intId = [[dict valueForKey:@"category_id"]intValue];
-            NSNumber *numberId = [NSNumber numberWithInt:intId];
-            
-            if ([self.arrFilterIDs containsObject:numberId])
-                passesCategoryValidation = YES;
-        }
-        else
-            passesCategoryValidation = YES;
-        
-        if(self.statusToFilterId != 0)
-        {
-            int statusId = [[dict  valueForKey:@"status_id"]intValue];
-            if(statusId == self.statusToFilterId)
-                passesStatusValidation = YES;
-        }
-        else
-            passesStatusValidation = YES;
-        
-        if(self.isDayFilter)
-        {
-            int daysPassed = [Utilities calculateDaysPassed:[dict valueForKey:@"created_at"]];
-            
-            if (self.dayFilter >= daysPassed)
-            {
-                passesDaysValidation = YES;
-            }
-        }
-        else
-            passesDaysValidation = YES;
     
-        if(passesCategoryValidation && passesDaysValidation && passesStatusValidation)
+        if([self markerPassesValidation:dict])
         {
             marker = [self setLocationWithCoordinate:dict];
         }
@@ -945,8 +985,18 @@ CLLocationCoordinate2D currentCoord;
     [marker setInfoWindowAnchor:CGPointMake(0.4, 0.1)];
     [marker setAppearAnimation:kGMSMarkerAnimationNone];
     
-    UIImage *img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
-    img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
+    UIImage* img;
+    
+    NSString* iconId = [NSString stringWithFormat:@"marker_category_%i", [[dict valueForKey:@"category_id"] intValue]];
+    UIImage* cachedImage = [[ImageCache defaultCache] imageWithName:iconId];
+    if(cachedImage)
+        img = cachedImage;
+    else
+    {
+        img = [UIImage imageWithData:[catDict valueForKey:@"markerData"]];
+        img = [Utilities imageWithImage:img scaledToSize:CGSizeMake(img.size.width/2, img.size.height/2)];
+    }
+    
     marker.icon = img;
     
     int markerId = [[marker.userData valueForKey:@"id"]intValue];

@@ -420,9 +420,9 @@
         } else {
             [self dismissViewControllerAnimated:YES completion:nil];
             [self.perfilVC getData];
-            if ([Utilities isIpad]) {
+            //if ([Utilities isIpad]) {
                 [self.relateVC setToken];
-            }
+            //}
         }
         
         
@@ -616,12 +616,17 @@
 
 - (IBAction)btJump:(id)sender {
     
-    if (self.isFromPerfil || self.isFromSolicit) {
+    if (self.isFromPerfil) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
         [self.exploreVC viewWillAppear:YES];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"backToMapFromPerfil" object:nil];
         
+        return;
+    }
+    else if(self.isFromSolicit) {
+        [self.relateVC viewWillAppear:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
     

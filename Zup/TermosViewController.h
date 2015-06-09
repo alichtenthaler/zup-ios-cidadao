@@ -7,4 +7,6 @@
 
 @interface TermosViewController : UIViewController
 
+@property (nonatomic, retain) IBOutlet UIWebView* webView;
+
 @end

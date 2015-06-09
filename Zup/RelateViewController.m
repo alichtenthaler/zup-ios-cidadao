@@ -58,7 +58,7 @@
         [navLogin.view.superview setBackgroundColor:[UIColor clearColor]];
         
     }
-    [self presentViewController:navLogin animated:NO completion:nil];
+    [self presentViewController:navLogin animated:YES completion:nil];
 }
 
 - (void)viewDidLoad

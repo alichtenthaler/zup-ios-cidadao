@@ -663,4 +663,16 @@ typedef enum {
     return image;
 }
 
++ (NSDate*) todayMinusDays:(int) days
+{
+    NSDate* date = [[NSDate alloc] initWithTimeIntervalSinceNow:-(days * 24 * 60 * 60)];
+    return date;
+}
+
++ (NSString*) dateToISOString:(NSDate*)date
+{
+    ISO8601DateFormatter* formatter = [[ISO8601DateFormatter alloc] init];
+    return [formatter stringFromDate:date timeZone:[NSTimeZone systemTimeZone]];
+}
+
 @end

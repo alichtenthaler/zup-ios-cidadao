@@ -119,6 +119,13 @@
 		88F48AA11842B490009788D7 /* FiltrarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F48A9F1842B490009788D7 /* FiltrarViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		88F48AA21842B490009788D7 /* FiltrarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88F48AA01842B490009788D7 /* FiltrarViewController.xib */; };
 		936E464F1CAC56F5FA747DE6 /* libPods-zupTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D22F37708D5A94B4F00F3C6 /* libPods-zupTests.a */; };
+		9C026BDF1B265EB400D2EE6F /* Termos.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BDE1B265EB400D2EE6F /* Termos.rtf */; };
+		9C026BE11B266B4800D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
+		9C026BE21B266B4800D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
+		9C026BE31B266B4800D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
+		9C026BE41B266B4800D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
+		9C026BE51B266B4900D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
+		9C026BE61B266B4900D2EE6F /* termo-de-uso.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C026BE01B266B4800D2EE6F /* termo-de-uso.html */; };
 		9C028A731AFFDE42007B77D9 /* UIApplication+name.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C028A721AFFDE42007B77D9 /* UIApplication+name.m */; };
 		9C028A741AFFE2FB007B77D9 /* UIApplication+name.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C028A721AFFDE42007B77D9 /* UIApplication+name.m */; };
 		9C028A751AFFE303007B77D9 /* UIApplication+name.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C028A721AFFDE42007B77D9 /* UIApplication+name.m */; };
@@ -981,6 +988,8 @@
 		88F48A9E1842B490009788D7 /* FiltrarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltrarViewController.h; sourceTree = "<group>"; };
 		88F48A9F1842B490009788D7 /* FiltrarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltrarViewController.m; sourceTree = "<group>"; };
 		88F48AA01842B490009788D7 /* FiltrarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FiltrarViewController.xib; sourceTree = "<group>"; };
+		9C026BDE1B265EB400D2EE6F /* Termos.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Termos.rtf; sourceTree = "<group>"; };
+		9C026BE01B266B4800D2EE6F /* termo-de-uso.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "termo-de-uso.html"; sourceTree = "<group>"; };
 		9C028A711AFFDE42007B77D9 /* UIApplication+name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+name.h"; sourceTree = "<group>"; };
 		9C028A721AFFDE42007B77D9 /* UIApplication+name.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+name.m"; sourceTree = "<group>"; };
 		9C0A7CE01A26CFB10036421C /* XLMediaZoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XLMediaZoom.h; path = XL/XLMediaZoom.h; sourceTree = "<group>"; };
@@ -1410,12 +1419,14 @@
 		88387C90184045DC0059C826 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9C026BE01B266B4800D2EE6F /* termo-de-uso.html */,
 				8853BFAD186DC3E900135ADC /* Raven */,
 				88387C91184045DC0059C826 /* zup-Info.plist */,
 				88387C92184045DC0059C826 /* InfoPlist.strings */,
 				88387C95184045DC0059C826 /* main.m */,
 				88387C97184045DC0059C826 /* zup-Prefix.pch */,
 				8863BA1F18593F78005251C1 /* Marcacoes.plist */,
+				9C026BDE1B265EB400D2EE6F /* Termos.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1975,6 +1986,7 @@
 				88CCCBC2184B935B00618ADC /* PerfilDetailViewController.xib in Resources */,
 				88A5B5C118459E13002CD41C /* SolicitacaoPhotoViewController.xib in Resources */,
 				8879C24518515D5400130DEA /* TermosViewController.xib in Resources */,
+				9C026BE11B266B4800D2EE6F /* termo-de-uso.html in Resources */,
 				88E70E6B18478975000018E2 /* CreateViewController.xib in Resources */,
 				882D420E189EE4CD00406C62 /* GraphicCell_iPad.xib in Resources */,
 				9CFC44B519F863BA0045E84F /* CellFiltrarCategoria.xib in Resources */,
@@ -1985,6 +1997,7 @@
 				9CC1406C1AD3B4C8009A35C3 /* Launch Screen.xib in Resources */,
 				9C7FDF591A027FAF00416CF5 /* GoogleMaps.bundle in Resources */,
 				887EA9D418441FA70073C443 /* Images.xcassets in Resources */,
+				9C026BDF1B265EB400D2EE6F /* Termos.rtf in Resources */,
 				8842AD971889D57000894219 /* SocialViewController.xib in Resources */,
 				9CFC44AD19F8557F0045E84F /* FiltrarViewControllerNovo.xib in Resources */,
 				88B90626185026D30024AEEB /* PerfilDetailViewController_iPad.xib in Resources */,
@@ -2014,6 +2027,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C15300C1AD99341004E0BB9 /* SBC.xcassets in Resources */,
+				9C026BE51B266B4900D2EE6F /* termo-de-uso.html in Resources */,
 				9C15300D1AD99341004E0BB9 /* CellGaleriaInventario.xib in Resources */,
 				9C15300E1AD99341004E0BB9 /* Main_iPad.storyboard in Resources */,
 				9C15300F1AD99341004E0BB9 /* OpenSans-Bold.ttf in Resources */,
@@ -2056,6 +2070,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C5ECE971AA7DBD400BD1791 /* SBC.xcassets in Resources */,
+				9C026BE31B266B4800D2EE6F /* termo-de-uso.html in Resources */,
 				9C5ECE6E1AA7DAA000BD1791 /* CellGaleriaInventario.xib in Resources */,
 				9C5ECE6F1AA7DAA000BD1791 /* Main_iPad.storyboard in Resources */,
 				9C5ECE701AA7DAA000BD1791 /* OpenSans-Bold.ttf in Resources */,
@@ -2098,6 +2113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C67937C1AC526D30024A726 /* Floripa.xcassets in Resources */,
+				9C026BE41B266B4800D2EE6F /* termo-de-uso.html in Resources */,
 				9C6792C51AC51B0C0024A726 /* CellGaleriaInventario.xib in Resources */,
 				9C6792C61AC51B0C0024A726 /* Main_iPad.storyboard in Resources */,
 				9C6792C71AC51B0C0024A726 /* OpenSans-Bold.ttf in Resources */,
@@ -2140,6 +2156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C67937F1AC526ED0024A726 /* Maceio.xcassets in Resources */,
+				9C026BE21B266B4800D2EE6F /* termo-de-uso.html in Resources */,
 				9C6793501AC522F20024A726 /* CellGaleriaInventario.xib in Resources */,
 				9C6793511AC522F20024A726 /* Main_iPad.storyboard in Resources */,
 				9C6793521AC522F20024A726 /* OpenSans-Bold.ttf in Resources */,
@@ -2182,6 +2199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CA81E811AE5B63E0071AC89 /* SBC.xcassets in Resources */,
+				9C026BE61B266B4900D2EE6F /* termo-de-uso.html in Resources */,
 				9CA81E821AE5B63E0071AC89 /* CellGaleriaInventario.xib in Resources */,
 				9CA81E831AE5B63E0071AC89 /* Main_iPad.storyboard in Resources */,
 				9CA81E841AE5B63E0071AC89 /* OpenSans-Bold.ttf in Resources */,

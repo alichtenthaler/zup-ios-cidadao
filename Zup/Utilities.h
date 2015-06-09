@@ -73,4 +73,7 @@
 
 + (UIImage*) iconForCluster:(NSDictionary*)cluster inventory:(BOOL)inv;
 
++ (NSDate*) todayMinusDays:(int) days;
++ (NSString*) dateToISOString:(NSDate*)date;
+
 @end

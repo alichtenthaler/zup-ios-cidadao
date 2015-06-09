@@ -69,10 +69,14 @@ description:(NSString*)description
 
 -(BOOL)getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom categoryId:(int)catId;
 
+
 -(BOOL) getItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds;
 
--(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds;
--(BOOL)getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom;
+-(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds sinceDate:(NSDate*)date statuses:(NSArray*)statuses;
+//-(BOOL)getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float) zoom;
+
+- (BOOL) flagReportAsOffensive:(int)reportId;
+- (BOOL) unflagReportAsOffensive:(int)reportId;
 
 -(BOOL)getInventoryDetailsWithId:(NSString*)idCategory idItem:(NSString*)idItem;
 

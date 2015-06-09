@@ -34,6 +34,8 @@
     [btDone addTarget:self action:@selector(btDone) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:btDone];
     
+    NSURL* url = [[NSBundle mainBundle] URLForResource:@"termo-de-uso" withExtension:@"html"];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 - (void)btDone {

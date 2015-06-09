@@ -158,7 +158,8 @@
         
         int i = 0;
         for (NSMutableDictionary *dict2 in arrMerge) {
-            if ([[dict1 valueForKey:@"status_id"]intValue] == [[dict2 valueForKey:@"status_id"]intValue]) {
+            //if ([[dict1 valueForKey:@"status_id"]intValue] == [[dict2 valueForKey:@"status_id"]intValue]) {
+            if ([[[dict1 valueForKey:@"title"] lowercaseString] isEqualToString:[[dict2 valueForKey:@"title"] lowercaseString]]) {
                 contains = YES;
             }
             if (!contains) {

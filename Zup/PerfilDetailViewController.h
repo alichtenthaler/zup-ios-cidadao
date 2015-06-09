@@ -5,7 +5,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PerfilDetailViewController : UIViewController {
+@interface PerfilDetailViewController : UIViewController<UIActionSheetDelegate> {
     CustomButton *btCancel;
 }
 @property (weak, nonatomic) UINavigationController* navCtrl;
@@ -38,5 +38,8 @@
 @property (weak, nonatomic) IBOutlet CustomButton *btAndamento;
 @property (weak, nonatomic) IBOutlet CustomButton *btResolvido;
 @property (weak, nonatomic) IBOutlet CustomButton *btNaoResolvido;
+
+@property (strong, nonatomic) UIButton* btReportar;
+@property (strong, nonatomic) UIAlertView* reportLoading;
 
 @end

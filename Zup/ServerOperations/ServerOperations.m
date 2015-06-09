@@ -347,7 +347,7 @@ addressAdditional:(NSString*)addressAdditional
     return [self StartRequest:postRequest];
 }
 
--(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds
+-(BOOL) getReportItemsForPosition:(float)latitude longitude:(float)longitude radius:(double)radius zoom:(float)zoom categoryIds:(NSArray*)categoryIds sinceDate:(NSDate*)date statuses:(NSArray*)statuses
 {
     int maxCount = 0;
     if ([Utilities isIpad] || [Utilities isIphone4inch]) maxCount = maxMarkersCountiPhone5iPad;
@@ -355,8 +355,52 @@ addressAdditional:(NSString*)addressAdditional
     
     NSString* strUrl;
     
+    // begin_date reports_categories_ids statuses_ids
+    NSString* strBeginDate = @"";
+    NSString* strCategories = @"";
+    NSString* strStatuses = @"";
+    
+    if(date)
+    {
+        strBeginDate = [NSString stringWithFormat:@"begin_date=%@&", [Utilities dateToISOString:date]];
+    }
+    
+    if(categoryIds && categoryIds.count > 0)
+    {
+        strCategories = [strCategories stringByAppendingString:@"reports_categories_ids="];
+        int i = 0;
+        for(NSNumber* catid in categoryIds)
+        {
+            if(i > 0)
+                strCategories = [strCategories stringByAppendingString:@","];
+            
+            strCategories = [strCategories stringByAppendingFormat:@"%i", [catid intValue]];
+            i++;
+        }
+        
+        strCategories = [strCategories stringByAppendingString:@"&"];
+    }
+    
+    if(statuses && statuses.count > 0)
+    {
+        strStatuses = [strStatuses stringByAppendingString:@"statuses_ids="];
+        int i = 0;
+        for(NSNumber* statusid in statuses)
+        {
+            if(i > 0)
+                [strStatuses stringByAppendingString:@","];
+            
+            [strStatuses stringByAppendingFormat:@"%i", [statusid intValue]];
+            i++;
+        }
+        
+        [strStatuses stringByAppendingString:@"&"];
+    }
+    
+    strUrl = [NSString stringWithFormat:@"%@?%@%@%@position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, strBeginDate, strCategories, strStatuses, latitude, longitude, radius, maxCount, zoom];
+    
     // display_type=basic
-    if ([categoryIds count] == 0) {
+    /*if ([categoryIds count] == 0) {
         strUrl = [NSString stringWithFormat:@"%@?position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, latitude, longitude, radius, maxCount, zoom];
     } else {
         NSMutableString* catIds = [[NSMutableString alloc] init];
@@ -370,7 +414,7 @@ addressAdditional:(NSString*)addressAdditional
         }
         
         strUrl = [NSString stringWithFormat:@"%@?%@position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, catIds, latitude, longitude, radius, maxCount, zoom];
-    }
+    }*/
     
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
     
@@ -669,6 +713,28 @@ description:(NSString*)description
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
     
     [postRequest setHTTPMethod:@"GET"];
+    
+    return [self StartRequest:postRequest];
+}
+
+- (BOOL) flagReportAsOffensive:(int)reportId
+{
+    NSString* strUrl = [NSString stringWithFormat:APIURL(@"reports/items/%i/offensive"), reportId];
+    
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    [postRequest setHTTPMethod:@"PUT"];
+    
+    return [self StartRequest:postRequest];
+}
+
+- (BOOL) unflagReportAsOffensive:(int)reportId
+{
+    NSString* strUrl = [NSString stringWithFormat:APIURL(@"reports/items/%i/offensive"), reportId];
+    
+    NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    
+    [postRequest setHTTPMethod:@"DELETE"];
     
     return [self StartRequest:postRequest];
 }

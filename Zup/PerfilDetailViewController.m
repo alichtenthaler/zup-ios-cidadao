@@ -14,6 +14,8 @@ int RESOLVIDO = 3;
 
 #import "ComentarioViewController.h"
 
+#import <ISO8601DateFormatter/ISO8601DateFormatter.h>
+
 @interface PerfilDetailViewController ()
 
 @end
@@ -72,20 +74,50 @@ int RESOLVIDO = 3;
     
     [self.lblSubtitle setFont:[Utilities fontOpensSansBoldWithSize:10]];
     
+    
+    UIImage* image = [[UIImage imageNamed:@"report_flag"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(flagReport)];
+    
+    self.navigationItem.rightBarButtonItem = item;
+    
+    /*UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.bounds = CGRectMake( 0, 0, 44, 44);
+    button.backgroundColor = [UIColor redColor];
+    [button setImage:image forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(flagReport) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem = barButtonItem;*/
+    
     NSMutableString* address = [[NSMutableString alloc] init];
     [address appendString:[self.dictMain valueForKey:@"address"]];
     
+    NSString* number = [self.dictMain valueForKey:@"number"];
     NSString* subLocality = [self.dictMain valueForKey:@"district"];
+    NSString* postalCode = [self.dictMain valueForKey:@"postal_code"];
     NSString* city = [self.dictMain valueForKey:@"city"];
     NSString* state = [self.dictMain valueForKey:@"state"];
     
+    if(number && ![number isKindOfClass:[NSNull class]])
+    {
+        [address appendString:@", "];
+        [address appendString:number];
+    }
+    
+    if(postalCode && ![postalCode isKindOfClass:[NSNull class]])
+    {
+        [address appendString:@", "];
+        [address appendString:postalCode];
+    }
+    
     if(subLocality && ![subLocality isKindOfClass:[NSNull class]])
     {
-        [address appendString:@" - "];
+        [address appendString:@", "];
         [address appendString:subLocality];
     }
      
-    if(city && ![city isKindOfClass:[NSNull class]])
+    /*if(city && ![city isKindOfClass:[NSNull class]])
     {
         [address appendString:@", "];
         [address appendString:city];
@@ -95,7 +127,7 @@ int RESOLVIDO = 3;
             [address appendString:@" - "];
             [address appendString:state];
         }
-    }
+    }*/
     
     [self.lblAddress setText:address];
     [self.lblAddress setFont:[Utilities fontOpensSansLightWithSize:11]];
@@ -187,7 +219,7 @@ int RESOLVIDO = 3;
     [self.lblTitle setText:[NSString stringWithFormat:@"PROTOCOLO %@", [self.dictMain valueForKey:@"protocol"]]];
     [self.tvDesc setFont:[Utilities fontOpensSansWithSize:12]];
     [self.tvDesc setText:[Utilities checkIfNull:[self.dictMain valueForKey:@"description"]]];
-    
+    [self.tvDesc sizeToFit];
     
     [self buildStatusWithColor:[self.dictMain valueForKeyPath:@"status.color"] title:[self.dictMain valueForKeyPath:@"status.title"]];
     
@@ -237,6 +269,7 @@ int RESOLVIDO = 3;
     int y = 0;
 
     NSArray* comments = [[dict valueForKey:@"comments"] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
         
         NSDateFormatter *form = [[NSDateFormatter alloc]init];
         [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -307,16 +340,19 @@ int RESOLVIDO = 3;
     UILabel* lblDate = [[UILabel alloc] initWithFrame:CGRectMake(30, lblMsg.frame.origin.y + lblMsg.frame.size.height + 10, self.view.frame.size.width - 60, 18)];
     
     NSString* strDate = [comment valueForKey:@"created_at"];
+
+    ISO8601DateFormatter *form = [[ISO8601DateFormatter alloc] init];
+    //[form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
-    NSDateFormatter *form = [[NSDateFormatter alloc]init];
-    [form setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    strDate = [strDate substringToIndex:19];
-    strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    //strDate = [strDate substringToIndex:19];
+    //strDate = [strDate stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
     NSDate *date = [form dateFromString:strDate];
-    [form setDateFormat:@"dd/MM/yyyy HH:mm"];
-    NSString* datestr = [form stringFromDate:date];
+    
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd/MM/yyyy HH:mm"];
+    
+    NSString* datestr = [formatter stringFromDate:date];
     
     //NSString* sentby = [NSString stringWithFormat:@"Enviado por %@\r%@", [Utilities getTenantName], datestr];
     NSString* sentby = [NSString stringWithFormat:@"Resposta do Município enviada: %@", datestr];
@@ -348,6 +384,11 @@ int RESOLVIDO = 3;
 }
 
 - (void)buildStatusWithColor:(NSString*)colorStr title:(NSString*)title {
+    if(!colorStr || [colorStr isKindOfClass:[NSNull class]])
+        colorStr = @"#ffffff";
+    
+    if(!title || [title isKindOfClass:[NSNull class]])
+        title = @"";
     
     colorStr = [colorStr stringByReplacingOccurrencesOfString:@"#" withString:@""];
     UIColor *color = [Utilities colorWithHexString:colorStr];
@@ -426,7 +467,6 @@ int RESOLVIDO = 3;
     [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
     [btCancel addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];
     [controller.navigationBar addSubview:btCancel];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -438,6 +478,76 @@ int RESOLVIDO = 3;
 
 }
 
+- (void) flagReport {
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:@"Deseja reportar esse relato como conteúdo ofensivo ou inapropriado?" delegate:self cancelButtonTitle:@"Cancelar" destructiveButtonTitle:@"Reportar" otherButtonTitles:nil];
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == actionSheet.destructiveButtonIndex)
+    {
+        [self confirmFlagReport];
+    }
+}
+
+- (void)confirmFlagReport {
+    UIAlertView* myAlertView = [[UIAlertView alloc] initWithTitle:@"" message:nil
+                                                         delegate:self
+                                                cancelButtonTitle:nil
+                                                otherButtonTitles:nil];
+    
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 100)];
+    
+    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
+                                        initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    loading.color = [UIColor grayColor];
+    loading.frame=CGRectMake((myAlertView.frame.size.width - 64) / 2, 0, 64, 64);
+    loading.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    
+    [view addSubview:loading];
+    [myAlertView setValue:view forKey:@"accessoryView"];
+    [myAlertView show];
+    
+    [loading startAnimating];
+    
+    self.reportLoading = myAlertView;
+    
+    ServerOperations* operations = [[ServerOperations alloc] init];
+    operations.target = self;
+    operations.action = @selector(didReceiveOffensive:);
+    operations.actionErro = @selector(didReceiveOffensiveError:operation:data:);
+    [operations flagReportAsOffensive:[self.dictMain[@"id"] intValue]];
+}
+
+- (void) didReceiveOffensive:(NSData*)data
+{
+    NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    
+    NSString* message = dict[@"message"];
+    [self.reportLoading dismissWithClickedButtonIndex:-1 animated:YES];
+    
+    [self popView];
+    
+    UIAlertView* alerView = [[UIAlertView alloc] initWithTitle:@"Reportar Relato" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alerView show];
+}
+
+- (void) didReceiveOffensiveError:(NSError*)error operation:(TIRequestOperation*)operation data:(NSData*)data
+{
+    if(data == nil)
+        [Utilities alertWithServerError];
+    else
+    {
+        NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        
+        NSString* message = dict[@"error"];
+        [self.reportLoading dismissWithClickedButtonIndex:-1 animated:YES];
+        
+        [Utilities alertWithError:message];
+    }
+}
 
 - (void)buildScroll {
     
