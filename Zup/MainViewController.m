@@ -534,6 +534,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    self.screenName = @"Tela de slides (abertura)";
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {

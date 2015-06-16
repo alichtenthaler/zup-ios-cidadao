@@ -194,6 +194,8 @@ UITextField *activeField;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Editar Conta";
     
     btSalvar = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 83, 5, 78, 35)];
     

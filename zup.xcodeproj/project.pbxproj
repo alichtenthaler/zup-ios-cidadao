@@ -3085,7 +3085,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Marcio Lozano (JSJSQENZMF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marcio Lozano (JSJSQENZMF)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3119,7 +3119,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3140,7 +3140,7 @@
 				);
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = zup;
-				PROVISIONING_PROFILE = "d009bbe6-b42b-451a-af5b-cc3027f40757";
+				PROVISIONING_PROFILE = "cb360fc5-f7d1-4f8e-996c-54f66b49a308";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7s armv7";
 				WRAPPER_EXTENSION = app;

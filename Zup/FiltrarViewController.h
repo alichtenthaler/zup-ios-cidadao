@@ -8,9 +8,10 @@
 #import "FiltrarPeriodoStatusViewController.h"
 #import "FiltrarInventarioViewController.h"
 #import "CustomButton.h"
+#import "GAITrackedViewController.h"
 
 @class ExploreViewController;
-@interface FiltrarViewController : UIViewController <UIGestureRecognizerDelegate> {
+@interface FiltrarViewController : GAITrackedViewController <UIGestureRecognizerDelegate> {
     BOOL isMenuOpen;
 }
 

@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface PerfilViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIScrollViewDelegate> {
+@interface PerfilViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIScrollViewDelegate> {
     CustomButton *btEdit;
     CustomButton *btCancel;
     NSString *tokenStr;

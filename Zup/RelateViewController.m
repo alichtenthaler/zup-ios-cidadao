@@ -27,6 +27,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    self.screenName = @"Seleção de Categoria (Novo Relato)";
+
     [self setToken];
     
     self->categories = [UserDefaults getReportRootCategories];

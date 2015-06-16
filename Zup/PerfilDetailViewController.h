@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface PerfilDetailViewController : UIViewController<UIActionSheetDelegate> {
+@interface PerfilDetailViewController : GAITrackedViewController<UIActionSheetDelegate> {
     CustomButton *btCancel;
 }
 @property (weak, nonatomic) UINavigationController* navCtrl;

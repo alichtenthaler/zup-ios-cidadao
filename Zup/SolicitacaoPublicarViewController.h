@@ -5,8 +5,9 @@
 
 #import <UIKit/UIKit.h>
 #import <GooglePlus/GooglePlus.h>
+#import "GAITrackedViewController.h"
 
-@interface SolicitacaoPublicarViewController : UIViewController <GPPSignInDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
+@interface SolicitacaoPublicarViewController : GAITrackedViewController <GPPSignInDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
     SocialNetworkType socialType;
     UIView *viewLoading;
 }

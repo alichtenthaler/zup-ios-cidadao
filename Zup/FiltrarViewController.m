@@ -170,6 +170,9 @@ int currentIdCategory;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Filtrar (Explore)";
+    
     //CustomButton *btFilter = nil;
     self.btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
     [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];

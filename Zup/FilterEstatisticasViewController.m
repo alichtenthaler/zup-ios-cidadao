@@ -103,6 +103,9 @@ int positionY;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.screenName = @"Filtrar Estatísticas";
+    
     self->categories = [UserDefaults getReportRootCategories];
     
     NSMutableArray* elementsToRemove = [[NSMutableArray alloc] init];

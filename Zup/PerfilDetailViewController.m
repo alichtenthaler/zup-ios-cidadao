@@ -451,6 +451,9 @@ int RESOLVIDO = 3;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Detalhes de um Relato";
+    
     if(btCancel != nil)
         return;
     

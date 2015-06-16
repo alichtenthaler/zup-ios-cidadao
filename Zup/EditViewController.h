@@ -11,8 +11,9 @@
 #import "TWAPIManager.h"
 #import "SolicitacaoPublicarViewController.h"
 #import "PerfilViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface EditViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, GPPSignInDelegate> {
+@interface EditViewController : GAITrackedViewController <UITextFieldDelegate, UIActionSheetDelegate, UIAlertViewDelegate, GPPSignInDelegate> {
     CustomButton *btSalvar;
     CustomButton *btCancel;
     SocialNetworkType socialType;

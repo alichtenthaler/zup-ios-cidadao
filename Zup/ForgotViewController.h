@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface ForgotViewController : UIViewController
+@interface ForgotViewController : GAITrackedViewController
 @property (weak, nonatomic) IBOutlet UITextField *tfemail;
 
 @end

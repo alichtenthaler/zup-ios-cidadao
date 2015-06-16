@@ -5,8 +5,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SSPieProgressView.h"
+#import "GAITrackedViewController.h"
 
-@interface EstatisticasViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface EstatisticasViewController : GAITrackedViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

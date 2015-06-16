@@ -7,8 +7,9 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "SolicitacaoPhotoViewController.h"
 #import "SearchTableViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface SolicitacaoMapViewController : UIViewController<CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
+@interface SolicitacaoMapViewController : GAITrackedViewController<CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
     GMSMarker *userMarker;
     SolicitacaoPhotoViewController *photoView;
     SearchTableViewController *searchTable;

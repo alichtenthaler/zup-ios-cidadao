@@ -7,8 +7,9 @@
 #import "PerfilViewController.h"
 #import "ExploreViewController.h"
 #import "RelateViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface MainViewController : UIViewController <UIScrollViewDelegate> {
+@interface MainViewController : GAITrackedViewController <UIScrollViewDelegate> {
     BOOL isJump;
     UIActivityIndicatorView *spin;
     UIImageView *imgViewLoad;

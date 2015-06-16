@@ -24,6 +24,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.screenName = @"Estatísticas";
+    
     //[self getValues];
 }
 

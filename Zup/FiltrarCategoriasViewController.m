@@ -62,6 +62,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.screenName = @"Filtrar relatos por categoria";
+    
     self->categories = [UserDefaults getReportRootCategories];
     NSMutableArray* elementsToRemove = [[NSMutableArray alloc] init];
     for(NSNumber* num in self->selectedCategories)

@@ -7,8 +7,9 @@
 #import "MainViewController.h"
 #import "PerfilViewController.h"
 #import "RelateViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : GAITrackedViewController <UITextFieldDelegate>
 
 @property (nonatomic) BOOL isFromInside;
 @property (nonatomic) BOOL isFromPerfil;

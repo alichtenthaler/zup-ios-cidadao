@@ -100,6 +100,13 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.screenName = @"Esqueci minha senha";
+}
+
 - (void)didReceiveError:(NSError*)error {
     [Utilities alertWithServerError];
 }

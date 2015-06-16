@@ -38,6 +38,12 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.screenName = @"Termos de uso";
+}
+
 - (void)btDone {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

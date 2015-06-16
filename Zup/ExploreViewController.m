@@ -155,7 +155,9 @@ CLLocationCoordinate2D currentCoord;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-        
+    [super viewWillAppear:animated];
+    self.screenName = @"Explore";
+    
     btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
     [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
     [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];

@@ -105,6 +105,12 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.screenName = @"Adição de Fotos (Novo Relato)";
+}
+
 - (IBAction)btNext:(id)sender {
     
     SolicitacaoPublicarViewController *publicarVC = [[SolicitacaoPublicarViewController alloc]initWithNibName:@"SolicitacaoPublicarViewController" bundle:nil];

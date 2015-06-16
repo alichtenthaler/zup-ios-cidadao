@@ -218,6 +218,9 @@
 //}
 //
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Login";
+    
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }

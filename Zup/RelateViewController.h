@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface RelateViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
+@interface RelateViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate> {
     NSArray* categories;
     NSMutableArray* expandedCategories;
     int selectedCategoryId;

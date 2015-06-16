@@ -23,6 +23,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.screenName = @"Filtrar itens de inventário";
+    
     self->categories = [UserDefaults getInventoryCategories];
     NSMutableArray* elementsToRemove = [[NSMutableArray alloc] init];
     for(NSNumber* num in self->selectedCategories)

@@ -7,8 +7,9 @@
 #import "PerfilViewController.h"
 #import "RelateViewController.h"
 #import "MainViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface CreateViewController : UIViewController <UITextFieldDelegate> {
+@interface CreateViewController : GAITrackedViewController <UITextFieldDelegate> {
     CustomButton *btCreate;
     CustomButton *btCancel;
     BOOL isFirstTime;

@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface FiltrarCategoriasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface FiltrarCategoriasViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate>
 {
     NSArray* categories;
     NSArray* allcategories;

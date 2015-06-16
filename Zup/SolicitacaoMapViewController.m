@@ -459,6 +459,11 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     }
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.screenName = @"Seleção de Local (Novo Relato)";
+}
 - (void) mapMovementEnd {
     //isMoving = NO;
     //    [self.mapView clear];

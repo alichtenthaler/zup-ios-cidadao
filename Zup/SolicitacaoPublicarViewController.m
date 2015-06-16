@@ -90,6 +90,9 @@ NSString* linkTemp;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    self.screenName = @"Comentário do Relato";
+    
     NSNumber* catid = [self.dictMain valueForKey:@"catId"];
     NSDictionary* cat = [UserDefaults getCategory:[catid intValue]];
     

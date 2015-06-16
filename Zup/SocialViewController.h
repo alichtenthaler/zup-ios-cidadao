@@ -11,10 +11,11 @@
 #import "TWAPIManager.h"
 #import "PerfilViewController.h"
 #import "RelateViewController.h"
+#import "GAITrackedViewController.h"
 
 @class GPPSignInButton;
 
-@interface SocialViewController : UIViewController <GPPSignInDelegate> {
+@interface SocialViewController : GAITrackedViewController <GPPSignInDelegate> {
     BOOL isLoggedSocial;
     CustomButton *btCancel;
 }

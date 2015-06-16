@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface FiltrarPeriodoStatusViewController : UIViewController
+@interface FiltrarPeriodoStatusViewController : GAITrackedViewController
 {
     BOOL isMenuOpen;
     int dayFilter;

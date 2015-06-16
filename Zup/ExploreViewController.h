@@ -8,9 +8,10 @@
 #import <MapKit/MapKit.h>
 #import "FiltrarViewController.h"
 #import "SearchTableViewController.h"
+#import "GAITrackedViewController.h"
 
 
-@interface ExploreViewController : UIViewController <CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate> {
+@interface ExploreViewController : GAITrackedViewController <CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate> {
     CustomButton *btFilter;
     UIView *viewLogo;
     UIImageView* viewHeader;

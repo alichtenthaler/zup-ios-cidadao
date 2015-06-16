@@ -90,6 +90,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Minha Conta";
     
     tokenStr = [UserDefaults getToken];
     

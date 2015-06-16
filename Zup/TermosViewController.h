@@ -4,8 +4,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface TermosViewController : UIViewController
+@interface TermosViewController : GAITrackedViewController
 
 @property (nonatomic, retain) IBOutlet UIWebView* webView;
 

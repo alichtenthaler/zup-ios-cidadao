@@ -122,6 +122,8 @@ UITextField *activeField;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.screenName = @"Cadastro";
     
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];

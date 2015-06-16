@@ -6,8 +6,9 @@
 #import <UIKit/UIKit.h>
 #import "PerfilDetailViewController.h"
 #import "XL/XLMediaZoom.h"
+#import "GAITrackedViewController.h"
 
-@interface ListExploreViewController : UIViewController {
+@interface ListExploreViewController : GAITrackedViewController {
     CustomButton *btCancel;
     PerfilDetailViewController *detailView;
     BOOL isSolicit;

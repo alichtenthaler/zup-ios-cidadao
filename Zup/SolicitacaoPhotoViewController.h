@@ -5,8 +5,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomUIImagePickerController.h"
+#import "GAITrackedViewController.h"
 
-@interface SolicitacaoPhotoViewController : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
+@interface SolicitacaoPhotoViewController : GAITrackedViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     int currentButtonTag;
 }
 

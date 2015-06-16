@@ -5,8 +5,9 @@
 
 #import <UIKit/UIKit.h>
 #import "EstatisticasViewController.h"
+#import "GAITrackedViewController.h"
 
-@interface FilterEstatisticasViewController : UIViewController<UITableViewDataSource, UITableViewDelegate> {
+@interface FilterEstatisticasViewController : GAITrackedViewController<UITableViewDataSource, UITableViewDelegate> {
     BOOL isCategoriesOpen;
     int currentIdCat;
     

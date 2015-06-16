@@ -95,6 +95,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.screenName = @"Conectar redes sociais";
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [btCancel removeFromSuperview];
 }
