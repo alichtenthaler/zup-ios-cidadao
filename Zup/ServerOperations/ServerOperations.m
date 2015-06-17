@@ -17,9 +17,11 @@
 #elif defined(SBC)
     //#define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
     //#define BASE_URL @"http://zup-api-sbc.cognita.ntxdev.com.br/"
-    #define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
+    //#define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
+    #define BASE_URL @"http://vcsbc.saobernardo.sp.gov.br:8081/"
 #elif defined(SBC_SBC)
-    #define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
+    #define BASE_URL @"http://vcsbc.saobernardo.sp.gov.br:8081/"
+    //#define BASE_URL @"http://zuphmg.saobernardo.sp.gov.br:8282/"
     //#define BASE_URL @"http://dti-zuphmg-01:9292/"
 #elif defined(FLORIPA)
     #define BASE_URL @"http://zup-api-florianopolis.cognita.ntxdev.com.br/"

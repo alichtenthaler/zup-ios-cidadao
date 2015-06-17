@@ -75,7 +75,9 @@ int RESOLVIDO = 3;
     [self.lblSubtitle setFont:[Utilities fontOpensSansBoldWithSize:10]];
     
     
-    UIImage* image = [[UIImage imageNamed:@"report_flag"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage* image = [UIImage imageNamed:@"report_flag"];
+    if([image respondsToSelector:@selector(imageWithRenderingMode:)])
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(flagReport)];
     
@@ -229,7 +231,7 @@ int RESOLVIDO = 3;
     [self buildScroll];
     
     // Só exibe o protocolo se for o criador do relato
-    if([[self.dictMain valueForKeyPath:@"user.id"] intValue] != [[UserDefaults getUserId] intValue])
+    if([self.dictMain valueForKeyPath:@"user.id"] == nil || [[self.dictMain valueForKeyPath:@"user.id"] isKindOfClass:[NSNull class]] || [[self.dictMain valueForKeyPath:@"user.id"] intValue] != [[UserDefaults getUserId] intValue])
     {
         [self.lblTitle setHidden:YES];
     }

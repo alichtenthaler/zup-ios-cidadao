@@ -262,6 +262,7 @@
 		9C15302E1AD99341004E0BB9 /* SolicitacaoPublicarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 88A5B5C41845A607002CD41C /* SolicitacaoPublicarViewController.xib */; };
 		9C392EB81A883F85003450E9 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C392EB61A883F85003450E9 /* Crashlytics.framework */; };
 		9C392EB91A883F85003450E9 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C392EB71A883F85003450E9 /* Fabric.framework */; };
+		9C47EB711B31B8FC0052DCCC /* BoaVista.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD1C13F1A3EA997008B51A5 /* BoaVista.xcassets */; };
 		9C4CD2CD1AC2E1A6001812B2 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4CD2CC1AC2E1A6001812B2 /* EditViewController.m */; };
 		9C4CD2CF1AC2E1A6001812B2 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4CD2CC1AC2E1A6001812B2 /* EditViewController.m */; };
 		9C5ECE121AA7DAA000BD1791 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88387CD5184048930059C826 /* TabBarController.m */; };
@@ -742,7 +743,6 @@
 		9CA81E7D1AE5B63E0071AC89 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8B184045DC0059C826 /* CoreGraphics.framework */; };
 		9CA81E7E1AE5B63E0071AC89 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C8D184045DC0059C826 /* UIKit.framework */; };
 		9CA81E7F1AE5B63E0071AC89 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88387C89184045DC0059C826 /* Foundation.framework */; };
-		9CA81E811AE5B63E0071AC89 /* SBC.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CD4173F1A0E82C8001C59B7 /* SBC.xcassets */; };
 		9CA81E821AE5B63E0071AC89 /* CellGaleriaInventario.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C8351AE1A26C07300C43A91 /* CellGaleriaInventario.xib */; };
 		9CA81E831AE5B63E0071AC89 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 88387C9E184045DC0059C826 /* Main_iPad.storyboard */; };
 		9CA81E841AE5B63E0071AC89 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 887EA9DD18442D270073C443 /* OpenSans-Bold.ttf */; };
@@ -2198,7 +2198,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CA81E811AE5B63E0071AC89 /* SBC.xcassets in Resources */,
+				9C47EB711B31B8FC0052DCCC /* BoaVista.xcassets in Resources */,
 				9C026BE61B266B4900D2EE6F /* termo-de-uso.html in Resources */,
 				9CA81E821AE5B63E0071AC89 /* CellGaleriaInventario.xib in Resources */,
 				9CA81E831AE5B63E0071AC89 /* Main_iPad.storyboard in Resources */,
@@ -3482,7 +3482,7 @@
 			baseConfigurationReference = 6DB680EAB9B06D255C08F595 /* Pods-zup.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_BoaVista;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Marcio Lozano (JSJSQENZMF)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marcio Lozano (JSJSQENZMF)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3521,7 +3521,7 @@
 			baseConfigurationReference = 74DB6CCCE72AEA7444466E5C /* Pods-zup.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_SBC;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage_BoaVista;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: La Fabbrica Comunica��o e Marketing Ltda (GCSLR8778M)";
 				FRAMEWORK_SEARCH_PATHS = (

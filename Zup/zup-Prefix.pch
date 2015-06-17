@@ -20,15 +20,19 @@
 
 #endif
 
-#warning Faltando dados
-
 //static NSString * const kAPIkey = @"AIzaSyB63AChJ0R6195vGiW_KCq-NA-jrhrnumc";
 //static NSString * const kClientId = @"278632881278-0253kmktfm2bc3516mms47acq8rdtfs0.apps.googleusercontent.com";
 //static NSString * const kClientSecret = @"-WjBc5n1qxOpfew3v5CXc4kj";
 
 
 //static NSString * const kAPIkey = @"AIzaSyDecq7z3XghWttNX_BU4XzGr7vVaYq8UrI";
-static NSString * const kAPIkey = @"AIzaSyBOHit7f4XSihOEtZpA8o_ysPo5ticplaA";
+#if defined(SBC) || defined(SBC_SBC) || defined(SBC_NTX)
+    static NSString * const kAPIkey = @"AIzaSyD8PQityBcZh_R2DkDXNW-qSjg4NpBhqdw";
+#elif defined(BOA_VISTA)
+    static NSString * const kAPIkey = @"AIzaSyB3MeeWro4bxkAvPxL1tGF_eelOlACupUw";
+#else // staging
+    static NSString * const kAPIkey = @"AIzaSyBOHit7f4XSihOEtZpA8o_ysPo5ticplaA";
+#endif
 
 static NSString * const kClientId = @"937126404865.apps.googleusercontent.com";
 static NSString * const kClientSecret = @"By9p5DtVhQ-4AwDbHfcm5lbg";

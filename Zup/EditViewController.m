@@ -502,7 +502,7 @@ UITextField *activeField;
     BOOL isEmpty = NO;
     
     for (UITextField *tf in self.arrTf) {
-        if (tf.text.length == 0 && tf != self.tfComplement && tf != self.tfCurrentPassword && tf != self.tfPass && tf != self.tfConfirmPass) {
+        if (tf.text.length == 0 && tf != self.tfComplement) {
             
             tf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
             tf.background = [Utilities changeColorForImage:tf.background toColor:[UIColor redColor]];
@@ -514,6 +514,7 @@ UITextField *activeField;
     BOOL isNoPhone = NO;
     BOOL isNoCpf = NO;
     BOOL isNoCep = NO;
+    BOOL isPasswordShort = NO;
     
     if (self.tfPhone.text.length != 14 && self.tfPhone.text.length != 15) {
         self.tfPhone.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
@@ -536,19 +537,28 @@ UITextField *activeField;
         isEmpty = YES;
     }
     
+    if(self.tfPass.text.length < 6) {
+        self.tfPass.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
+        self.tfPass.background = [Utilities changeColorForImage:self.tfCep.background toColor:[UIColor redColor]];
+        isPasswordShort = YES;
+        isEmpty = YES;
+    }
+    
     if (isEmpty) {
         
         BOOL isSpecific = NO;
         NSString *msg = nil;
         
-        if (isNoCep || isNoCpf || isNoPhone) {
+        if (isNoCep || isNoCpf || isNoPhone || isPasswordShort) {
             isSpecific = YES;
             if (isNoPhone) {
                 msg = @"Erro no campo Telefone.";
             } else if (isNoCep) {
                 msg = @"Erro no campo CEP.";
-            } else {
+            } else if(isNoCpf) {
                 msg = @"Erro no campo CPF.";
+            } else {
+                msg = @"A senha deve ter no mínimo 6 caracteres.";
             }
             
         }
