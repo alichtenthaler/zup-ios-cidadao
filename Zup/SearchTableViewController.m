@@ -162,8 +162,12 @@ int ZOOMLEVELSEARCH = 16;
             zoomCurrent = ZOOMLEVELSEARCH + diffZoom;
         else
             zoomCurrent = ZOOMLEVELSEARCH + diffZoom;
-        
+            
         [self.solicitacaoView setLocationWithCoordinate:location zoom:zoomCurrent];
+        if(self.solicitacaoView.tfNumber.text.length > 0)
+            self.solicitacaoView->isCustomNumber = YES;
+        else
+            self.solicitacaoView->isCustomNumber = NO;
         
         if (![Utilities isIpad])
             [self.solicitacaoView moveSearchBarIsTop:NO];

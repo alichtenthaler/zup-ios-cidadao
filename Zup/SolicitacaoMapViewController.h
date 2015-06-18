@@ -37,6 +37,8 @@
     BOOL mapCameraChangeIsFromNumberChange;
     BOOL isBoundsOk;
     int boundsValidationJobId;
+    
+    @public BOOL isCustomNumber;
 }
 
 @property (weak, nonatomic) IBOutlet UITextView *tvReferencia;

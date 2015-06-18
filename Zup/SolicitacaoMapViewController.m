@@ -275,7 +275,8 @@ ServerOperations *serverOperations;
         NSString* streetNumber = [self component:@"street_number" forAddress:mainResult];
         NSString* route = [self longNameOfComponent:@"route" forAddress:mainResult];
     
-        self.tfNumber.text = streetNumber;
+        if(self.tfNumber.text.length == 0 || !self->isCustomNumber)
+            self.tfNumber.text = streetNumber;
         self.searchBar.text = route;
         self.searchBar.placeholder = @"Endereço";
     
@@ -360,6 +361,7 @@ ServerOperations *serverOperations;
 
 - (void)mapView:(GMSMapView *)mapView
 didChangeCameraPosition:(GMSCameraPosition *)position {
+    
     CGPoint point = self.mapView.center;
     point.y -= 60;
     currentCoord = [self.mapView.projection coordinateForPoint:point];
@@ -370,6 +372,12 @@ didChangeCameraPosition:(GMSCameraPosition *)position {
     //if (!isMoving) {
         [self performSelector:@selector(mapMovementEnd) withObject:nil afterDelay:0.15];
     //}
+}
+
+- (void)mapView:(GMSMapView *)mapView willMove:(BOOL)gesture
+{
+    if(gesture)
+        self->isCustomNumber = NO;
 }
 
 - (void)mapView:(GMSMapView *)mapView
@@ -976,6 +984,11 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
 
 
 - (void)btConfirm {
+    if(self.tfNumber.text.length > 0)
+        self->isCustomNumber = YES;
+    else
+        self->isCustomNumber = NO;
+    
     mapCameraChangeIsFromNumberChange = YES;
     
     [self.tvReferencia resignFirstResponder];
@@ -1013,7 +1026,7 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
             return;
         }
         
-        NSString* route = [self component:@"route" forAddress:newDict];
+        NSString* route = [self longNameOfComponent:@"route" forAddress:newDict];
       
         if (![route isEqualToString:self.searchBar.text]) {
             return;
@@ -1030,7 +1043,11 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:coord.latitude
                                                                 longitude:coord.longitude
                                                                      zoom:self.mapView.camera.zoom];
+        
+        BOOL cn = self->isCustomNumber;
         self.mapView.camera = camera;
+        self->isCustomNumber = cn;
+        
         boundsCurrent = [[GMSCoordinateBounds alloc]
                          initWithRegion: self.mapView.projection.visibleRegion];
     }
