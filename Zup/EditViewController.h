@@ -22,6 +22,8 @@
 
 @property (nonatomic) BOOL isFromReportView;
 
+@property (weak, nonatomic) IBOutlet UIView* viewShare;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint* viewShareHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet UIButton *btFacebook;
 @property (weak, nonatomic) IBOutlet UIButton *btTwitter;

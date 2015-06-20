@@ -76,4 +76,7 @@
 + (NSDate*) todayMinusDays:(int) days;
 + (NSString*) dateToISOString:(NSDate*)date;
 
++ (UIBarButtonItem*) createSpacer;
++ (UIBarButtonItem*) createEdgeSpacer;
+
 @end

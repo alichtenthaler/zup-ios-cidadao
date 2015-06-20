@@ -13,11 +13,16 @@
 
 @property (nonatomic) BOOL isFromInside;
 @property (nonatomic) BOOL isFromPerfil;
+@property (nonatomic) BOOL isFromReport;
 @property (nonatomic) BOOL isFromSolicit;
 
 @property (weak, nonatomic) IBOutlet CustomButton* btLogin;
 @property (weak, nonatomic) IBOutlet CustomButton *btForgot;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *spin;
+
+@property (nonatomic, retain) UIBarButtonItem* buttonLogin;
+@property (nonatomic, retain) UIBarButtonItem* buttonCancel;
+@property (nonatomic, retain) UIBarButtonItem* buttonSpin;
 
 @property (weak, nonatomic) IBOutlet UITextField *tfEmail;
 @property (weak, nonatomic) IBOutlet UITextField *tfPass;

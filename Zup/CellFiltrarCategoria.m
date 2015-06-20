@@ -108,7 +108,7 @@
     self.iconView.image = icon;
     [self.iconView setContentMode:UIViewContentModeCenter];
     
-    self.lblTitle.font = [Utilities fontOpensSansLightWithSize:17];
+    self.lblTitle.font = [Utilities fontOpensSansLightWithSize:17 - 2];
     self.lblTitle.textColor = [Utilities colorBlueLight];
     self.lblLink.hidden = YES;
     self.lblTitle.hidden = NO;

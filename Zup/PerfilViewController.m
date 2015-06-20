@@ -64,6 +64,36 @@
     [self.lbltitle setFont:[Utilities fontOpensSansBoldWithSize:11]];
     
     [self.navigationItem setHidesBackButton:YES];
+    [self createNavButtons];
+}
+
+- (void)createNavButtons {
+    btEdit = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
+    [btEdit setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [btEdit setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [btEdit setFontSize:14];
+    [btEdit setTitle:@"Editar" forState:UIControlStateNormal];
+    [btEdit addTarget:self action:@selector(didEditButton) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* buttonEdit = [[UIBarButtonItem alloc] initWithCustomView:btEdit];
+    
+    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 60, 35)];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_sair_normal"] forState:UIControlStateNormal];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_sair_active"] forState:UIControlStateHighlighted];
+    [btCancel setFontSize:14];
+    [btCancel setTitle:@"Sair" forState:UIControlStateNormal];
+    [btCancel addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* buttonLogout = [[UIBarButtonItem alloc] initWithCustomView:btCancel];
+    
+    UIBarButtonItem* leftSpacer = [[UIBarButtonItem alloc] init];
+    leftSpacer.width = -5;
+    
+    UIBarButtonItem* rightSpacer = [[UIBarButtonItem alloc] init];
+    rightSpacer.width = -5;
+    
+    self.navigationItem.leftBarButtonItems = @[leftSpacer, buttonLogout];
+    self.navigationItem.rightBarButtonItems = @[rightSpacer, buttonEdit];
 }
 
 - (void)callLoginView {
@@ -85,8 +115,8 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [btCancel removeFromSuperview];
-    [btEdit removeFromSuperview];
+    //[btCancel removeFromSuperview];
+    //[btEdit removeFromSuperview];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -98,22 +128,6 @@
     if (tokenStr.length == 0) {
         [self callLoginView];
     }
-    
-    btEdit = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
-    [btEdit setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btEdit setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btEdit setFontSize:14];
-    [btEdit setTitle:@"Editar" forState:UIControlStateNormal];
-    [btEdit addTarget:self action:@selector(didEditButton) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btEdit];
-    
-    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(5, 5, 60, 35)];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_sair_normal"] forState:UIControlStateNormal];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_sair_active"] forState:UIControlStateHighlighted];
-    [btCancel setFontSize:14];
-    [btCancel setTitle:@"Sair" forState:UIControlStateNormal];
-    [btCancel addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btCancel];
     
     [self.spin setCenter:self.table.center];
     [self.table scrollRectToVisible:CGRectMake(1, 1, 1, 1) animated:NO];
@@ -289,7 +303,7 @@
 
 - (void)logout {
     
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Você tem certeza?" delegate:self cancelButtonTitle:@"Cancelar" otherButtonTitles:@"Sair", nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:[UIApplication displayName] message:@"Tem certeza de que deseja sair de sua conta?" delegate:self cancelButtonTitle:@"Não" otherButtonTitles:@"Sim", nil];
     [alert show];
     
 }
@@ -300,7 +314,7 @@
     if (buttonIndex == 1) {
         
         [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
-        [UserDefaults setToken:@""];
+        [UserDefaults setToken:@"gjhgjh"];
         [UserDefaults setUserId:@""];
         [UserDefaults setIsUserLogged:NO];
         [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
@@ -409,6 +423,7 @@
     }
     PerfilDetailViewController *perfilDetailVC = [[PerfilDetailViewController alloc]initWithNibName:nibName bundle:nil];
     perfilDetailVC.isFromPerfil = YES;
+    perfilDetailVC.thatStoryboard = self.storyboard;
     
     if ([Utilities isIpad]) {
         perfilDetailVC.dictMain = [self.arrMain objectAtIndex:indexPath.row];

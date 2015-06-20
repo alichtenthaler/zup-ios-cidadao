@@ -117,7 +117,7 @@ static BOOL hasInternetChecked;
 }
 
 + (void)alertWithServerError {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"Não foi possível localizar o servidor." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Erro" message:@"Não foi possível acessar o serviço no momento. Por favor, tente novamente mais tarde." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
 
@@ -673,6 +673,22 @@ typedef enum {
 {
     ISO8601DateFormatter* formatter = [[ISO8601DateFormatter alloc] init];
     return [formatter stringFromDate:date timeZone:[NSTimeZone systemTimeZone]];
+}
+
++ (UIBarButtonItem*) createSpacer
+{
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] init];
+    item.width = -5;
+    
+    return item;
+}
+
++ (UIBarButtonItem*) createEdgeSpacer
+{
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] init];
+    item.width = -10;
+    
+    return item;
 }
 
 @end

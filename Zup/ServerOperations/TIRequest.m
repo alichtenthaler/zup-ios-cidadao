@@ -100,6 +100,12 @@
 {
     NSLog(@"STATUS_CODE: %i", self.statusCode);
     //if (self.statusCode == 400 || self.statusCode == 404) {
+    if(self.statusCode == 401)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"APISessionExpired" object:nil];
+        return;
+    }
+    
     if (self.statusCode >= 400 && self.statusCode <= 499) {
         NSError* error = [NSError errorWithDomain:@"HTTP Error" code:self.statusCode userInfo:nil];
         if ([self.delegate respondsToSelector:@selector(request:DidFinishWithError:data:)]) {

@@ -21,6 +21,7 @@
 
 @property (nonatomic) BOOL isFromPerfil;
 @property (nonatomic) BOOL isFromSolicit;
+@property (nonatomic) BOOL isFromReport;
 @property (strong, nonatomic)  PerfilViewController *perfilVC;
 @property (strong, nonatomic)  RelateViewController *relateVC;
 

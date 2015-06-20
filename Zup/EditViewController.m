@@ -151,14 +151,58 @@ UITextField *activeField;
     self.btTwitter.frame = frameTwitter;
     self.btPlus.frame = framePlus;
     
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btFacebook attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:frameFacebook.origin.x]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btTwitter attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:frameTwitter.origin.x]];
+    
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btPlus attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:framePlus.origin.x]];
+    
     if(!facebookEnabled && !twitterEnabled && !plusEnabled)
     {
+        int height = self.viewShare.frame.size.height;
+        CGSize sz = self.viewContent.frame.size;
+        sz.height -= height;
+        
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.viewShare attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:0]];
+        [self.view setNeedsLayout];
+        //[self.view setNeedsUpdateConstraints];
+        [self.view layoutIfNeeded];
+        [self.scroll setContentSize:sz];
+
         self.viewShareNotAvailable.hidden = NO;
     }
     else
     {
         self.viewShareNotAvailable.hidden = YES;
     }
+    
+    [self createNavButtons];
+}
+
+- (void)createNavButtons {
+    btSalvar = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 83, 5, 78, 35)];
+    
+    [btSalvar setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_normal-1"] forState:UIControlStateNormal];
+    [btSalvar setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_active-1"] forState:UIControlStateHighlighted];
+    [btSalvar setFontSize:14];
+    [btSalvar setTitle:@"Salvar" forState:UIControlStateNormal];
+    [btSalvar addTarget:self action:@selector(didEditButton) forControlEvents:UIControlEventTouchUpInside];
+    [btSalvar setHidden:YES];
+    
+    UIBarButtonItem* buttonSave = [[UIBarButtonItem alloc] initWithCustomView:btSalvar];
+    
+    
+    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 60, 35)];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_normal-1"] forState:UIControlStateNormal];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_active-1"] forState:UIControlStateHighlighted];
+    [btCancel setFontSize:14];
+    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
+    [btCancel addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* buttonCancel = [[UIBarButtonItem alloc] initWithCustomView:btCancel];
+    
+    self.navigationItem.leftBarButtonItems = @[[Utilities createEdgeSpacer], buttonCancel];
+    self.navigationItem.rightBarButtonItems = @[[Utilities createSpacer], buttonSave];
 }
 
 - (void)setValues {
@@ -196,30 +240,11 @@ UITextField *activeField;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.screenName = @"Editar Conta";
-    
-    btSalvar = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 83, 5, 78, 35)];
-    
-    [btSalvar setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_normal-1"] forState:UIControlStateNormal];
-    [btSalvar setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_active-1"] forState:UIControlStateHighlighted];
-    [btSalvar setFontSize:14];
-    [btSalvar setTitle:@"Salvar" forState:UIControlStateNormal];
-    [btSalvar addTarget:self action:@selector(didEditButton) forControlEvents:UIControlEventTouchUpInside];
-    [btSalvar setHidden:YES];
-    [self.navigationController.navigationBar addSubview:btSalvar];
-    
-    
-    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 60, 35)];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_normal-1"] forState:UIControlStateNormal];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_active-1"] forState:UIControlStateHighlighted];
-    [btCancel setFontSize:14];
-    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
-    [btCancel addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btCancel];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    [btCancel removeFromSuperview];
-    [btSalvar removeFromSuperview];
+    //[btCancel removeFromSuperview];
+    //[btSalvar removeFromSuperview];
 }
 
 

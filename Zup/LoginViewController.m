@@ -47,19 +47,10 @@
     [btCancel setTitle:@"Cancelar" forState:UIControlStateNormal];
     [btCancel addTarget:self action:@selector(didCancelButton) forControlEvents:UIControlEventTouchUpInside];
     [btCancel setFrame:CGRectMake(5, 5, 74, 35)];
-    [self.navigationController.navigationBar addSubview:btCancel];
+    self.buttonCancel = [[UIBarButtonItem alloc] initWithCustomView:btCancel];
     
     int x = self.navigationController.navigationBar.bounds.size.width - 79;
     x = self.navigationController.view.superview.bounds.size.width - 600;
-    
-    /*CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
-    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btCreate setFontSize:14];
-    [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
-    [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
-    [btCreate setFrame:CGRectMake(self.navigationController.view.superview.bounds.size.width - 600, 5, 74, 35)];
-    [self.navigationController.navigationBar addSubview:btCreate];*/
     
     [self.navigationItem setHidesBackButton:YES];
     
@@ -95,6 +86,26 @@
         [self.btForgot setHidden:YES];
     }
 
+    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
+    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [btCreate setFontSize:14];
+    [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
+    [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
+    [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.bounds.size.width - 79, 5, 74, 35)];
+    self.buttonLogin = [[UIBarButtonItem alloc] initWithCustomView:btCreate];
+    
+    self.navigationItem.leftBarButtonItem = self.buttonCancel;
+    
+    self.spin = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spin.frame = CGRectMake(self.navigationController.navigationBar.bounds.size.width - 30, 12, 20, 20);
+    self.spin.hidesWhenStopped = YES;
+
+    self.buttonSpin = [[UIBarButtonItem alloc] initWithCustomView:self.spin];
+    
+    self.navigationItem.rightBarButtonItems = @[self.buttonLogin];
+    
+    self.btLogin = btCreate;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -105,7 +116,7 @@
     
     if (self.tfPass.text.length == 0 || self.tfEmail.text.length == 0) {
         if (![Utilities isValidEmail:self.tfEmail.text]) {
-            [Utilities alertWithError:@"Insira um e-mail válido!"];
+            //[Utilities alertWithError:@"Insira um e-mail válido!"];
             return;
         }
         [Utilities alertWithError:@"Preencha todos os campos!"];
@@ -119,6 +130,8 @@
         self.btForgot.enabled = NO;
         self.btLogin.hidden = YES;
         [self.spin startAnimating];
+        self.navigationItem.rightBarButtonItem = self.buttonSpin;
+        self.navigationItem.leftBarButtonItems = @[];
         
         ServerOperations *serverOp = [[ServerOperations alloc]init];
         [serverOp setTarget:self];
@@ -166,6 +179,8 @@
         self.btForgot.enabled = YES;
         self.btLogin.hidden = NO;
         [self.spin stopAnimating];
+        self.navigationItem.rightBarButtonItem = self.buttonLogin;
+        self.navigationItem.leftBarButtonItems = @[self.buttonCancel];
     }
 }
 
@@ -175,6 +190,8 @@
     self.btForgot.enabled = YES;
     self.btLogin.hidden = NO;
     [self.spin stopAnimating];
+    self.navigationItem.rightBarButtonItem = self.buttonLogin;
+    self.navigationItem.leftBarButtonItems = @[self.buttonCancel];
     
     NSString* errorString = [NSString stringWithFormat:@"%@", error];
     [[RavenClient sharedClient] captureMessage:errorString];
@@ -191,11 +208,12 @@
 }
 
 - (void)didCancelButton {
+    
     if ([Utilities isIpad]) {
         [self dismissViewControllerAnimated:YES completion:nil];
     } else {
         
-        if (self.isFromInside || self.isFromPerfil || self.isFromSolicit)
+        if (self.isFromInside || self.isFromPerfil || self.isFromSolicit || self.isFromReport)
             [self dismissViewControllerAnimated:YES completion:nil];
         else
             [self.navigationController popViewControllerAnimated:YES];
@@ -224,28 +242,12 @@
     if (![Utilities isIpad]) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
-    
-    CustomButton *btCreate = [[CustomButton alloc] initWithFrame:CGRectMake(0, 0, 60, 35)];
-    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btCreate setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btCreate setFontSize:14];
-    [btCreate setTitle:@"Entrar" forState:UIControlStateNormal];
-    [btCreate addTarget:self action:@selector(didLoginButton) forControlEvents:UIControlEventTouchUpInside];
-    [btCreate setFrame:CGRectMake(self.navigationController.navigationBar.bounds.size.width - 79, 5, 74, 35)];
-    [self.navigationController.navigationBar addSubview:btCreate];
-    
-    self.spin = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.spin.frame = CGRectMake(self.navigationController.navigationBar.bounds.size.width - 30, 12, 20, 20);
-    self.spin.hidesWhenStopped = YES;
-    [self.navigationController.navigationBar addSubview:self.spin];
-    
-    self.btLogin = btCreate;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.btLogin removeFromSuperview];
-    [self.spin removeFromSuperview];
+    //[self.btLogin removeFromSuperview];
+    //[self.spin removeFromSuperview];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {

@@ -56,7 +56,7 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(btJump:) name:@"jump" object:nil];
     
-    if (self.isFromPerfil || self.isFromSolicit) {
+    if (self.isFromPerfil || self.isFromSolicit || self.isFromReport) {
         [self setLabel];
         [self.btJump setTitle:@"Cancelar" forState:UIControlStateNormal];
     } else {
@@ -407,13 +407,13 @@
 
 - (void)goToMap
 {
-    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit ) {
+    if ([Utilities isIpad] && !self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
         
         [self dismissViewControllerAnimated:YES completion:nil];
         [self btJump:nil];
         
     } else {
-        if (!self.isFromPerfil && !self.isFromSolicit) {
+        if (!self.isFromPerfil && !self.isFromSolicit && !self.isFromReport) {
             TabBarController *tabBar = [self.storyboard instantiateViewControllerWithIdentifier:@"tabBar"];
             [self.navigationController setNavigationBarHidden:YES];
             [self.navigationController pushViewController:tabBar animated:YES];
@@ -562,7 +562,7 @@
         
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:createVC];
         
-        if (self.isFromPerfil || self.isFromSolicit) {
+        if (self.isFromPerfil || self.isFromSolicit || self.isFromReport) {
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             [self.navigationController pushViewController:createVC animated:YES];
         } else {
@@ -594,7 +594,7 @@
     } else {
         UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:loginVC];
         
-        if (self.isFromPerfil || self.isFromSolicit) {
+        if (self.isFromPerfil || self.isFromSolicit || self.isFromReport) {
             [self.navigationController setNavigationBarHidden:NO animated:NO];
             [self.navigationController pushViewController:loginVC animated:YES];
         } else {
@@ -628,6 +628,10 @@
     }
     else if(self.isFromSolicit) {
         [self.relateVC viewWillAppear:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    else if(self.isFromReport) {
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }

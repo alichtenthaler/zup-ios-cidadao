@@ -88,6 +88,19 @@
     
     [self getDetails];
     //    [self removeLabelSolcitations];
+    
+    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 56, 35)];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_normal-1"] forState:UIControlStateNormal];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_active-1"] forState:UIControlStateHighlighted];
+    [btCancel setFontSize:14];
+    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
+    [btCancel addTarget:self action:@selector(btBack) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* spacer = [[UIBarButtonItem alloc] init];
+    spacer.width = -10;
+    
+    UIBarButtonItem* filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:btCancel];
+    self.navigationItem.leftBarButtonItems = @[spacer, filterBarButton];
 }
 
 - (void)removeLabelSolcitations {
@@ -102,19 +115,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.screenName = @"Item de inventário";
-    
-    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 56, 35)];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_normal-1"] forState:UIControlStateNormal];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_active-1"] forState:UIControlStateHighlighted];
-    [btCancel setFontSize:14];
-    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
-    [btCancel addTarget:self action:@selector(btBack) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btCancel];
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    [btCancel removeFromSuperview];
+    
 }
 
 - (void)btBack {

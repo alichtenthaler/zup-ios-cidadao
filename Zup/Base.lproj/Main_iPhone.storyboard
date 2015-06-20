@@ -86,7 +86,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_login_sbc" id="alX-Yh-cDy">
-                                <rect key="frame" x="36" y="442" width="248" height="74.999997730254989"/>
+                                <rect key="frame" x="36" y="442" width="248" height="74.999996780035303"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                             </imageView>
                         </subviews>

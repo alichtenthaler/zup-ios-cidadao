@@ -41,6 +41,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //NSLog(@"Token: %@", [UserDefaults getToken]);
     // Override point for customization after application launch.
     
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Senha" message:@"Este aplicativo está em projeto piloto e tem acesso restrito. Para continuar digite a senha que você recebeu para participar desta fase." delegate:self cancelButtonTitle:@"Validar" otherButtonTitles: nil];

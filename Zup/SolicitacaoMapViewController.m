@@ -598,11 +598,15 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
         searchTable.solicitacaoView = self;
         searchTable.isExplore = NO;
         
-        UITapGestureRecognizer* gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelSearch)];
+        /*UITapGestureRecognizer* gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelSearch)];*/
+        UITapGestureRecognizer* gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchOut:)];
+        //gr.delegate = self;
         
-        UIView *backgroundView = [[UIView alloc] init];
+        /*UIView *backgroundView = [[UIView alloc] init];
+        backgroundView.backgroundColor = [UIColor redColor];
         [backgroundView addGestureRecognizer:gr];
-        searchTable.tableView.backgroundView = backgroundView;
+        searchTable.tableView.backgroundView = backgroundView;*/
+        [searchTable.tableView addGestureRecognizer:gr];
         
         if ([Utilities isIpad]) {
             [searchTable.view setFrame:CGRectMake(self.view.center.x - searchTable.view.frame.size.width/2,
@@ -643,6 +647,16 @@ idleAtCameraPosition:(GMSCameraPosition *)position {
     
     isSearch = YES;
     
+}
+
+- (void)touchOut:(UITapGestureRecognizer *)recognizer
+{
+    NSIndexPath *index = [self->searchTable.tableView indexPathForRowAtPoint:[recognizer locationInView:self->searchTable.tableView]];
+    
+    if(!index)
+        [self cancelSearch];
+    else
+        [self->searchTable tableView:self->searchTable.tableView didSelectRowAtIndexPath:index];
 }
 
 - (void)cancelSearch {

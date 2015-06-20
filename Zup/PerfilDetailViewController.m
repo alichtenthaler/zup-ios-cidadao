@@ -11,6 +11,8 @@ int RESOLVIDO = 3;
 #import "PerfilDetailViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CustomMap.h"
+#import "MainViewController.h"
+#import "LoginViewController.h"
 
 #import "ComentarioViewController.h"
 
@@ -82,15 +84,6 @@ int RESOLVIDO = 3;
     UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(flagReport)];
     
     self.navigationItem.rightBarButtonItem = item;
-    
-    /*UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.bounds = CGRectMake( 0, 0, 44, 44);
-    button.backgroundColor = [UIColor redColor];
-    [button setImage:image forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(flagReport) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem = barButtonItem;*/
     
     NSMutableString* address = [[NSMutableString alloc] init];
     [address appendString:[self.dictMain valueForKey:@"address"]];
@@ -238,6 +231,36 @@ int RESOLVIDO = 3;
     
     [self.indicatorComentarios startAnimating];
     [self loadComments];
+    [self createNavButtons];
+}
+
+- (void)createNavButtons
+{
+    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 56, 35)];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_normal-1"] forState:UIControlStateNormal];
+    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_cancelar_active-1"] forState:UIControlStateHighlighted];
+    [btCancel setFontSize:14];
+    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
+    [btCancel addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* button = [[UIBarButtonItem alloc] initWithCustomView:btCancel];
+    self.navigationItem.leftBarButtonItems = @[[Utilities createSpacer], button];
+}
+
+- (void)callLoginView {
+    UIStoryboard* storyboard = self.thatStoryboard;
+    
+    MainViewController *loginVC = [storyboard instantiateViewControllerWithIdentifier:@"mainVC"];
+    loginVC.isFromReport = YES;
+    UINavigationController* navLogin = [[UINavigationController alloc]initWithRootViewController:loginVC];
+    
+    if ([Utilities isIpad]) {
+        [navLogin setModalPresentationStyle:UIModalPresentationFormSheet];
+        navLogin.view.superview.bounds = CGRectMake(-25, 0, 470, 620);
+        [navLogin.view.superview setBackgroundColor:[UIColor clearColor]];
+        
+    }
+    [self presentViewController:navLogin animated:YES completion:nil];
 }
 
 - (void)loadComments
@@ -253,7 +276,7 @@ int RESOLVIDO = 3;
 
 - (void)didReceiveCommentsError:(NSError*)error data:(NSData*)data
 {
-    
+    [self.indicatorComentarios stopAnimating];
 }
 
 - (void)didReceiveComments:(NSData*)data
@@ -464,20 +487,12 @@ int RESOLVIDO = 3;
         controller = self.navCtrl;
     
     self.navigationItem.hidesBackButton = YES;
-    
-    btCancel = [[CustomButton alloc] initWithFrame:CGRectMake(0, 5, 56, 35)];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_normal-1"] forState:UIControlStateNormal];
-    [btCancel setBackgroundImage:[UIImage imageNamed:@"menubar_btn_voltar_active-1"] forState:UIControlStateHighlighted];
-    [btCancel setFontSize:14];
-    [btCancel setTitle:@"Voltar" forState:UIControlStateNormal];
-    [btCancel addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];
-    [controller.navigationBar addSubview:btCancel];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self.exploreVC viewWillAppear:YES];
-    [btCancel removeFromSuperview];
-    btCancel = nil;
+    //[btCancel removeFromSuperview];
+    //btCancel = nil;
     
 //    [self.navigationController popViewControllerAnimated:YES];
 
@@ -498,6 +513,12 @@ int RESOLVIDO = 3;
 }
 
 - (void)confirmFlagReport {
+    if(![UserDefaults isUserLogged])
+    {
+        [self callLoginView];
+        return;
+    }
+    
     UIAlertView* myAlertView = [[UIAlertView alloc] initWithTitle:@"" message:nil
                                                          delegate:self
                                                 cancelButtonTitle:nil

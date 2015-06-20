@@ -91,6 +91,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(pushToMainView) name:@"pushToMainView" object:Nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToMap:) name:@"backToMap" object:Nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(backToMap) name:@"backToMapFromPerfil" object:Nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
     
     float fontSize;
     if ([Utilities isIpad]) {
@@ -107,6 +108,18 @@
 
     } else {
     }
+}
+
+- (void) sessionExpired
+{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Sessão expirada" message:@"Sua sessão expirou. É necessário fazer login novamente." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
+    [UserDefaults setToken:@""];
+    [UserDefaults setUserId:@""];
+    [UserDefaults setIsUserLogged:NO];
+    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
 }
 
 - (void) hideTabBar {

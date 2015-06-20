@@ -56,23 +56,20 @@ CLLocationCoordinate2D currentCoord;
     image.frame = CGRectMake(0, 0, hwidth, 22);
     image.contentMode = UIViewContentModeScaleAspectFit;
     [viewLogo addSubview:image];
-    [self.navigationController.navigationBar addSubview:viewLogo];
-    
-    /*UIView* viewHeader = [[UIView alloc]initWithFrame:CGRectMake(10, 0, self.view.bounds.size.width/2 - 34, 44)];
-    viewHeader.contentMode = UIViewContentModeScaleAspectFit;
-    viewHeader.backgroundColor = [UIColor redColor];
-    image = [[UIImageView alloc]initWithImage:[Utilities getTenantHeaderImage]];
-    [viewHeader addSubview:image];
-    [self.navigationController.navigationBar addSubview:viewHeader];*/
+    self.navigationItem.titleView = viewLogo;
     
     viewHeader = [[UIImageView alloc]initWithImage:[Utilities getTenantHeaderImage]];
     // Calcular largura da imagem redimensionada
     int width = (viewHeader.image.size.width / viewHeader.image.size.height) * 34.0f;
     int realwidth = MIN(self.view.bounds.size.width/2 - 64, width);
     
-    viewHeader.frame = CGRectMake(10, 5, realwidth, 44 - 10); // self.view.bounds.size.width/2 - 64
+    viewHeader.frame = CGRectMake(10, 5, realwidth, 44 - 10);
     viewHeader.contentMode = UIViewContentModeScaleAspectFit;
-    [self.navigationController.navigationBar addSubview:viewHeader];
+    
+    UIBarButtonItem* spacer = [[UIBarButtonItem alloc] init];
+    spacer.width = -5;
+    UIBarButtonItem* headerBarButton = [[UIBarButtonItem alloc] initWithCustomView:viewHeader];
+    self.navigationItem.leftBarButtonItems = @[spacer, headerBarButton];
     
     [self.searchBar setBackgroundImage:[UIImage new]];
     [self.searchBar setDelegate:self];
@@ -89,6 +86,18 @@ CLLocationCoordinate2D currentCoord;
     
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[Utilities fontOpensSansWithSize:15]];
     
+    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
+    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [btFilter setFontSize:14];
+    [btFilter setTitle:@"Filtrar" forState:UIControlStateNormal];
+    [btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
+    
+    spacer = [[UIBarButtonItem alloc] init];
+    spacer.width = -5;
+    
+    UIBarButtonItem* filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:btFilter];
+    self.navigationItem.rightBarButtonItems = @[spacer, filterBarButton];
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(didPan:)];
     self.mapView.gestureRecognizers = @[panRecognizer];
@@ -149,25 +158,17 @@ CLLocationCoordinate2D currentCoord;
 
 - (void)viewWillDisappear:(BOOL)animated {
     self.navigationController.navigationBarHidden = NO;
-    [btFilter removeFromSuperview];
-    [viewLogo setHidden:YES];
-    [viewHeader setHidden:YES];
+    //[btFilter removeFromSuperview];
+    //[viewLogo setHidden:YES];
+    //[viewHeader setHidden:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.screenName = @"Explore";
     
-    btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 65, 5, 60, 35)];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [btFilter setFontSize:14];
-    [btFilter setTitle:@"Filtrar" forState:UIControlStateNormal];
-    [btFilter addTarget:self action:@selector(btFilter:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:btFilter];
-    
-    [viewLogo setHidden:NO];
-    [viewHeader setHidden:NO];
+    //[viewLogo setHidden:NO];
+    //[viewHeader setHidden:NO];
     
     if (isFromSolicit) {
         [self.arrMarkers removeAllObjects];
@@ -1057,6 +1058,7 @@ CLLocationCoordinate2D currentCoord;
         PerfilDetailViewController *perfilDetailVC = [[PerfilDetailViewController alloc]initWithNibName:nibName bundle:nil];
         perfilDetailVC.isFromExplore = YES;
         perfilDetailVC.dictMain = marker.userData;
+        perfilDetailVC.thatStoryboard = self.storyboard;
         
         BOOL animated;
         
@@ -1113,6 +1115,7 @@ CLLocationCoordinate2D currentCoord;
         PerfilDetailViewController *perfilDetailVC = [[PerfilDetailViewController alloc]initWithNibName:nibName bundle:nil];
         perfilDetailVC.isFromExplore = YES;
         perfilDetailVC.dictMain = dict;
+        perfilDetailVC.thatStoryboard = self.storyboard;
         perfilDetailVC.exploreVC = self;
         
         BOOL animated;

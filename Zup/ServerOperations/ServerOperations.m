@@ -390,9 +390,9 @@ addressAdditional:(NSString*)addressAdditional
         for(NSNumber* statusid in statuses)
         {
             if(i > 0)
-                [strStatuses stringByAppendingString:@","];
+                strStatuses = [strStatuses stringByAppendingString:@","];
             
-            [strStatuses stringByAppendingFormat:@"%i", [statusid intValue]];
+            strStatuses = [strStatuses stringByAppendingFormat:@"%i", [statusid intValue]];
             i++;
         }
         

@@ -146,6 +146,19 @@ int currentIdCategory;
 
     [self.categoriasViewController setDelegate:self selector:@selector(filterChanged:)];
     [self.inventarioViewController setDelegate:self selector:@selector(filterChanged:)];
+    
+    self.btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
+    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
+    [self.btFilter setFontSize:14];
+    [self.btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
+    [self.btFilter addTarget:self action:@selector(btConcluido) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem* button = [[UIBarButtonItem alloc] initWithCustomView:self.btFilter];
+    UIBarButtonItem* spacer = [[UIBarButtonItem alloc] init];
+    spacer.width = -5;
+    
+    self.navigationItem.rightBarButtonItems = @[spacer, button];
 }
 
 - (void)filterChanged:(id)sender
@@ -174,14 +187,6 @@ int currentIdCategory;
     self.screenName = @"Filtrar (Explore)";
     
     //CustomButton *btFilter = nil;
-    self.btFilter = [[CustomButton alloc] initWithFrame:CGRectMake(self.navigationController.view.bounds.size.width - 83, 5, 78, 35)];
-    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_normal-1"] forState:UIControlStateNormal];
-    [self.btFilter setBackgroundImage:[UIImage imageNamed:@"menubar_btn_filtrar-editar_active-1"] forState:UIControlStateHighlighted];
-    [self.btFilter setFontSize:14];
-    [self.btFilter setTitle:@"Concluído" forState:UIControlStateNormal];
-    [self.btFilter addTarget:self action:@selector(btConcluido) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:self.btFilter];
-    
     
     [self.categoriasViewController viewWillAppear:YES];
     [self.inventarioViewController viewWillAppear:YES];

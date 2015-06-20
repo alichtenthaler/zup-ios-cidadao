@@ -9,6 +9,9 @@
 @interface PerfilDetailViewController : GAITrackedViewController<UIActionSheetDelegate> {
     CustomButton *btCancel;
 }
+
+@property (nonatomic, retain) UIStoryboard* thatStoryboard;
+
 @property (weak, nonatomic) UINavigationController* navCtrl;
 @property (weak, nonatomic) UIViewController* exploreVC;
 

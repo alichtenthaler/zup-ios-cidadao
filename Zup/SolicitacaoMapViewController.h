@@ -9,7 +9,7 @@
 #import "SearchTableViewController.h"
 #import "GAITrackedViewController.h"
 
-@interface SolicitacaoMapViewController : GAITrackedViewController<CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate, UITextFieldDelegate, UITextViewDelegate> {
+@interface SolicitacaoMapViewController : GAITrackedViewController<CLLocationManagerDelegate, UISearchBarDelegate, GMSMapViewDelegate, UITextFieldDelegate, UITextViewDelegate, UIGestureRecognizerDelegate> {
     GMSMarker *userMarker;
     SolicitacaoPhotoViewController *photoView;
     SearchTableViewController *searchTable;
