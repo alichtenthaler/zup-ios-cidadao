@@ -45,6 +45,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblSocialSentence;
 @property (weak, nonatomic) IBOutlet UITextField *tfName;
 @property (weak, nonatomic) IBOutlet UITextField *tfEmail;
+@property (weak, nonatomic) IBOutlet UITextField* tfcurrentPass;
 @property (weak, nonatomic) IBOutlet UITextField *tfPass;
 @property (weak, nonatomic) IBOutlet UITextField *tfConfirmPass;
 @property (weak, nonatomic) IBOutlet UITextField *tfPhone;

@@ -25,6 +25,7 @@
                 <outlet property="tfName" destination="hbI-Gf-VZ2" id="baZ-nE-Qfq"/>
                 <outlet property="tfPass" destination="gdJ-u3-4sa" id="Qyd-8A-e64"/>
                 <outlet property="tfPhone" destination="jch-nl-CNO" id="P3X-xD-HSx"/>
+                <outlet property="tfcurrentPass" destination="SXV-f5-p0e" id="PU9-TP-8JU"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="viewContent" destination="v0j-Lm-D65" id="3qH-Z3-qxu"/>
                 <outlet property="viewOverlay" destination="QJw-rG-JbA" id="RTX-Wt-Urx"/>

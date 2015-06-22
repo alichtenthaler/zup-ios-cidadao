@@ -527,7 +527,7 @@ UITextField *activeField;
     BOOL isEmpty = NO;
     
     for (UITextField *tf in self.arrTf) {
-        if (tf.text.length == 0 && tf != self.tfComplement) {
+        if (tf.text.length == 0 && tf != self.tfComplement && tf != self.tfcurrentPass && tf != self.tfPass && tf != self.tfConfirmPass) {
             
             tf.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
             tf.background = [Utilities changeColorForImage:tf.background toColor:[UIColor redColor]];
@@ -562,7 +562,7 @@ UITextField *activeField;
         isEmpty = YES;
     }
     
-    if(self.tfPass.text.length < 6) {
+    if(self.tfPass.text.length > 0 && self.tfPass.text.length < 6) {
         self.tfPass.background = [UIImage imageNamed:@"textbox_1linha-larga_normal"];
         self.tfPass.background = [Utilities changeColorForImage:self.tfCep.background toColor:[UIColor redColor]];
         isPasswordShort = YES;
