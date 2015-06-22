@@ -15,6 +15,7 @@
 @property(nonatomic, retain) id target;
 @property(nonatomic) int jobId;
 @property(nonatomic) SEL actionJob;
+@property(nonatomic) BOOL isLogin;
 
 -(void)CancelRequest;
 -(BOOL)StartRequest:(NSURLRequest*)request;

@@ -121,6 +121,8 @@ NSString * const URLvalidateBounds = APIURL(@"utils/city-boundary/validate");
 }
 
 -(BOOL)authenticate:(NSString*)email pass:(NSString*)pass{
+    self.isLogin = YES;
+    
     NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@", URLauthenticate]];
     NSMutableURLRequest* postRequest = [NSMutableURLRequest requestWithURL:url];
     

@@ -79,4 +79,7 @@
 + (UIBarButtonItem*) createSpacer;
 + (UIBarButtonItem*) createEdgeSpacer;
 
++ (BOOL) didShowTabBarView;
++ (void) setDidShowTabBarView;
+
 @end

@@ -28,14 +28,25 @@
     return self;
 }
 
+- (void) startLoadingData
+{
+    self->onlyReload = NO;
+    
+    [self getReportCategories];
+    [self buildScroll];
+    [self buildLoadPage];
+    [self requestLocation];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self->onlyReload = NO;
+    
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self.scroll setDelegate:self];
     
-    self->onlyReload = NO;
     [self.btLogin setFontSize:14];
     [self.btRegister setFontSize:14];
     [self.lblTitle1 setFont:[Utilities fontOpensSansWithSize:11]];
@@ -61,17 +72,32 @@
         [self.btJump setTitle:@"Cancelar" forState:UIControlStateNormal];
     } else {
         [self.view setUserInteractionEnabled:NO];
-        [self getReportCategories];
-        [self buildScroll];
-        [self buildLoadPage];
-        [self requestLocation];
+        [self startLoadingData];
         [self.btJump setTitle:@"Pule para acessar o aplicativo" forState:UIControlStateNormal];
         
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionExpired) name:@"APISessionExpired" object:nil];
+    
     self.logoView.image = [Utilities getTenantLoginImage];
     if(![Utilities isIphone4inch])
         self.logoView.hidden = YES;
+}
+
+- (void) sessionExpired
+{
+    if([Utilities didShowTabBarView])
+        return;
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Sessão expirada" message:@"Sua sessão expirou. É necessário fazer login novamente." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    
+    [UserDefaults setToken:@""];
+    [UserDefaults setUserId:@""];
+    [UserDefaults setIsUserLogged:NO];
+    [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];
+    
+    [self startLoadingData];
 }
 
 - (void)requestLocation {

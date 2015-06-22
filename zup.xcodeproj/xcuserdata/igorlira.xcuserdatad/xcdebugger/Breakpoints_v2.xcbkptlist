@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zup/MainViewController.m"
-            timestampString = "452388840.54253"
+            timestampString = "456684913.25373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "475"
-            endingLineNumber = "475"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
             landmarkName = "-didReceiveInventoryError:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zup/MainViewController.m"
-            timestampString = "452388840.54253"
+            timestampString = "456684913.25373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "476"
-            endingLineNumber = "476"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
             landmarkName = "-didReceiveInventoryError:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Zup/Utilities.m"
-            timestampString = "453907065.250906"
+            timestampString = "456684814.829487"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "574"
-            endingLineNumber = "574"
+            startingLineNumber = "585"
+            endingLineNumber = "585"
             landmarkName = "+getTenantLoginImage"
             landmarkType = "5">
          </BreakpointContent>

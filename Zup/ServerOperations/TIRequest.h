@@ -18,6 +18,7 @@
 @property(nonatomic, retain) NSURLRequest* request;
 @property(nonatomic, retain) NSURLConnection* currentConnection;
 @property(nonatomic, assign) id<TIRequestDelegate> delegate;
+@property(nonatomic) BOOL isLogin;
 
 -(BOOL)startConnection:(NSURLRequest*)request;
 -(void)cancel;

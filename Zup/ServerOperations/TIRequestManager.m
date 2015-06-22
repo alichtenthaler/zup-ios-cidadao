@@ -46,6 +46,7 @@ static TIRequestManager* _defaultManager;
 
 -(BOOL)startRequest:(NSURLRequest*)urlRequest forOperation:(TIRequestOperation*)requestOperation{
     TIRequest* request = [[TIRequest alloc]init];
+    request.isLogin = requestOperation.isLogin;
     request.delegate = self;
     if ([request startConnection:urlRequest]) {
         NSDictionary* OperationRequest = @{ keyOperation : requestOperation, keyRequest : request };

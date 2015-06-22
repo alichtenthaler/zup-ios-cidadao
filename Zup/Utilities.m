@@ -21,6 +21,17 @@
 static BOOL internetActive;
 static BOOL hostActive;
 static BOOL hasInternetChecked;
+static BOOL didShowMain = false;
+
++ (BOOL) didShowTabBarView
+{
+    return didShowMain;
+}
+
++ (void) setDidShowTabBarView
+{
+    didShowMain = YES;
+}
 
 +(BOOL)isNetworkOnline{
     if (!hasInternetChecked) {

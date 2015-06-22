@@ -70,6 +70,8 @@
     self.tfemail.leftViewMode = UITextFieldViewModeAlways;
     
     [self.tfemail becomeFirstResponder];
+    
+    self.label.font = [Utilities fontOpensSansLightWithSize:15];
 
 }
 

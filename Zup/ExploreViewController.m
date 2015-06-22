@@ -1195,12 +1195,31 @@ CLLocationCoordinate2D currentCoord;
     [self getPoints];
 }
 
-
+- (void)convertButtonTitle:(NSString *)from toTitle:(NSString *)to inView:(UIView *)view
+{
+    if ([view isKindOfClass:[UIButton class]])
+    {
+        UIButton *button = (UIButton *)view;
+        if (from == nil || [[button titleForState:UIControlStateNormal] isEqualToString:from])
+        {
+            [button setTitle:to forState:UIControlStateNormal];
+            [button sizeToFit];
+        }
+    }
+    
+    for (UIView *subview in view.subviews)
+    {
+        [self convertButtonTitle:from toTitle:to inView:subview];
+    }
+}
 
 #pragma mark - Search Bar delegates
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:YES animated:YES];
+    [self convertButtonTitle:nil toTitle:@"Cancelar" inView:searchBar];
+    [searchBar setNeedsLayout];
+    [searchBar layoutIfNeeded];
     
     if (!searchTable) {
         

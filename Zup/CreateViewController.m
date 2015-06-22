@@ -290,12 +290,16 @@ UITextField *activeField;
 
 - (void)showLoadingOverlay
 {
+    btCancel.enabled = NO;
+    btCreate.enabled = NO;
     self.loadingOverlay.hidden = NO;
     [self.view bringSubviewToFront:self.loadingOverlay];
 }
 
 - (void)hideLoadingOverlay
 {
+    btCancel.enabled = YES;
+    btCreate.enabled = YES;
     self.loadingOverlay.hidden = YES;
 }
 
@@ -333,7 +337,7 @@ UITextField *activeField;
 }
 
 - (void)didReceiveLoginData:(NSData*)data {
-    [self hideLoadingOverlay];
+    //[self hideLoadingOverlay];
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
     
@@ -344,7 +348,7 @@ UITextField *activeField;
         
         [self.mainVC getReportCategories];
         
-        [self callNextView];
+        //[self callNextView];
         
     }
 }

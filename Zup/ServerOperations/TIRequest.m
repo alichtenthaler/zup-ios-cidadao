@@ -100,7 +100,7 @@
 {
     NSLog(@"STATUS_CODE: %i", self.statusCode);
     //if (self.statusCode == 400 || self.statusCode == 404) {
-    if(self.statusCode == 401)
+    if(self.statusCode == 401 && !self.isLogin)
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"APISessionExpired" object:nil];
         return;
