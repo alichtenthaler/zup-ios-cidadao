@@ -1081,8 +1081,6 @@ CLLocationCoordinate2D currentCoord;
 
 - (void)buildDetail:(NSDictionary*)dict {
     
-    [btFilter setHidden:YES];
-    
     if (![self.navigationController.visibleViewController isKindOfClass:[ExploreViewController class]]) {
         [self.navigationController popToRootViewControllerAnimated:NO];
     }

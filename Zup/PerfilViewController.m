@@ -314,7 +314,7 @@
     if (buttonIndex == 1) {
         
         [[NSNotificationCenter defaultCenter]postNotificationName:@"pushToMainView" object:nil];
-        [UserDefaults setToken:@"gjhgjh"];
+        [UserDefaults setToken:@""];
         [UserDefaults setUserId:@""];
         [UserDefaults setIsUserLogged:NO];
         [UserDefaults setIsUserLoggedOnSocialNetwork:kSocialNetworkAnyone];

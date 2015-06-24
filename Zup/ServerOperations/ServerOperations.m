@@ -398,7 +398,7 @@ addressAdditional:(NSString*)addressAdditional
             i++;
         }
         
-        [strStatuses stringByAppendingString:@"&"];
+        strStatuses = [strStatuses stringByAppendingString:@"&"];
     }
     
     strUrl = [NSString stringWithFormat:@"%@?%@%@%@position[latitude]=%f&position[longitude]=%f&position[distance]=%f&position[max_items]=%i&zoom=%f&clusterize=true&return_fields=id,category_id,created_at,status_id,position,protocol,address,reference,user.id,images,description,count", URLgetReportItems, strBeginDate, strCategories, strStatuses, latitude, longitude, radius, maxCount, zoom];
