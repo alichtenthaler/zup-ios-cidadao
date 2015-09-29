@@ -2,7 +2,7 @@
 platform :ios, '6.0'
 
 target 'zup' do
-	pod 'SDWebImage', '~>3.7'
+    pod 'SDWebImage', '~>3.7'
     pod 'ISO8601DateFormatter', '~> 0.7'
 end
 

@@ -28,12 +28,12 @@
 #elif defined(MACEIO)
     #define BASE_URL @"http://zup-api-maceio.cognita.ntxdev.com.br/"
 #else
-    #define BASE_URL @"http://zup-staging.cognita.ntxdev.com.br/"
+    #define BASE_URL @"http://api.latest.staging.zup.ntxdev.com.br/"
 #endif
 
 #define APIURL(x) BASE_URL x
 
-#define BASE_WEB_URL @"http://zup.cognita.ntxdev.com.br"
+#define BASE_WEB_URL @"http://web.latest.staging.zup.ntxdev.com.br/"
 
 NSString* q = @"a" @"bc";
 
